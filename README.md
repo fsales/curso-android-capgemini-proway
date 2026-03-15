@@ -1,10 +1,18 @@
 # 📱 Curso Android – Capgemini | Proway
 
+[![Email](https://img.shields.io/badge/Email-fabio.oliveira.sales%40gmail.com-D14836?logo=gmail&logoColor=white)](mailto:fabio.oliveira.sales@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-F%C3%A1bio%20Sales-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/fabio-oliveira-sales)
+
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.2-blueviolet?logo=kotlin&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-Module-3DDC84?logo=android&logoColor=white)
 ![Gradle KTS](https://img.shields.io/badge/Gradle-KTS-brightgreen?logo=gradle&logoColor=white)
 ![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
+
+## Autor
+
+- Nome: Fábio de Oliveira Sales
+---
 
 Repositório contendo todas as atividades desenvolvidas durante o treinamento de **Desenvolvimento Android com Kotlin** oferecido pela **Capgemini** em parceria com a **Proway**.
 
