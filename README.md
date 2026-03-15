@@ -19,14 +19,7 @@ curso-android-capgemini-proway/
 ├── README.md
 │
 ├── modulo-01/
-│   ├── atividade-01/
-│   └── atividade-02/
-│
-├── modulo-02/
-│   ├── atividade-03/
-│   └── atividade-04/
-│
-└── modulo-03/
+│   └── AppContas/
 ```
 
 ---
@@ -42,7 +35,7 @@ curso-android-capgemini-proway/
 ### 📦 Módulo 01 – Fundamentos de Kotlin
 | Atividade | Descrição |
 |----------|-----------|
-| **Atividade 01** | CRUD em console usando Kotlin, Scanner, POO, Null Safety, Elvis Operator |
+| [**Atividade 01**](modulo-01/AppContas/README.md) | CRUD em console usando Kotlin, Scanner, POO, Null Safety, Elvis Operator |
 
 
 ---
