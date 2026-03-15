@@ -1,11 +1,10 @@
 # 📱 Curso Android – Capgemini | Proway
 
-![Kotlin](https://img.shields.io/badge/Kotlin-1.9-blueviolet?logo=kotlin&logoColor=white)
-![Android Studio](https://img.shields.io/badge/Android%20Studio-Official-green?logo=android&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.2-blueviolet?logo=kotlin&logoColor=white)
+![Android](https://img.shields.io/badge/Android-Module-3DDC84?logo=android&logoColor=white)
 ![Gradle KTS](https://img.shields.io/badge/Gradle-KTS-brightgreen?logo=gradle&logoColor=white)
-![Git](https://img.shields.io/badge/Git-Versionamento-orange?logo=git&logoColor=white)
+![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
-![License](https://img.shields.io/badge/License-Educacional-lightgrey)
 
 Repositório contendo todas as atividades desenvolvidas durante o treinamento de **Desenvolvimento Android com Kotlin** oferecido pela **Capgemini** em parceria com a **Proway**.
 
@@ -45,9 +44,6 @@ curso-android-capgemini-proway/
 |----------|-----------|
 | **Atividade 01** | CRUD em console usando Kotlin, Scanner, POO, Null Safety, Elvis Operator |
 
-
-### 📦 Módulo 03 – Android Avançado
-Atividades a serem adicionadas conforme andamento.
 
 ---
 
