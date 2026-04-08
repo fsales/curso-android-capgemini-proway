@@ -1,7 +1,9 @@
 package com.fsales.app.e_aluno.domain.model
 
+import androidx.compose.runtime.Immutable
 import java.time.LocalDate
 
+@Immutable
 data class Aluno(
     val id: Long,
     val nome: String,

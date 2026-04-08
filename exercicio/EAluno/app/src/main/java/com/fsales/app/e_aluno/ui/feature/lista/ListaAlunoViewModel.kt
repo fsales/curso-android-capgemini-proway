@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fsales.app.e_aluno.domain.AlunoRepository
 import com.fsales.app.e_aluno.domain.model.Aluno
+import androidx.compose.runtime.Immutable
 import com.fsales.app.e_aluno.ui.ListUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Immutable
 data class ListaAlunoUiState(
     val ativos: List<Aluno> = emptyList(),
     val inativos: List<Aluno> = emptyList()

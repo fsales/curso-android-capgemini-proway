@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 
 sealed interface UiEvent {
 
-    data class ShowSnackbar(@param:StringRes val resId: Int) : ListUiEvent
+    data class ShowSnackbar(@param:StringRes val resId: Int) : UiEvent
 }
 
 sealed interface ListUiEvent : UiEvent {

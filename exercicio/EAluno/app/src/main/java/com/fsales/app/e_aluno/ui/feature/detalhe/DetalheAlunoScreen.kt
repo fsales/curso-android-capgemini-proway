@@ -62,7 +62,7 @@ fun DetalheAlunoScreen(
         viewModel.load(id)
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.uiEvent.collect { event ->
             if (event is DetalhesUiEvent.NavigateBack) {
                 navigateBack()

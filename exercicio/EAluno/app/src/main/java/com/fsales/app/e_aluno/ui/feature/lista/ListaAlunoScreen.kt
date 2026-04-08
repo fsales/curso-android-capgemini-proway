@@ -68,7 +68,7 @@ fun ListaAlunoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is ListUiEvent.NavigateToDetalhes -> onNavigateToDetalhes(event.id)

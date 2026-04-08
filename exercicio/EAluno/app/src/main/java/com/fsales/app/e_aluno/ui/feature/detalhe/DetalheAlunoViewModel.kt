@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.fsales.app.e_aluno.R
 import com.fsales.app.e_aluno.domain.AlunoRepository
 import com.fsales.app.e_aluno.domain.model.Aluno
+import androidx.compose.runtime.Immutable
 import com.fsales.app.e_aluno.ui.DetalhesUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Immutable
 data class DetalheAlunoUiState(
     val isLoading: Boolean = false,
     val aluno: Aluno? = null,
