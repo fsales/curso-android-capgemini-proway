@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">E-Aluno</string>
+
+    <!-- Lista Aluno Categoria -->
+    <string name="lista_aluno_categoria_ativos">Ativos</string>
+    <string name="lista_aluno_categoria_inativos">Inativos</string>
+    <string name="lista_aluno_categoria_count">%1$s (%2$d)</string>
+
+    <!-- Lista Aluno Screen -->
+    <string name="lista_aluno_filtrar_alunos">Filtrar alunos</string>
+    <string name="lista_aluno_screen_title">Lista de Alunos</string>
+    <string name="lista_aluno_empty">Não há dados</string>
+    <string name="aluno_item_open_details">Abrir detalhes de %1$s</string>
+    <string name="lista_aluno_voltar_topo">Voltar ao topo</string>
+
+    <!-- Turno -->
+    <string name="turno_matutino">Matutino</string>
+    <string name="turno_vespertino">Vespertino</string>
+    <string name="turno_noturno">Noturno</string>
+
+    <!-- Semestre -->
+    <string name="semestre_primeiro">1º semestre</string>
+    <string name="semestre_segundo">2º semestre</string>
+    <string name="semestre_terceiro">3º semestre</string>
+    <string name="semestre_quarto">4º semestre</string>
+    <string name="semestre_quinto">5º semestre</string>
+    <string name="semestre_sexto">6º semestre</string>
+    <string name="semestre_setimo">7º semestre</string>
+    <string name="semestre_oitavo">8º semestre</string>
+
+    <!-- Detalhe Aluno Screen -->
+    <string name="detalhe_aluno_screen_title">Detalhes do Aluno</string>
+    <string name="detalhe_aluno_navigate_back">Voltar</string>
+    <string name="detalhe_aluno_not_found">Aluno não encontrado</string>
+    <string name="detalhe_aluno_status_ativo">Ativo</string>
+    <string name="detalhe_aluno_status_inativo">Inativo</string>
+    <string name="detalhe_aluno_field_id">ID</string>
+    <string name="detalhe_aluno_field_nome">Nome</string>
+    <string name="detalhe_aluno_field_sobrenome">Sobrenome</string>
+    <string name="detalhe_aluno_field_email">E-mail</string>
+    <string name="detalhe_aluno_field_telefone">Telefone</string>
+    <string name="detalhe_aluno_field_matricula">Matrícula</string>
+    <string name="detalhe_aluno_field_curso">Curso</string>
+    <string name="detalhe_aluno_field_turno">Turno</string>
+    <string name="detalhe_aluno_field_semestre">Semestre</string>
+    <string name="detalhe_aluno_field_data_nascimento">Data de nascimento</string>
+</resources>
