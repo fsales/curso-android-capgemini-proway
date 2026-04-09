@@ -45,7 +45,10 @@ curso-android-capgemini-proway/
 |----------|-----------|
 | [**Atividade 01**](modulo-01/AppContas/README.md) | CRUD em console usando Kotlin, Scanner, POO, Null Safety, Elvis Operator |
 
-
+### 📦 Módulo 02 – Componentes de tela e navegação
+| Atividade | Descrição |
+|----------|-----------|
+| [**Atividade 02**](modulo-02/Rumo/README.md) | App Android de gestão financeira com Jetpack Compose e navegação entre telas; MVVM e Room aplicados como plus/desafio técnico |
 ---
 
 ## 🛠 Tecnologias Utilizadas
