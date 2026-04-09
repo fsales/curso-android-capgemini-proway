@@ -87,4 +87,7 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // AndroidX Startup (dependência transitiva do manifest; deve ser explícita para inclusão no DEX)
+    implementation(libs.androidx.startup)
 }
