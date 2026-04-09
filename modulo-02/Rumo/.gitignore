@@ -1,0 +1,53 @@
+# ── Gradle ──────────────────────────────────────────────────────────────────
+.gradle/
+**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# ── IntelliJ / Android Studio ───────────────────────────────────────────────
+*.iml
+.idea/
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+
+# ── Android ─────────────────────────────────────────────────────────────────
+/captures
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# ── Local config (never commit) ──────────────────────────────────────────────
+local.properties
+keystore.properties
+*.jks
+*.keystore
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Kotlin ───────────────────────────────────────────────────────────────────
+*.class
+*.kotlin_module
+
+# ── VS Code ──────────────────────────────────────────────────────────────────
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+# ── Logs & temp ──────────────────────────────────────────────────────────────
+*.log
+*.tmp
+*.swp
