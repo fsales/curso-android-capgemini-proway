@@ -2,10 +2,28 @@ package com.fsales.app.rumo.ui
 
 import androidx.annotation.StringRes
 
-sealed interface UiEvent {
-    data class ShowSnackbar(@param:StringRes val resId: Int) : GanhoUiEvent
+
+/** Ganho */
+sealed interface ListaGanhoUiEvent {
+    data class ShowSnackbar(@param:StringRes val resId: Int)
+    data object NavigateToCadastro : ListaGanhoUiEvent
 }
 
-sealed interface GanhoUiEvent : UiEvent {
-    data object NavigateToCadastro : GanhoUiEvent
+sealed interface CadastroGanhoUiEvent {
+    data object NavigateBack : CadastroGanhoUiEvent
+}
+
+/** Gasto */
+sealed interface ListaGastoUiEvent {
+    data class ShowSnackbar(@param:StringRes val resId: Int)
+    data object NavigateToCadastro : ListaGastoUiEvent
+}
+
+sealed interface CadastroGastoUiEvent {
+    data object NavigateBack : CadastroGastoUiEvent
+}
+
+/** Sonho */
+sealed interface ListaSonhoUiEvent {
+    data object NavigateBack : ListaSonhoUiEvent
 }

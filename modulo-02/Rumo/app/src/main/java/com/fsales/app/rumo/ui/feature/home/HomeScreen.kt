@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.fsales.app.rumo.ui.theme.RumoTheme
 
 @Composable
@@ -21,6 +22,7 @@ fun HomeScreen() {
 @Composable
 fun HomeContent() {
     RumoTheme {
+        val navController = rememberNavController()
         Scaffold() { paddingValues ->
             Column(
                 modifier = Modifier

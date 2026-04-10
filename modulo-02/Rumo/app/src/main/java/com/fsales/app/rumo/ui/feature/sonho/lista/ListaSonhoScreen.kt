@@ -9,12 +9,25 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.fsales.app.rumo.ui.ListaSonhoUiEvent
 import com.fsales.app.rumo.ui.theme.RumoTheme
 
 @Composable
-fun ListaSonhoScreen() {
+fun ListaSonhoScreen(
+    viewModel: ListaSonhoViewModel = hiltViewModel(),
+    navigateBack: () -> Unit
+) {
+    LaunchedEffect(viewModel) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                ListaSonhoUiEvent.NavigateBack -> navigateBack()
+            }
+        }
+    }
     ListaSonhoContent()
 }
 

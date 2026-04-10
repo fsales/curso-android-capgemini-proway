@@ -9,17 +9,36 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.fsales.app.rumo.ui.ListaGanhoUiEvent
 import com.fsales.app.rumo.ui.theme.RumoTheme
 
 @Composable
-fun ListaGanhoScreen() {
-    ListaGanhoContent()
+fun ListaGanhoScreen(
+    viewModel: ListaGanhoViewModel = hiltViewModel(),
+    onNavigateToCadastro: () -> Unit
+) {
+
+    LaunchedEffect(viewModel) {
+        viewModel.uiEvent.collect { event ->
+            when(event){
+                ListaGanhoUiEvent.NavigateToCadastro -> onNavigateToCadastro()
+            }
+        }
+    }
+
+    ListaGanhoContent(
+        onEvent = viewModel::onEvent
+    )
 }
 
 @Composable
-fun ListaGanhoContent() {
+fun ListaGanhoContent(
+    onEvent: (ListaGanhoEvent) -> Unit
+) {
     RumoTheme {
         Scaffold() { paddingValues ->
             Column(
@@ -38,5 +57,7 @@ fun ListaGanhoContent() {
 @Preview(showBackground = true, name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ListaGanhoPreview() {
-    ListaGanhoContent()
+    ListaGanhoContent(
+        onEvent = { }
+    )
 }
