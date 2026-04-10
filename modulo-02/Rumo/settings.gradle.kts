@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Rumo"
 include(":app")
- 
+include(":rumo-core")

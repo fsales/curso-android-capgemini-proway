@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.Rumo" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+        Parent Theme.Material3.DayNight.NoActionBar garante:
+        - Suporte correto a WindowInsets / edge-to-edge com enableEdgeToEdge()
+        - Sem ActionBar nativa (Compose gerencia a topBar)
+        - Compatibilidade com SplashScreen API
+    -->
+    <style name="Theme.Rumo" parent="Theme.Material3.DayNight.NoActionBar" />
 </resources>
