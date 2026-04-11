@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.fsales.app.rumo.ui.ListaGanhoUiEvent
 import com.fsales.app.rumo.ui.feature.home.HomeEvent
-import com.fsales.app.rumo.ui.feature.home.HomeScreen
+import com.fsales.app.rumo.ui.feature.home.HomeScreenPreviewShell
 import com.fsales.app.rumo.ui.theme.RumoTheme
 
 @Composable
@@ -52,6 +52,6 @@ fun ListaGanhoContent(
 @Composable
 fun ListaGanhoPreview() {
     RumoTheme {
-        HomeScreen(initialTab = HomeEvent.IrParaGanhos)
+        HomeScreenPreviewShell(initialTab = HomeEvent.IrParaGanhos)
     }
 }

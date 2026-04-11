@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.fsales.app.rumo.ui.ListaSonhoUiEvent
 import com.fsales.app.rumo.ui.feature.home.HomeEvent
-import com.fsales.app.rumo.ui.feature.home.HomeScreen
+import com.fsales.app.rumo.ui.feature.home.HomeScreenPreviewShell
 import com.fsales.app.rumo.ui.theme.RumoTheme
 
 @Composable
@@ -48,6 +48,6 @@ fun ListaSonhoContent(
 @Composable
 fun ListaSonhoPreview() {
     RumoTheme {
-        HomeScreen(initialTab = HomeEvent.IrParaSonhos)
+        HomeScreenPreviewShell(initialTab = HomeEvent.IrParaSonhos)
     }
 }

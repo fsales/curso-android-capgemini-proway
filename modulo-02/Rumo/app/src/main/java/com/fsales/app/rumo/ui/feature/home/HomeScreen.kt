@@ -14,8 +14,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.fsales.app.rumo.ui.components.RumoNavigationBar
+import com.fsales.app.rumo.ui.feature.ganho.lista.ListaGanhoContent
 import com.fsales.app.rumo.ui.feature.ganho.lista.ListaGanhoScreen
+import com.fsales.app.rumo.ui.feature.gasto.lista.ListaGastoContent
 import com.fsales.app.rumo.ui.feature.gasto.lista.ListaGastoScreen
+import com.fsales.app.rumo.ui.feature.sonho.lista.ListaSonhoContent
 import com.fsales.app.rumo.ui.feature.sonho.lista.ListaSonhoScreen
 import com.fsales.app.rumo.ui.theme.RumoTheme
 
@@ -58,12 +61,47 @@ private fun HomeDestino(
     }
 }
 
+// =============================================================================
+// Shell sem ViewModel — exclusivo para @Preview
+// Usa *Content diretamente para evitar dependência do Hilt no preview renderer
+// =============================================================================
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreenPreviewShell(
+    initialTab: HomeEvent = HomeEvent.IrParaGanhos,
+) {
+    var selectedTab by remember { mutableStateOf(initialTab) }
+
+    Scaffold(
+        bottomBar = {
+            RumoNavigationBar(
+                selectedEvent = selectedTab,
+                onItemSelected = { selectedTab = it },
+            )
+        },
+        modifier = Modifier.fillMaxSize(),
+    ) { paddingValues ->
+        val modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxSize()
+
+        when (selectedTab) {
+            HomeEvent.IrParaGanhos -> ListaGanhoContent(modifier = modifier, onEvent = {})
+            HomeEvent.IrParaGastos -> ListaGastoContent(modifier = modifier, onEvent = {})
+            HomeEvent.IrParaSonhos -> ListaSonhoContent(modifier = modifier)
+        }
+    }
+}
+
+// =============================================================================
+// Previews
+// =============================================================================
 @Preview(showBackground = true, name = "Home · Ganhos · Light")
 @Preview(showBackground = true, name = "Home · Ganhos · Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun HomeGanhosPreview() {
     RumoTheme {
-        HomeScreen(initialTab = HomeEvent.IrParaGanhos)
+        HomeScreenPreviewShell(initialTab = HomeEvent.IrParaGanhos)
     }
 }
 
@@ -72,7 +110,7 @@ fun HomeGanhosPreview() {
 @Composable
 fun HomeGastosPreview() {
     RumoTheme {
-        HomeScreen(initialTab = HomeEvent.IrParaGastos)
+        HomeScreenPreviewShell(initialTab = HomeEvent.IrParaGastos)
     }
 }
 
@@ -81,6 +119,6 @@ fun HomeGastosPreview() {
 @Composable
 fun HomeSonhosPreview() {
     RumoTheme {
-        HomeScreen(initialTab = HomeEvent.IrParaSonhos)
+        HomeScreenPreviewShell(initialTab = HomeEvent.IrParaSonhos)
     }
 }
