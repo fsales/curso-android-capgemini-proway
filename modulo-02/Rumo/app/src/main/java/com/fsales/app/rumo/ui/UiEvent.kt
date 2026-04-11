@@ -27,3 +27,10 @@ sealed interface CadastroGastoUiEvent {
 sealed interface ListaSonhoUiEvent {
     data object NavigateBack : ListaSonhoUiEvent
 }
+
+/** Home */
+sealed interface HomeUiEvent {
+    data object NavigateToListaGanho : HomeUiEvent
+    data object NavigateToListaGasto : HomeUiEvent
+    data object NavigateToListaSonho : HomeUiEvent
+}

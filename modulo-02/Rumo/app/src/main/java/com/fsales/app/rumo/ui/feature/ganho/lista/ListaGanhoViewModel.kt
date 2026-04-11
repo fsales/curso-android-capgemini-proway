@@ -18,7 +18,7 @@ class ListaGanhoViewModel @Inject constructor(
 
     fun onEvent(event: ListaGanhoEvent) {
         when (event) {
-            is ListaGanhoEvent.Cadastro -> cadastro()
+            is ListaGanhoEvent.IrParaCadastro -> cadastro()
         }
     }
 

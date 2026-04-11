@@ -9,9 +9,7 @@ import com.fsales.app.rumo.ui.feature.home.HomeScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeRoute : NavKey {
-
-}
+object HomeRoute : NavKey
 
 @Composable
 fun AppNavHost() {
@@ -23,9 +21,7 @@ fun AppNavHost() {
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             entry<HomeRoute> {
-                HomeScreen(
-
-                )
+                HomeScreen()
             }
         }
     )

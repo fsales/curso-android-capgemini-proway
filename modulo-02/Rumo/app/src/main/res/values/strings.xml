@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name">Rumo</string>
+
+    <!-- ===== Home ===== -->
+    <string name="home_titulo">Rumo</string>
+
+    <!-- Destino: Ganhos -->
+    <string name="home_ganhos_titulo">Ganhos</string>
+    <string name="home_ganhos_descricao">Registre e acompanhe seus ganhos mensais</string>
+
+    <!-- Destino: Gastos -->
+    <string name="home_gastos_titulo">Gastos</string>
+    <string name="home_gastos_descricao">Controle seus gastos e mantenha o orçamento</string>
+
+    <!-- Destino: Sonhos -->
+    <string name="home_sonhos_titulo">Sonhos</string>
+    <string name="home_sonhos_descricao">Defina metas e realize seus sonhos</string>
+
+    <!-- ===== NavigationBar ===== -->
+    <string name="nav_ganhos">Ganhos</string>
+    <string name="nav_gastos">Gastos</string>
+    <string name="nav_sonhos">Sonhos</string>
+
+    <!-- ===== Lista Ganhos ===== -->
+    <string name="lista_ganho_titulo">Lista de Ganhos</string>
+
+    <!-- ===== Lista Gastos ===== -->
+    <string name="lista_gasto_titulo">Lista de Gastos</string>
+
+    <!-- ===== Lista Sonhos ===== -->
+    <string name="lista_sonho_titulo">Lista de Sonhos</string>
+
+    <!-- ===== Cadastro Ganho ===== -->
+    <string name="cadastro_ganho_titulo">Cadastro de Ganho</string>
+
+    <!-- ===== Cadastro Gasto ===== -->
+    <string name="cadastro_gasto_titulo">Cadastro de Gasto</string>
 </resources>

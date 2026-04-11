@@ -18,7 +18,7 @@ class ListaGastoViewModel @Inject constructor(
 
      fun onEvent(event: ListaGastoEvent) {
         when (event) {
-            is ListaGastoEvent.Cadastro -> cadastro()
+            is ListaGastoEvent.IrParaCadastro -> cadastro()
         }
     }
 

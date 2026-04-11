@@ -1,0 +1,24 @@
+package com.fsales.app.rumo.ui.feature.home
+
+import androidx.lifecycle.ViewModel
+import com.fsales.app.rumo.ui.HomeUiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import javax.inject.Inject
+
+@HiltViewModel
+class HomeViewModel @Inject constructor() : ViewModel() {
+
+    private val _uiEvent = Channel<HomeUiEvent>(Channel.BUFFERED)
+    val uiEvent = _uiEvent.receiveAsFlow()
+
+    fun onEvent(event: HomeEvent) {
+        when (event) {
+            HomeEvent.IrParaGanhos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGanho)
+            HomeEvent.IrParaGastos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGasto)
+            HomeEvent.IrParaSonhos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaSonho)
+        }
+    }
+}
+
