@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Rumo</string>
 
+    <!-- ===== TopAppBar ===== -->
+    <string name="topbar_titulo">Rumo</string>
+    <string name="topbar_logo_descricao">Logo Rumo — bússola</string>
+
     <!-- ===== Home ===== -->
     <string name="home_titulo">Rumo</string>
 

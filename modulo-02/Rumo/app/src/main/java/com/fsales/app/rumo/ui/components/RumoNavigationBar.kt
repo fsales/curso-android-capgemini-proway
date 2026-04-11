@@ -6,6 +6,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Savings
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -19,15 +22,31 @@ import com.fsales.app.rumo.ui.feature.home.HomeEvent
 import com.fsales.app.rumo.ui.theme.RumoTheme
 
 data class RumoNavItem(
-    @StringRes val labelRes: Int,
-    val icon: ImageVector,
+    @param:StringRes val labelRes: Int,
+    val iconFilled: ImageVector,
+    val iconOutlined: ImageVector,
     val evento: HomeEvent,
 )
 
 val rumoNavItems = listOf(
-    RumoNavItem(labelRes = R.string.nav_ganhos, icon = Icons.Filled.Savings,      evento = HomeEvent.IrParaGanhos),
-    RumoNavItem(labelRes = R.string.nav_gastos, icon = Icons.Filled.ShoppingCart,  evento = HomeEvent.IrParaGastos),
-    RumoNavItem(labelRes = R.string.nav_sonhos, icon = Icons.Filled.AutoAwesome,   evento = HomeEvent.IrParaSonhos),
+    RumoNavItem(
+        labelRes     = R.string.nav_ganhos,
+        iconFilled   = Icons.Filled.Savings,
+        iconOutlined = Icons.Outlined.Savings,
+        evento       = HomeEvent.IrParaGanhos,
+    ),
+    RumoNavItem(
+        labelRes     = R.string.nav_gastos,
+        iconFilled   = Icons.Filled.ShoppingCart,
+        iconOutlined = Icons.Outlined.ShoppingCart,
+        evento       = HomeEvent.IrParaGastos,
+    ),
+    RumoNavItem(
+        labelRes     = R.string.nav_sonhos,
+        iconFilled   = Icons.Filled.AutoAwesome,
+        iconOutlined = Icons.Outlined.AutoAwesome,
+        evento       = HomeEvent.IrParaSonhos,
+    ),
 )
 
 @Composable
@@ -38,13 +57,14 @@ fun RumoNavigationBar(
 ) {
     NavigationBar {
         items.forEach { item ->
+            val selecionado = selectedEvent == item.evento
             val label = stringResource(id = item.labelRes)
             NavigationBarItem(
-                selected = selectedEvent == item.evento,
+                selected = selecionado,
                 onClick = { onItemSelected(item.evento) },
                 icon = {
                     Icon(
-                        imageVector = item.icon,
+                        imageVector = if (selecionado) item.iconFilled else item.iconOutlined,
                         contentDescription = label,
                     )
                 },

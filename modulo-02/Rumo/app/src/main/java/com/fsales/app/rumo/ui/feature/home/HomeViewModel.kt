@@ -7,6 +7,12 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
+/**
+ * ViewModel da HomeScreen — shell de navegação entre abas.
+ * Exceção justificada ao §13 do AGENTS.md: não injeta use case pois
+ * não há regra de negócio; responsabilidade é exclusivamente gerenciar
+ * o estado visual da aba ativa.
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
 
@@ -21,4 +27,3 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 }
-
