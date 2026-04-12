@@ -1,9 +1,9 @@
 package com.fsales.app.rumo.core.data.repository.mapper
 
 import com.fsales.app.rumo.core.data.room.entity.GanhoEntity
-import com.fsales.app.rumo.core.data.room.entity.enums.TipoGanho as TipoGanhoEntity
 import com.fsales.app.rumo.core.domain.model.Ganho
 import com.fsales.app.rumo.core.domain.model.TipoGanho
+import com.fsales.app.rumo.core.data.room.entity.enums.TipoGanho as TipoGanhoEntity
 
 fun GanhoEntity.toDomain(): Ganho = Ganho(
     id = id,

@@ -5,10 +5,10 @@ import com.fsales.app.rumo.core.domain.repository.GanhoRepository
 import com.fsales.app.rumo.core.domain.repository.GastoRepository
 import com.fsales.app.rumo.core.domain.usecase.ObterSaldoMensalUseCase
 import com.fsales.app.rumo.core.domain.usecase.validarCompetencia
-import java.math.BigDecimal
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import java.math.BigDecimal
+import javax.inject.Inject
 
 class ObterSaldoMensalUseCaseImpl @Inject constructor(
     private val ganhoRepository: GanhoRepository,

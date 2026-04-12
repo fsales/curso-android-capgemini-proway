@@ -1,9 +1,9 @@
 package com.fsales.app.rumo.core.data.repository.mapper
 
 import com.fsales.app.rumo.core.data.room.entity.GastoEntity
-import com.fsales.app.rumo.core.data.room.entity.enums.CategoriaGasto as CategoriaGastoEntity
 import com.fsales.app.rumo.core.domain.model.CategoriaGasto
 import com.fsales.app.rumo.core.domain.model.Gasto
+import com.fsales.app.rumo.core.data.room.entity.enums.CategoriaGasto as CategoriaGastoEntity
 
 fun GastoEntity.toDomain(): Gasto = Gasto(
     id = id,

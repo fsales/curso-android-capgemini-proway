@@ -7,11 +7,11 @@ import com.fsales.app.rumo.core.domain.repository.SonhoRepository
 import com.fsales.app.rumo.core.domain.usecase.ObterProjecaoSonhosUseCase
 import com.fsales.app.rumo.core.domain.usecase.ObterSaldoMensalUseCase
 import com.fsales.app.rumo.core.domain.usecase.validarCompetencia
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 
 private val STATUS_ATIVOS = setOf(StatusSonho.NAO_INICIADO, StatusSonho.EM_ANDAMENTO)
 

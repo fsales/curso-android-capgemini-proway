@@ -25,8 +25,17 @@
     <string name="nav_gastos">Gastos</string>
     <string name="nav_sonhos">Sonhos</string>
 
+    <!-- ===== Componentes Genéricos ===== -->
+    <string name="erro_tentar_novamente">Tentar novamente</string>
+
     <!-- ===== Lista Ganhos ===== -->
     <string name="lista_ganho_titulo">Lista de Ganhos</string>
+    <string name="lista_ganho_adicionar">Novo Ganho</string>
+    <string name="lista_ganho_vazia_titulo">Nenhum ganho registrado</string>
+    <string name="lista_ganho_vazia_mensagem">Adicione seu primeiro ganho do mês usando o botão abaixo.</string>
+    <string name="lista_ganho_erro">Não foi possível carregar os ganhos. Verifique sua conexão e tente novamente.</string>
+    <string name="lista_ganho_tentar_novamente">Tentar novamente</string>
+    <string name="ganho_recorrente">Recorrente</string>
 
     <!-- ===== Lista Gastos ===== -->
     <string name="lista_gasto_titulo">Lista de Gastos</string>
@@ -39,4 +48,8 @@
 
     <!-- ===== Cadastro Gasto ===== -->
     <string name="cadastro_gasto_titulo">Cadastro de Gasto</string>
+
+    <!-- ===== Seletor de Mês ===== -->
+    <string name="seletor_mes_anterior">Mês anterior</string>
+    <string name="seletor_mes_proximo">Próximo mês</string>
 </resources>

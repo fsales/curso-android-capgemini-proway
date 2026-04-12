@@ -1,11 +1,11 @@
 package com.fsales.app.rumo.core.data.repository.mapper
 
 import com.fsales.app.rumo.core.data.room.entity.SonhoEntity
-import com.fsales.app.rumo.core.data.room.entity.enums.PrioridadeSonho as PrioridadeSonhoEntity
-import com.fsales.app.rumo.core.data.room.entity.enums.StatusSonho as StatusSonhoEntity
 import com.fsales.app.rumo.core.domain.model.PrioridadeSonho
 import com.fsales.app.rumo.core.domain.model.Sonho
 import com.fsales.app.rumo.core.domain.model.StatusSonho
+import com.fsales.app.rumo.core.data.room.entity.enums.PrioridadeSonho as PrioridadeSonhoEntity
+import com.fsales.app.rumo.core.data.room.entity.enums.StatusSonho as StatusSonhoEntity
 
 fun SonhoEntity.toDomain(): Sonho = Sonho(
     id = id,

@@ -5,11 +5,15 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.fsales.app.rumo.ui.feature.ganho.cadastro.CadastroGanhoScreen
 import com.fsales.app.rumo.ui.feature.home.HomeScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
 object HomeRoute : NavKey
+
+@Serializable
+object CadastroGanhoRoute : NavKey
 
 @Composable
 fun AppNavHost() {
@@ -21,8 +25,16 @@ fun AppNavHost() {
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             entry<HomeRoute> {
-                HomeScreen()
+                HomeScreen(
+                    onNavigateToGanhoCadastro = { backStack.add(CadastroGanhoRoute) },
+                )
+            }
+            entry<CadastroGanhoRoute> {
+                CadastroGanhoScreen(
+                    navigateBack = { backStack.removeLastOrNull() },
+                )
             }
         }
     )
 }
+

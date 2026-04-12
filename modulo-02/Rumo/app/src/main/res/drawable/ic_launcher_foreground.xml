@@ -4,22 +4,30 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Círculo externo da bússola — centralizado na safe zone (72x72 ao centro) -->
+    <!-- Círculo de fundo -->
     <path
-        android:pathData="M54,9 A45,45 0 1,1 53.999,9 Z"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="4"
-        android:fillColor="#00000000" />
+        android:pathData="M54,54 m-40,0 a40,40 0 1,0 80,0 a40,40 0 1,0 -80,0"
+        android:fillColor="#3F51B5" />
 
-    <!-- Agulha Norte — branca sólida (aponta para cima-direita) -->
+    <!-- Agulha Norte — branca (aponta para cima) -->
     <path
-        android:pathData="M54,54 L70,18 L54,30 Z"
+        android:pathData="M54,54 L62,22 L54,32 L46,22 Z"
         android:fillColor="#FFFFFF" />
 
-    <!-- Agulha Sul — branca translúcida (aponta para baixo-esquerda) -->
+    <!-- Agulha Sul — branca translúcida (aponta para baixo) -->
     <path
-        android:pathData="M54,54 L38,90 L54,78 Z"
+        android:pathData="M54,54 L62,86 L54,76 L46,86 Z"
         android:fillColor="#B3FFFFFF" />
+
+    <!-- Agulha Leste — cinza claro (aponta para direita) -->
+    <path
+        android:pathData="M54,54 L86,46 L76,54 L86,62 Z"
+        android:fillColor="#C5CAE9" />
+
+    <!-- Agulha Oeste — cinza claro (aponta para esquerda) -->
+    <path
+        android:pathData="M54,54 L22,46 L32,54 L22,62 Z"
+        android:fillColor="#C5CAE9" />
 
     <!-- Ponto central -->
     <path
