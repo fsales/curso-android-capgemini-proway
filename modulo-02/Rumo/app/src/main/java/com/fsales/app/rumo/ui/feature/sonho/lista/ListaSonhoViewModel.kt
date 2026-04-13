@@ -2,6 +2,9 @@ package com.fsales.app.rumo.ui.feature.sonho.lista
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fsales.app.rumo.core.domain.model.ProjecaoSonho
+import com.fsales.app.rumo.core.domain.model.Sonho
+import com.fsales.app.rumo.core.domain.usecase.ListarSonhosUseCase
 import com.fsales.app.rumo.core.domain.usecase.ObterProjecaoSonhosUseCase
 import com.fsales.app.rumo.ui.ListaSonhoUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListaSonhoViewModel @Inject constructor(
+    private val listarSonhosUseCase: ListarSonhosUseCase,
     private val obterProjecaoSonhosUseCase: ObterProjecaoSonhosUseCase,
 ) : ViewModel() {
 
@@ -43,18 +47,25 @@ class ListaSonhoViewModel @Inject constructor(
         val hoje = LocalDate.now()
         viewModelScope.launch {
             _uiState.update { it.copy(carregando = true, erro = null) }
-            runCatching { obterProjecaoSonhosUseCase(hoje.monthValue, hoje.year) }
-                .onFailure { e ->
+            kotlinx.coroutines.flow.combine(
+                listarSonhosUseCase(),
+                obterProjecaoSonhosUseCase(hoje.monthValue, hoje.year)
+            ) { sonhos, projecoes ->
+                // Mapeia cada sonho para sua projeção, se existir, ou cria uma "vazia"
+                sonhos.map { sonho ->
+                    projecoes.find { it.sonho.id == sonho.id } ?: ProjecaoSonho(
+                        sonho = sonho,
+                        saldoMensal = java.math.BigDecimal.ZERO,
+                        mesesNecessarios = null,
+                        seraAlcancadoNoPrazo = null
+                    )
+                }
+            }
+                .catch { e ->
                     _uiState.update { it.copy(carregando = false, erro = e.message ?: "Erro desconhecido") }
                 }
-                .onSuccess { flow ->
-                    flow
-                        .catch { e ->
-                            _uiState.update { it.copy(carregando = false, erro = e.message ?: "Erro desconhecido") }
-                        }
-                        .collect { projecoes ->
-                            _uiState.update { it.copy(carregando = false, erro = null, projecoes = projecoes) }
-                        }
+                .collect { todasProjecoes ->
+                    _uiState.update { it.copy(carregando = false, erro = null, projecoes = todasProjecoes) }
                 }
         }
     }

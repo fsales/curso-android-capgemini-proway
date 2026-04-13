@@ -101,6 +101,7 @@
     <string name="cadastro_sonho_campo_valor_meta">Valor meta</string>
     <string name="cadastro_sonho_campo_prioridade">Prioridade</string>
     <string name="cadastro_sonho_campo_prazo">Prazo alvo (opcional)</string>
+    <string name="cadastro_sonho_campo_data_criacao">Data de criação</string>
     <string name="cadastro_sonho_erro_titulo_obrigatorio">O título é obrigatório.</string>
     <string name="cadastro_sonho_erro_valor_meta_invalido">Informe um valor meta maior que zero.</string>
     <string name="cadastro_sonho_erro_salvar">Não foi possível salvar o sonho. Tente novamente.</string>

@@ -263,6 +263,12 @@ private fun DetalheSonhoBody(
                 valor  = prazo.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
             )
         }
+        // Linha: Data de criação
+        DetalheRow(
+            rotulo = stringResource(R.string.cadastro_sonho_campo_data_criacao),
+            valor  = sonho.dataCriacao.atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+                .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+        )
 
         HorizontalDivider()
 
@@ -325,9 +331,10 @@ private fun DetalheSonhoBody(
         }
 
         // ------------------------------------------------------------------
-        // Botão "Marcar como realizado" — só para sonhos ativos
+        // Botão "Marcar como realizado" — só para sonhos ativos e com projeção executada
         // ------------------------------------------------------------------
-        if (!sonho.concluido) {
+        val podeMarcarComoRealizado = !sonho.concluido && projecao?.mesesNecessarios != null
+        if (podeMarcarComoRealizado) {
             Button(
                 onClick  = { onEvent(DetalheSonhoEvent.Concluir) },
                 modifier = Modifier.fillMaxWidth(),
@@ -472,8 +479,3 @@ private fun DetalheSonhoDialogoPreview() {
         )
     }
 }
-
-
-
-
-

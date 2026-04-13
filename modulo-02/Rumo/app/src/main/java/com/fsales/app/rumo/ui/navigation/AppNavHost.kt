@@ -81,7 +81,13 @@ fun AppNavHost() {
             entry<DetalheSonhoRoute> { route ->
                 DetalheSonhoScreen(
                     sonhoId      = route.sonhoId,
-                    navigateBack = { backStack.removeLastOrNull() },
+                    navigateBack = {
+                        backStack.removeLastOrNull()
+                        val topo = backStack.lastOrNull()
+                        if (topo !is HomeRoute || topo.abaInicial != AbaInicial.SONHOS) {
+                            backStack.add(HomeRoute(AbaInicial.SONHOS))
+                        }
+                    },
                 )
             }
         }
