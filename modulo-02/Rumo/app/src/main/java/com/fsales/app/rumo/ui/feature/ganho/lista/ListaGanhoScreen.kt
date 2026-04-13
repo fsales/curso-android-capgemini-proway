@@ -2,7 +2,9 @@ package com.fsales.app.rumo.ui.feature.ganho.lista
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -96,42 +98,47 @@ fun ListaGanhoContent(
             )
         },
     ) { paddingValues ->
-        when {
-            uiState.erro != null -> {
-                RumoErroState(
-                    mensagem = uiState.erro,
-                    onRetry = { onEvent(ListaGanhoEvent.TentarNovamente) },
-                    modifier = Modifier.padding(paddingValues),
-                )
-            }
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
+        ) {
+            // SeletorMes sempre visível — independente do estado da lista
+            SeletorMes(
+                mesAno = uiState.mesAno,
+                onAnterior = { onEvent(ListaGanhoEvent.MesAnterior) },
+                onProximo = { onEvent(ListaGanhoEvent.ProximoMes) },
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
+            )
 
-            uiState.ganhos.isEmpty() && !uiState.carregando -> {
-                RumoEmptyState(
-                    icone = Icons.Filled.SearchOff,
-                    tituloRes = R.string.lista_ganho_vazia_titulo,
-                    mensagemRes = R.string.lista_ganho_vazia_mensagem,
-                    modifier = Modifier.padding(paddingValues),
-                )
-            }
+            when {
+                uiState.erro != null -> {
+                    RumoErroState(
+                        mensagem = uiState.erro,
+                        onRetry = { onEvent(ListaGanhoEvent.TentarNovamente) },
+                    )
+                }
 
-            else -> {
-                LazyColumn(
-                    modifier = Modifier.padding(paddingValues),
-                    contentPadding = PaddingValues(
-                        horizontal = MaterialTheme.spacing.medium,
-                        vertical = MaterialTheme.spacing.medium,
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
-                ) {
-                    item {
-                        SeletorMes(
-                            mesAno = uiState.mesAno,
-                            onAnterior = { onEvent(ListaGanhoEvent.MesAnterior) },
-                            onProximo = { onEvent(ListaGanhoEvent.ProximoMes) },
-                        )
-                    }
-                    items(uiState.ganhos, key = { it.id }) { ganho ->
-                        GanhoItem(ganho = ganho, onClick = {})
+                uiState.ganhos.isEmpty() && !uiState.carregando -> {
+                    RumoEmptyState(
+                        icone = Icons.Filled.SearchOff,
+                        tituloRes = R.string.lista_ganho_vazia_titulo,
+                        mensagemRes = R.string.lista_ganho_vazia_mensagem,
+                    )
+                }
+
+                else -> {
+                    LazyColumn(
+                        contentPadding = PaddingValues(
+                            horizontal = MaterialTheme.spacing.medium,
+                            vertical = MaterialTheme.spacing.medium,
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        items(uiState.ganhos, key = { it.id }) { ganho ->
+                            GanhoItem(ganho = ganho, onClick = {})
+                        }
                     }
                 }
             }

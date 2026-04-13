@@ -50,9 +50,12 @@ private const val LOADING_DURATION_MS = 400L
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    abaInicial: HomeEvent = HomeEvent.IrParaGanhos,
     onNavigateToGanhoCadastro: () -> Unit = {},
+    onNavigateToGastoCadastro: () -> Unit = {},
+    onNavigateToSonhoCadastro: () -> Unit = {},
 ) {
-    var uiState by remember { mutableStateOf(HomeUiState()) }
+    var uiState by remember { mutableStateOf(HomeUiState(abaAtiva = abaInicial)) }
     var carregandoAba by remember { mutableStateOf(false) }
     var carregandoLista by remember { mutableStateOf(false) }
 
@@ -75,6 +78,8 @@ fun HomeScreen(
         onEvent = viewModel::onEvent,
         onCarregandoChange = { carregandoLista = it },
         onNavigateToGanhoCadastro = onNavigateToGanhoCadastro,
+        onNavigateToGastoCadastro = onNavigateToGastoCadastro,
+        onNavigateToSonhoCadastro = onNavigateToSonhoCadastro,
     )
 }
 
@@ -91,10 +96,12 @@ fun HomeContent(
     onEvent: (HomeEvent) -> Unit,
     onCarregandoChange: (Boolean) -> Unit = {},
     onNavigateToGanhoCadastro: () -> Unit = {},
+    onNavigateToGastoCadastro: () -> Unit = {},
+    onNavigateToSonhoCadastro: () -> Unit = {},
     destinoConteudo: (@Composable (HomeEvent, Modifier) -> Unit)? = null,
 ) {
     Scaffold(
-        topBar = { RumoTopAppBar(carregando = carregando) },
+        topBar = { RumoTopAppBar(carregando = carregando, abaAtiva = uiState.abaAtiva) },
         bottomBar = {
             RumoNavigationBar(
                 selectedEvent = uiState.abaAtiva,
@@ -115,6 +122,8 @@ fun HomeContent(
                 modifier = contentModifier,
                 onCarregandoChange = onCarregandoChange,
                 onNavigateToGanhoCadastro = onNavigateToGanhoCadastro,
+                onNavigateToGastoCadastro = onNavigateToGastoCadastro,
+                onNavigateToSonhoCadastro = onNavigateToSonhoCadastro,
             )
         }
     }
@@ -129,6 +138,8 @@ private fun HomeDestino(
     modifier: Modifier,
     onCarregandoChange: (Boolean) -> Unit,
     onNavigateToGanhoCadastro: () -> Unit,
+    onNavigateToGastoCadastro: () -> Unit,
+    onNavigateToSonhoCadastro: () -> Unit,
 ) {
     AnimatedContent(
         targetState = abaAtiva,
@@ -144,8 +155,13 @@ private fun HomeDestino(
                 onNavigateToCadastro = onNavigateToGanhoCadastro,
                 onCarregandoChange = onCarregandoChange,
             )
-            HomeEvent.IrParaGastos -> ListaGastoScreen()
-            HomeEvent.IrParaSonhos -> ListaSonhoScreen()
+            HomeEvent.IrParaGastos -> ListaGastoScreen(
+                onNavigateToCadastro = onNavigateToGastoCadastro,
+                onCarregandoChange = onCarregandoChange,
+            )
+            HomeEvent.IrParaSonhos -> ListaSonhoScreen(
+                onNavigateToCadastro = onNavigateToSonhoCadastro,
+            )
         }
     }
 }
@@ -234,6 +250,8 @@ private fun HomeSonhosPreview() {
         HomeScreenPreviewShell(initialTab = HomeEvent.IrParaSonhos)
     }
 }
+
+
 
 
 

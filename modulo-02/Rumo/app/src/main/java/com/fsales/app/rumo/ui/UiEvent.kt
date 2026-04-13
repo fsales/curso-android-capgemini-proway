@@ -9,9 +9,6 @@ sealed interface ListaGanhoUiEvent {
     data object NavigateToCadastro : ListaGanhoUiEvent
 }
 
-sealed interface CadastroGanhoUiEvent {
-    data object NavigateBack : CadastroGanhoUiEvent
-}
 
 /** Gasto */
 sealed interface ListaGastoUiEvent {
@@ -20,12 +17,18 @@ sealed interface ListaGastoUiEvent {
 }
 
 sealed interface CadastroGastoUiEvent {
-    data object NavigateBack : CadastroGastoUiEvent
+    data object NavigateBack   : CadastroGastoUiEvent
+    data object ErroAoSalvar   : CadastroGastoUiEvent
 }
 
 /** Sonho */
 sealed interface ListaSonhoUiEvent {
-    data object NavigateBack : ListaSonhoUiEvent
+    data object NavigateToCadastro : ListaSonhoUiEvent
+}
+
+sealed interface CadastroSonhoUiEvent {
+    data object NavigateBack   : CadastroSonhoUiEvent
+    data object ErroAoSalvar   : CadastroSonhoUiEvent
 }
 
 /** Home */

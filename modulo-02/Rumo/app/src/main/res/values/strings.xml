@@ -39,15 +39,65 @@
 
     <!-- ===== Lista Gastos ===== -->
     <string name="lista_gasto_titulo">Lista de Gastos</string>
+    <string name="lista_gasto_adicionar">Novo Gasto</string>
+    <string name="lista_gasto_vazia_titulo">Nenhum gasto registrado</string>
+    <string name="lista_gasto_vazia_mensagem">Adicione seu primeiro gasto do mês usando o botão abaixo.</string>
+    <string name="gasto_essencial">Essencial</string>
+    <string name="gasto_recorrente">Recorrente</string>
 
     <!-- ===== Lista Sonhos ===== -->
     <string name="lista_sonho_titulo">Lista de Sonhos</string>
+    <string name="lista_sonho_adicionar">Novo Sonho</string>
+    <string name="lista_sonho_vazia_titulo">Nenhum sonho cadastrado</string>
+    <string name="lista_sonho_vazia_mensagem">Adicione seu primeiro sonho usando o botão abaixo.</string>
 
     <!-- ===== Cadastro Ganho ===== -->
     <string name="cadastro_ganho_titulo">Cadastro de Ganho</string>
+    <string name="cadastro_ganho_campo_descricao">Descrição</string>
+    <string name="cadastro_ganho_campo_valor">Valor</string>
+    <string name="cadastro_ganho_campo_data">Data de recebimento</string>
+    <string name="cadastro_ganho_campo_tipo">Tipo de ganho</string>
+    <string name="cadastro_ganho_campo_recorrente">Ganho recorrente</string>
+    <string name="cadastro_ganho_campo_observacao">Observação (opcional)</string>
+    <!-- Erros de validação do formulário -->
+    <string name="cadastro_ganho_erro_descricao_obrigatoria">A descrição é obrigatória.</string>
+    <string name="cadastro_ganho_erro_valor_invalido">Informe um valor maior que zero.</string>
+    <string name="cadastro_ganho_erro_data_invalida">A data não corresponde ao mês de referência.</string>
+    <string name="cadastro_ganho_erro_salvar">Não foi possível salvar o ganho. Tente novamente.</string>
+
+    <!-- ===== Ações genéricas ===== -->
+    <string name="acao_salvar">Salvar</string>
+    <string name="acao_voltar">Voltar</string>
+    <string name="acao_confirmar">Confirmar</string>
+    <string name="acao_cancelar">Cancelar</string>
+    <string name="campo_data_abrir_calendario">Abrir calendário</string>
 
     <!-- ===== Cadastro Gasto ===== -->
     <string name="cadastro_gasto_titulo">Cadastro de Gasto</string>
+    <string name="cadastro_gasto_campo_descricao">Descrição</string>
+    <string name="cadastro_gasto_campo_valor">Valor</string>
+    <string name="cadastro_gasto_campo_data">Data do gasto</string>
+    <string name="cadastro_gasto_campo_categoria">Categoria</string>
+    <string name="cadastro_gasto_campo_essencial">Gasto essencial</string>
+    <string name="cadastro_gasto_campo_recorrente">Gasto recorrente</string>
+    <string name="cadastro_gasto_campo_observacao">Observação (opcional)</string>
+    <string name="cadastro_gasto_erro_descricao_obrigatoria">A descrição é obrigatória.</string>
+    <string name="cadastro_gasto_erro_valor_invalido">Informe um valor maior que zero.</string>
+    <string name="cadastro_gasto_erro_data_invalida">A data não corresponde ao mês de referência.</string>
+    <string name="cadastro_gasto_erro_salvar">Não foi possível salvar o gasto. Tente novamente.</string>
+
+    <!-- ===== Cadastro Sonho ===== -->
+    <string name="cadastro_sonho_titulo">Cadastro de Sonho</string>
+    <string name="cadastro_sonho_campo_titulo">Título</string>
+    <string name="cadastro_sonho_campo_descricao">Descrição (opcional)</string>
+    <string name="cadastro_sonho_campo_valor_meta">Valor meta</string>
+    <string name="cadastro_sonho_campo_valor_atual">Valor atual</string>
+    <string name="cadastro_sonho_campo_prioridade">Prioridade</string>
+    <string name="cadastro_sonho_campo_prazo">Prazo alvo (opcional)</string>
+    <string name="cadastro_sonho_erro_titulo_obrigatorio">O título é obrigatório.</string>
+    <string name="cadastro_sonho_erro_valor_meta_invalido">Informe um valor meta maior que zero.</string>
+    <string name="cadastro_sonho_erro_valor_atual_negativo">O valor atual não pode ser negativo.</string>
+    <string name="cadastro_sonho_erro_salvar">Não foi possível salvar o sonho. Tente novamente.</string>
 
     <!-- ===== Seletor de Mês ===== -->
     <string name="seletor_mes_anterior">Mês anterior</string>
