@@ -24,6 +24,15 @@
     <string name="nav_ganhos">Ganhos</string>
     <string name="nav_gastos">Gastos</string>
     <string name="nav_sonhos">Sonhos</string>
+    <string name="nav_saldo">Saldo</string>
+
+    <!-- ===== Saldo (Home) ===== -->
+    <string name="saldo_label">Saldo em conta</string>
+    <string name="saldo_negativo_badge">Negativo</string>
+    <string name="saldo_carregando">Carregando saldo...</string>
+    <string name="saldo_ver_extrato">Ver extrato</string>
+    <string name="saldo_ganhos_label">Ganhos</string>
+    <string name="saldo_gastos_label">Gastos</string>
 
     <!-- ===== Componentes Genéricos ===== -->
     <string name="erro_tentar_novamente">Tentar novamente</string>

@@ -33,6 +33,8 @@ import com.fsales.app.rumo.ui.feature.gasto.lista.ListaGastoContent
 import com.fsales.app.rumo.ui.feature.gasto.lista.ListaGastoScreen
 import com.fsales.app.rumo.ui.feature.sonho.lista.ListaSonhoContent
 import com.fsales.app.rumo.ui.feature.sonho.lista.ListaSonhoScreen
+import com.fsales.app.rumo.ui.feature.saldo.SaldoContent
+import com.fsales.app.rumo.ui.feature.saldo.SaldoUiState
 import com.fsales.app.rumo.ui.theme.RumoTheme
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
@@ -50,7 +52,7 @@ private const val LOADING_DURATION_MS = 400L
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    abaInicial: HomeEvent = HomeEvent.IrParaGanhos,
+    abaInicial: HomeEvent = HomeEvent.IrParaSaldo,
     onNavigateToGanhoCadastro: () -> Unit = {},
     onNavigateToGastoCadastro: () -> Unit = {},
     onNavigateToSonhoCadastro: () -> Unit = {},
@@ -67,6 +69,7 @@ fun HomeScreen(
                 HomeUiEvent.NavigateToListaGanho -> uiState.copy(abaAtiva = HomeEvent.IrParaGanhos)
                 HomeUiEvent.NavigateToListaGasto -> uiState.copy(abaAtiva = HomeEvent.IrParaGastos)
                 HomeUiEvent.NavigateToListaSonho -> uiState.copy(abaAtiva = HomeEvent.IrParaSonhos)
+                HomeUiEvent.NavigateToSaldo -> uiState.copy(abaAtiva = HomeEvent.IrParaSaldo)
             }
             delay(LOADING_DURATION_MS)
             carregandoAba = false
@@ -156,6 +159,9 @@ private fun HomeDestino(
         modifier = modifier,
     ) { aba ->
         when (aba) {
+            HomeEvent.IrParaSaldo -> com.fsales.app.rumo.ui.feature.saldo.SaldoScreen(
+                onIrExtrato = {},
+            )
             HomeEvent.IrParaGanhos -> ListaGanhoScreen(
                 onNavigateToCadastro = onNavigateToGanhoCadastro,
                 onCarregandoChange = onCarregandoChange,
@@ -212,6 +218,15 @@ fun HomeScreenPreviewShell(
                 modifier = modifier,
             ) { destino ->
                 when (destino) {
+                    HomeEvent.IrParaSaldo -> SaldoContent(
+                        uiState = SaldoUiState(
+                            mesAno = YearMonth.of(2026, 4),
+                            totalGanhos = java.math.BigDecimal("6200.00"),
+                            totalGastos = java.math.BigDecimal("4200.00"),
+                            saldo = java.math.BigDecimal("2000.00"),
+                        ),
+                        modifier = modifier,
+                    )
                     HomeEvent.IrParaGanhos -> ListaGanhoContent(
                         uiState = ListaGanhoUiState(
                             ganhos = ganhosFakePreview,
@@ -256,6 +271,8 @@ private fun HomeSonhosPreview() {
         HomeScreenPreviewShell(initialTab = HomeEvent.IrParaSonhos)
     }
 }
+
+
 
 
 

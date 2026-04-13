@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.fsales.app.rumo.R
 import com.fsales.app.rumo.ui.feature.home.HomeEvent
@@ -29,6 +30,12 @@ data class RumoNavItem(
 )
 
 val rumoNavItems = listOf(
+    RumoNavItem(
+        labelRes     = R.string.nav_saldo,
+        iconFilled   = Icons.Filled.Savings,
+        iconOutlined = Icons.Outlined.Savings,
+        evento       = HomeEvent.IrParaSaldo,
+    ),
     RumoNavItem(
         labelRes     = R.string.nav_ganhos,
         iconFilled   = Icons.Filled.Savings,
@@ -63,10 +70,18 @@ fun RumoNavigationBar(
                 selected = selecionado,
                 onClick = { onItemSelected(item.evento) },
                 icon = {
-                    Icon(
-                        imageVector = if (selecionado) item.iconFilled else item.iconOutlined,
-                        contentDescription = label,
-                    )
+                    // Use custom vector drawable for Saldo tab to allow a unique brand icon.
+                    if (item.evento == HomeEvent.IrParaSaldo) {
+                        Icon(
+                            painter = painterResource(id = com.fsales.app.rumo.R.drawable.ic_rumo_saldo),
+                            contentDescription = label,
+                        )
+                    } else {
+                        Icon(
+                            imageVector = if (selecionado) item.iconFilled else item.iconOutlined,
+                            contentDescription = label,
+                        )
+                    }
                 },
                 label = { Text(text = label) },
             )

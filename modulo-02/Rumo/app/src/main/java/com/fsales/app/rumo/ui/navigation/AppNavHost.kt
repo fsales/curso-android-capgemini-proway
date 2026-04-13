@@ -13,7 +13,7 @@ import com.fsales.app.rumo.ui.feature.sonho.detalhe.DetalheSonhoScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HomeRoute(val abaInicial: AbaInicial = AbaInicial.GANHOS) : NavKey
+data class HomeRoute(val abaInicial: AbaInicial = AbaInicial.SALDO) : NavKey
 
 @Serializable
 data class CadastroGanhoRoute(val abaOrigem: AbaInicial = AbaInicial.GANHOS) : NavKey

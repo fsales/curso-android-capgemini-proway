@@ -34,6 +34,7 @@ private fun HomeEvent.tituloSecaoRes(): Int = when (this) {
     HomeEvent.IrParaGanhos -> R.string.nav_ganhos
     HomeEvent.IrParaGastos -> R.string.nav_gastos
     HomeEvent.IrParaSonhos -> R.string.nav_sonhos
+    HomeEvent.IrParaSaldo -> R.string.nav_saldo
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

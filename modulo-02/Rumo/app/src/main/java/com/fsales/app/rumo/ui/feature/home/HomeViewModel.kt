@@ -24,6 +24,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             HomeEvent.IrParaGanhos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGanho)
             HomeEvent.IrParaGastos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGasto)
             HomeEvent.IrParaSonhos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaSonho)
+            HomeEvent.IrParaSaldo -> _uiEvent.trySend(HomeUiEvent.NavigateToSaldo)
         }
     }
 }
