@@ -18,9 +18,9 @@ data class SonhoEntity(
     val titulo: String,
     val descricao: String? = null,
     val valorMeta: BigDecimal,
-    val valorAtual: BigDecimal = BigDecimal.ZERO,
     val prioridade: PrioridadeSonho = PrioridadeSonho.MEDIA,
     val prazoAlvo: LocalDate? = null,
     val dataCriacao: Instant = Instant.now(),
+    val concluido: Boolean = false,
 )
 

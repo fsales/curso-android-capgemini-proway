@@ -13,7 +13,7 @@ import com.fsales.app.rumo.core.data.room.entity.SonhoEntity
 
 @Database(
     entities = [GanhoEntity::class, GastoEntity::class, SonhoEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(AppTypeConverters::class)

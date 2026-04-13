@@ -8,5 +8,6 @@ enum class CategoriaGasto(val descricao: String) {
     EDUCACAO("Educação"),
     LAZER("Lazer"),
     CONTAS("Contas"),
-    OUTROS("Outros")
+    OUTROS("Outros"),
+    SONHO_REALIZADO("Sonho realizado"),
 }

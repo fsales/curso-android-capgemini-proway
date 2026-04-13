@@ -20,6 +20,7 @@ sealed interface ListaGastoUiEvent {
 /** Sonho */
 sealed interface ListaSonhoUiEvent {
     data object NavigateToCadastro : ListaSonhoUiEvent
+    data class NavigateToDetalhe(val sonhoId: Long) : ListaSonhoUiEvent
 }
 
 

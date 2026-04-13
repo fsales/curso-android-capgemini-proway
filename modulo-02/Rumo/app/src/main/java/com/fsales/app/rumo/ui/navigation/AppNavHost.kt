@@ -9,6 +9,7 @@ import com.fsales.app.rumo.ui.feature.ganho.cadastro.CadastroGanhoScreen
 import com.fsales.app.rumo.ui.feature.gasto.cadastro.CadastroGastoScreen
 import com.fsales.app.rumo.ui.feature.home.HomeScreen
 import com.fsales.app.rumo.ui.feature.sonho.cadastro.CadastroSonhoScreen
+import com.fsales.app.rumo.ui.feature.sonho.detalhe.DetalheSonhoScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,6 +23,9 @@ data class CadastroGastoRoute(val abaOrigem: AbaInicial = AbaInicial.GASTOS) : N
 
 @Serializable
 data class CadastroSonhoRoute(val abaOrigem: AbaInicial = AbaInicial.SONHOS) : NavKey
+
+@Serializable
+data class DetalheSonhoRoute(val sonhoId: Long) : NavKey
 
 @Composable
 fun AppNavHost() {
@@ -38,6 +42,7 @@ fun AppNavHost() {
                     onNavigateToGanhoCadastro = { backStack.add(CadastroGanhoRoute(AbaInicial.GANHOS)) },
                     onNavigateToGastoCadastro = { backStack.add(CadastroGastoRoute(AbaInicial.GASTOS)) },
                     onNavigateToSonhoCadastro = { backStack.add(CadastroSonhoRoute(AbaInicial.SONHOS)) },
+                    onNavigateToSonhoDetalhe  = { sonhoId -> backStack.add(DetalheSonhoRoute(sonhoId)) },
                 )
             }
             entry<CadastroGanhoRoute> { route ->
@@ -71,6 +76,12 @@ fun AppNavHost() {
                             backStack.add(HomeRoute(route.abaOrigem))
                         }
                     },
+                )
+            }
+            entry<DetalheSonhoRoute> { route ->
+                DetalheSonhoScreen(
+                    sonhoId      = route.sonhoId,
+                    navigateBack = { backStack.removeLastOrNull() },
                 )
             }
         }

@@ -45,13 +45,15 @@ fun ListaSonhoScreen(
     modifier: Modifier = Modifier,
     viewModel: ListaSonhoViewModel = hiltViewModel(),
     onNavigateToCadastro: () -> Unit = {},
+    onNavigateToDetalhe: (Long) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                ListaSonhoUiEvent.NavigateToCadastro -> onNavigateToCadastro()
+                ListaSonhoUiEvent.NavigateToCadastro         -> onNavigateToCadastro()
+                is ListaSonhoUiEvent.NavigateToDetalhe -> onNavigateToDetalhe(event.sonhoId)
             }
         }
     }
@@ -132,35 +134,28 @@ private fun fakeSonho(
     id: Long,
     titulo: String,
     valorMeta: BigDecimal,
-    valorAtual: BigDecimal,
     prioridade: PrioridadeSonho,
-) = Sonho(id = id, titulo = titulo, valorMeta = valorMeta, valorAtual = valorAtual,
-          prioridade = prioridade)
+    concluido: Boolean = false,
+) = Sonho(id = id, titulo = titulo, valorMeta = valorMeta, prioridade = prioridade, concluido = concluido)
 
 private val projecoesFake = listOf(
     ProjecaoSonho(
-        sonho                = fakeSonho(1L, "Carro novo", BigDecimal("80000"), BigDecimal("25000"),
-                                         PrioridadeSonho.ALTA),
-        valorRestante        = BigDecimal("55000"),
-        percentualConcluido  = BigDecimal("31.25"),
-        mesesNecessarios     = 18,
-        seraAlcancadoNoPrazo = true,   // tem prazo e está no prazo
+        sonho                = fakeSonho(1L, "Carro novo", BigDecimal("80000"), PrioridadeSonho.ALTA),
+        saldoMensal          = BigDecimal("3055.55"),
+        mesesNecessarios     = 27,
+        seraAlcancadoNoPrazo = true,
     ),
     ProjecaoSonho(
-        sonho                = fakeSonho(2L, "Viagem para o Japão", BigDecimal("15000"), BigDecimal.ZERO,
-                                         PrioridadeSonho.MEDIA),
-        valorRestante        = BigDecimal("15000"),
-        percentualConcluido  = BigDecimal("0.00"),
+        sonho                = fakeSonho(2L, "Viagem para o Japão", BigDecimal("15000"), PrioridadeSonho.MEDIA),
+        saldoMensal          = BigDecimal.ZERO,
         mesesNecessarios     = null,
-        seraAlcancadoNoPrazo = null,   // sem prazo — indicador oculto
+        seraAlcancadoNoPrazo = null,
     ),
     ProjecaoSonho(
-        sonho                = fakeSonho(3L, "Apartamento próprio", BigDecimal("300000"), BigDecimal("45000"),
-                                         PrioridadeSonho.ALTA),
-        valorRestante        = BigDecimal("255000"),
-        percentualConcluido  = BigDecimal("15.00"),
-        mesesNecessarios     = 42,
-        seraAlcancadoNoPrazo = false,  // tem prazo mas está fora do prazo
+        sonho                = fakeSonho(3L, "Apartamento próprio", BigDecimal("300000"), PrioridadeSonho.ALTA, concluido = true),
+        saldoMensal          = BigDecimal.ZERO,
+        mesesNecessarios     = null,
+        seraAlcancadoNoPrazo = null,
     ),
 )
 

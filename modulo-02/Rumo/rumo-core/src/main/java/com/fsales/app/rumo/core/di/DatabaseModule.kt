@@ -25,7 +25,7 @@ abstract class DatabaseModule {
                 context,
                 AppDatabase::class.java,
                 "rumo-app"
-            ).build()
+            ).fallbackToDestructiveMigration(true).build()
         }
 
         @Provides

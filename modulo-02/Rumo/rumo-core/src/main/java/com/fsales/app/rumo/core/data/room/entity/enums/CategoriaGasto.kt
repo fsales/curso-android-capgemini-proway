@@ -8,5 +8,6 @@ enum class CategoriaGasto {
     EDUCACAO,
     LAZER,
     CONTAS,
-    OUTROS
+    OUTROS,
+    SONHO_REALIZADO,
 }

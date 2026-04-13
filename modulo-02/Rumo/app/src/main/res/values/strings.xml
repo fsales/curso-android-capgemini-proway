@@ -55,6 +55,9 @@
     <string name="sonho_sem_projecao">Sem projeção disponível</string>
     <string name="sonho_no_prazo">No prazo</string>
     <string name="sonho_fora_do_prazo">Fora do prazo</string>
+    <string name="sonho_meta">Meta: %s</string>
+    <string name="sonho_saldo_mensal">Alocado/mês: %s</string>
+    <string name="sonho_realizado">Realizado ✓</string>
 
     <!-- ===== Cadastro Ganho ===== -->
     <string name="cadastro_ganho_titulo">Cadastro de Ganho</string>
@@ -96,13 +99,21 @@
     <string name="cadastro_sonho_campo_titulo">Título</string>
     <string name="cadastro_sonho_campo_descricao">Descrição (opcional)</string>
     <string name="cadastro_sonho_campo_valor_meta">Valor meta</string>
-    <string name="cadastro_sonho_campo_valor_atual">Valor atual</string>
     <string name="cadastro_sonho_campo_prioridade">Prioridade</string>
     <string name="cadastro_sonho_campo_prazo">Prazo alvo (opcional)</string>
     <string name="cadastro_sonho_erro_titulo_obrigatorio">O título é obrigatório.</string>
     <string name="cadastro_sonho_erro_valor_meta_invalido">Informe um valor meta maior que zero.</string>
-    <string name="cadastro_sonho_erro_valor_atual_negativo">O valor atual não pode ser negativo.</string>
     <string name="cadastro_sonho_erro_salvar">Não foi possível salvar o sonho. Tente novamente.</string>
+
+    <!-- ===== Detalhe Sonho ===== -->
+    <string name="detalhe_sonho_titulo">Detalhe do Sonho</string>
+    <string name="detalhe_sonho_marcar_realizado">Marcar como realizado</string>
+    <string name="detalhe_sonho_titulo_projecao">Projeção financeira</string>
+    <string name="detalhe_sonho_prazo_estimado">Prazo estimado</string>
+    <string name="detalhe_sonho_indicador_prazo">Indicador de prazo</string>
+    <string name="sonho_dialogo_conclusao_titulo">Confirmar conclusão</string>
+    <string name="sonho_dialogo_conclusao_mensagem">Ao marcar como realizado, o sonho sairá da projeção. Essa ação não pode ser desfeita.</string>
+    <string name="sonho_dialogo_confirmar">Confirmar</string>
 
     <!-- ===== Seletor de Mês ===== -->
     <string name="seletor_mes_anterior">Mês anterior</string>

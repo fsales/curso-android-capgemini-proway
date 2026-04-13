@@ -10,10 +10,10 @@ fun SonhoEntity.toDomain(): Sonho = Sonho(
     titulo      = titulo,
     descricao   = descricao,
     valorMeta   = valorMeta,
-    valorAtual  = valorAtual,
     prioridade  = prioridade.toDomain(),
     prazoAlvo   = prazoAlvo,
     dataCriacao = dataCriacao,
+    concluido   = concluido,
 )
 
 fun Sonho.toEntity(): SonhoEntity = SonhoEntity(
@@ -21,10 +21,10 @@ fun Sonho.toEntity(): SonhoEntity = SonhoEntity(
     titulo      = titulo,
     descricao   = descricao,
     valorMeta   = valorMeta,
-    valorAtual  = valorAtual,
     prioridade  = prioridade.toEntity(),
     prazoAlvo   = prazoAlvo,
     dataCriacao = dataCriacao,
+    concluido   = concluido,
 )
 
 private fun PrioridadeSonhoEntity.toDomain(): PrioridadeSonho = when (this) {

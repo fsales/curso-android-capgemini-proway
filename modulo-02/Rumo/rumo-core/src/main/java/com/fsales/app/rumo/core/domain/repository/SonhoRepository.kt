@@ -5,5 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SonhoRepository {
     fun listarTodos(): Flow<List<Sonho>>
+    fun obterPorId(id: Long): Flow<Sonho?>
     suspend fun salvar(item: Sonho): Result<Long>
+    suspend fun concluir(id: Long): Result<Unit>
 }

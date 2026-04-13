@@ -13,6 +13,12 @@ interface SonhoDao {
     @Query("SELECT * FROM sonhos ORDER BY dataCriacao DESC")
     fun listarTodos(): Flow<List<SonhoEntity>>
 
+    @Query("SELECT * FROM sonhos WHERE id = :id")
+    fun obterPorId(id: Long): Flow<SonhoEntity?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun salvar(item: SonhoEntity): Long
+
+    @Query("UPDATE sonhos SET concluido = 1 WHERE id = :id")
+    suspend fun concluir(id: Long)
 }

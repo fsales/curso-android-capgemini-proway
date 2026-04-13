@@ -54,6 +54,7 @@ fun HomeScreen(
     onNavigateToGanhoCadastro: () -> Unit = {},
     onNavigateToGastoCadastro: () -> Unit = {},
     onNavigateToSonhoCadastro: () -> Unit = {},
+    onNavigateToSonhoDetalhe: (Long) -> Unit = {},
 ) {
     var uiState by remember { mutableStateOf(HomeUiState(abaAtiva = abaInicial)) }
     var carregandoAba by remember { mutableStateOf(false) }
@@ -80,6 +81,7 @@ fun HomeScreen(
         onNavigateToGanhoCadastro = onNavigateToGanhoCadastro,
         onNavigateToGastoCadastro = onNavigateToGastoCadastro,
         onNavigateToSonhoCadastro = onNavigateToSonhoCadastro,
+        onNavigateToSonhoDetalhe  = onNavigateToSonhoDetalhe,
     )
 }
 
@@ -98,6 +100,7 @@ fun HomeContent(
     onNavigateToGanhoCadastro: () -> Unit = {},
     onNavigateToGastoCadastro: () -> Unit = {},
     onNavigateToSonhoCadastro: () -> Unit = {},
+    onNavigateToSonhoDetalhe: (Long) -> Unit = {},
     destinoConteudo: (@Composable (HomeEvent, Modifier) -> Unit)? = null,
 ) {
     Scaffold(
@@ -124,6 +127,7 @@ fun HomeContent(
                 onNavigateToGanhoCadastro = onNavigateToGanhoCadastro,
                 onNavigateToGastoCadastro = onNavigateToGastoCadastro,
                 onNavigateToSonhoCadastro = onNavigateToSonhoCadastro,
+                onNavigateToSonhoDetalhe  = onNavigateToSonhoDetalhe,
             )
         }
     }
@@ -140,6 +144,7 @@ private fun HomeDestino(
     onNavigateToGanhoCadastro: () -> Unit,
     onNavigateToGastoCadastro: () -> Unit,
     onNavigateToSonhoCadastro: () -> Unit,
+    onNavigateToSonhoDetalhe: (Long) -> Unit,
 ) {
     AnimatedContent(
         targetState = abaAtiva,
@@ -160,7 +165,8 @@ private fun HomeDestino(
                 onCarregandoChange = onCarregandoChange,
             )
             HomeEvent.IrParaSonhos -> ListaSonhoScreen(
-                onNavigateToCadastro = onNavigateToSonhoCadastro,
+                onNavigateToCadastro  = onNavigateToSonhoCadastro,
+                onNavigateToDetalhe   = onNavigateToSonhoDetalhe,
             )
         }
     }

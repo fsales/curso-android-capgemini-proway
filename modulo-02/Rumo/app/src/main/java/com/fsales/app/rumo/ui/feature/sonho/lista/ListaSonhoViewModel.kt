@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,20 +35,26 @@ class ListaSonhoViewModel @Inject constructor(
         when (event) {
             ListaSonhoEvent.IrParaCadastro  -> _uiEvent.trySend(ListaSonhoUiEvent.NavigateToCadastro)
             ListaSonhoEvent.TentarNovamente -> carregarProjecoes()
-            is ListaSonhoEvent.AbrirSonho   -> { /* detalhe — futuro */ }
+            is ListaSonhoEvent.AbrirSonho   -> _uiEvent.trySend(ListaSonhoUiEvent.NavigateToDetalhe(event.id))
         }
     }
 
     private fun carregarProjecoes() {
         val hoje = LocalDate.now()
         viewModelScope.launch {
-            obterProjecaoSonhosUseCase(hoje.monthValue, hoje.year)
-                .onStart { _uiState.update { it.copy(carregando = true, erro = null) } }
-                .catch { e ->
+            _uiState.update { it.copy(carregando = true, erro = null) }
+            runCatching { obterProjecaoSonhosUseCase(hoje.monthValue, hoje.year) }
+                .onFailure { e ->
                     _uiState.update { it.copy(carregando = false, erro = e.message ?: "Erro desconhecido") }
                 }
-                .collect { projecoes ->
-                    _uiState.update { it.copy(carregando = false, erro = null, projecoes = projecoes) }
+                .onSuccess { flow ->
+                    flow
+                        .catch { e ->
+                            _uiState.update { it.copy(carregando = false, erro = e.message ?: "Erro desconhecido") }
+                        }
+                        .collect { projecoes ->
+                            _uiState.update { it.copy(carregando = false, erro = null, projecoes = projecoes) }
+                        }
                 }
         }
     }

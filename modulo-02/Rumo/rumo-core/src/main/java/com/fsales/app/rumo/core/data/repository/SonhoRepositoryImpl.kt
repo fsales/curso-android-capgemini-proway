@@ -20,7 +20,14 @@ class SonhoRepositoryImpl @Inject constructor(
     override fun listarTodos(): Flow<List<Sonho>> =
         sonhoDao.listarTodos().map { sonhos -> sonhos.map { it.toDomain() } }
 
+    override fun obterPorId(id: Long): Flow<Sonho?> =
+        sonhoDao.obterPorId(id).map { it?.toDomain() }
+
     override suspend fun salvar(item: Sonho): Result<Long> = withContext(ioDispatcher) {
         runCatching { sonhoDao.salvar(item.toEntity()) }
+    }
+
+    override suspend fun concluir(id: Long): Result<Unit> = withContext(ioDispatcher) {
+        runCatching { sonhoDao.concluir(id) }
     }
 }

@@ -7,35 +7,23 @@ import java.time.temporal.ChronoUnit
 
 data class ProjecaoSonho(
     val sonho: Sonho,
-    val valorRestante: BigDecimal,
-    val percentualConcluido: BigDecimal,
+    val saldoMensal: BigDecimal,
     val mesesNecessarios: Int?,
-    /** `null` quando o sonho não tem prazo definido — indicador de prazo não deve ser exibido. */
-    val seraAlcancadoNoPrazo: Boolean?
+    /** `null` quando o sonho não tem prazo definido ou quando concluído — indicador de prazo não deve ser exibido. */
+    val seraAlcancadoNoPrazo: Boolean?,
 )
 
 fun Sonho.calcularProjecao(saldoMensal: BigDecimal): ProjecaoSonho {
-    val valorRestante = valorMeta.subtract(valorAtual).max(BigDecimal.ZERO)
-
-    val percentualConcluido = if (valorMeta > BigDecimal.ZERO) {
-        valorAtual
-            .divide(valorMeta, 4, RoundingMode.HALF_UP)
-            .multiply(BigDecimal(100))
-            .setScale(2, RoundingMode.HALF_UP)
-    } else {
-        BigDecimal.ZERO
-    }
-
-    val mesesNecessarios = if (saldoMensal > BigDecimal.ZERO && valorRestante > BigDecimal.ZERO) {
-        valorRestante.divide(saldoMensal, 0, RoundingMode.CEILING).toInt()
+    val mesesNecessarios = if (saldoMensal > BigDecimal.ZERO && valorMeta > BigDecimal.ZERO) {
+        valorMeta.divide(saldoMensal, 0, RoundingMode.CEILING).toInt()
     } else {
         null
     }
 
     val seraAlcancadoNoPrazo: Boolean? = when {
-        valorRestante <= BigDecimal.ZERO -> null  // concluído — indicador irrelevante
-        mesesNecessarios == null         -> null  // sem saldo alocado — não é possível calcular
-        prazoAlvo == null                -> null  // sem prazo definido — não exibe indicador
+        concluido            -> null
+        mesesNecessarios == null -> null
+        prazoAlvo == null    -> null
         else -> {
             val mesesAtePrazo = ChronoUnit.MONTHS.between(
                 LocalDate.now().withDayOfMonth(1),
@@ -46,10 +34,9 @@ fun Sonho.calcularProjecao(saldoMensal: BigDecimal): ProjecaoSonho {
     }
 
     return ProjecaoSonho(
-        sonho = this,
-        valorRestante = valorRestante,
-        percentualConcluido = percentualConcluido,
-        mesesNecessarios = mesesNecessarios,
-        seraAlcancadoNoPrazo = seraAlcancadoNoPrazo
+        sonho                = this,
+        saldoMensal          = saldoMensal,
+        mesesNecessarios     = mesesNecessarios,
+        seraAlcancadoNoPrazo = seraAlcancadoNoPrazo,
     )
 }

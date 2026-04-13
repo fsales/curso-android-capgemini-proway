@@ -85,7 +85,6 @@ class CadastroSonhoViewModel @Inject constructor(
             titulo     = state.titulo.trim(),
             descricao  = state.descricao.trim().ifBlank { null },
             valorMeta  = state.valorMetaTexto.toBigDecimalOuNulo() ?: BigDecimal.ZERO,
-            valorAtual = BigDecimal.ZERO,
             prioridade = state.prioridade,
             prazoAlvo  = state.prazoAlvo,
         )
