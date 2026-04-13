@@ -1,4 +1,4 @@
-package com.fsales.app.rumo.ui.feature.saldo
+package com.fsales.app.rumo.ui.feature.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,12 +14,12 @@ import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
-class SaldoViewModel @Inject constructor(
+class DashboardViewModel @Inject constructor(
     private val obterSaldoMensalUseCase: ObterSaldoMensalUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SaldoUiState())
-    val uiState: StateFlow<SaldoUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(DashboardUiState())
+    val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
 
     init {
         carregarResumo(_uiState.value.mesAno)
@@ -54,4 +54,3 @@ class SaldoViewModel @Inject constructor(
         }
     }
 }
-

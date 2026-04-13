@@ -1,4 +1,4 @@
-package com.fsales.app.rumo.ui.feature.saldo
+package com.fsales.app.rumo.ui.feature.dashboard
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -35,12 +35,12 @@ import java.time.YearMonth
 import java.util.Locale
 
 @Composable
-fun SaldoScreen(
-    viewModel: SaldoViewModel = hiltViewModel(),
+fun DashboardScreen(
+    viewModel: DashboardViewModel = hiltViewModel(),
     onIrExtrato: () -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsState()
-    SaldoContent(
+    DashboardContent(
         uiState = state,
         onMesAnterior = viewModel::onMesAnterior,
         onMesProximo = viewModel::onMesProximo,
@@ -49,8 +49,8 @@ fun SaldoScreen(
 }
 
 @Composable
-fun SaldoContent(
-    uiState: SaldoUiState,
+fun DashboardContent(
+    uiState: DashboardUiState,
     modifier: Modifier = Modifier,
     onMesAnterior: () -> Unit = {},
     onMesProximo: () -> Unit = {},
@@ -71,10 +71,10 @@ fun SaldoContent(
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = stringResource(R.string.saldo_label), style = MaterialTheme.typography.titleSmall)
+                    Text(text = stringResource(R.string.dashboard_label), style = MaterialTheme.typography.titleSmall)
 
                     if (uiState.saldo != null && uiState.saldo < java.math.BigDecimal.ZERO) {
-                        BadgedBox(badge = { Badge { Text(stringResource(R.string.saldo_negativo_badge)) } }) {
+                        BadgedBox(badge = { Badge { Text(stringResource(R.string.dashboard_negativo_badge)) } }) {
                             Icon(painter = painterResource(id = R.drawable.ic_rumo_saldo), contentDescription = null)
                         }
                     } else {
@@ -85,7 +85,7 @@ fun SaldoContent(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = uiState.saldo?.let { fmt.format(it) } ?: stringResource(R.string.saldo_carregando),
+                    text = uiState.saldo?.let { fmt.format(it) } ?: stringResource(R.string.dashboard_carregando),
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = if (uiState.saldo != null && uiState.saldo < java.math.BigDecimal.ZERO) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                 )
@@ -94,11 +94,11 @@ fun SaldoContent(
 
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Column {
-                        Text(text = stringResource(R.string.saldo_ganhos_label), style = MaterialTheme.typography.bodySmall)
+                        Text(text = stringResource(R.string.dashboard_ganhos_label), style = MaterialTheme.typography.bodySmall)
                         Text(text = uiState.totalGanhos?.let { fmt.format(it) } ?: "—", style = MaterialTheme.typography.bodyLarge)
                     }
                     Column {
-                        Text(text = stringResource(R.string.saldo_gastos_label), style = MaterialTheme.typography.bodySmall)
+                        Text(text = stringResource(R.string.dashboard_gastos_label), style = MaterialTheme.typography.bodySmall)
                         Text(text = uiState.totalGastos?.let { fmt.format(it) } ?: "—", style = MaterialTheme.typography.bodyLarge)
                     }
                 }
@@ -107,14 +107,14 @@ fun SaldoContent(
     }
 }
 
-@Preview(showBackground = true, name = "Saldo · Light")
-@Preview(showBackground = true, name = "Saldo · Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(showBackground = true, name = "Dashboard · Light")
+@Preview(showBackground = true, name = "Dashboard · Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun SaldoPreview() {
+private fun DashboardPreview() {
     RumoTheme {
         Surface {
-            SaldoContent(
-                uiState = SaldoUiState(
+            DashboardContent(
+                uiState = DashboardUiState(
                     mesAno = YearMonth.of(2026, 4),
                     totalGanhos = java.math.BigDecimal("6200.00"),
                     totalGastos = java.math.BigDecimal("4200.00"),
@@ -124,5 +124,3 @@ private fun SaldoPreview() {
         }
     }
 }
-
-

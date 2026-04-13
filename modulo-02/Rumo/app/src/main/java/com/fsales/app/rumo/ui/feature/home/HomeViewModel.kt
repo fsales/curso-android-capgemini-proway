@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
     fun onEvent(event: HomeEvent) {
         when (event) {
-            HomeEvent.IrParaSaldo    -> _uiEvent.trySend(HomeUiEvent.NavigateToSaldo)
+            HomeEvent.IrParaHome     -> _uiEvent.trySend(HomeUiEvent.NavigateToHome)
             HomeEvent.IrParaExtrato  -> _uiEvent.trySend(HomeUiEvent.NavigateToExtrato)
             HomeEvent.IrParaGanhos   -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGanho)
             HomeEvent.IrParaGastos   -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGasto)

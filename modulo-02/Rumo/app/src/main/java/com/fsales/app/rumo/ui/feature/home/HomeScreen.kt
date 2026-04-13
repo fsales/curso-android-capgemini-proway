@@ -33,10 +33,10 @@ import com.fsales.app.rumo.ui.feature.gasto.lista.ListaGastoContent
 import com.fsales.app.rumo.ui.feature.gasto.lista.ListaGastoScreen
 import com.fsales.app.rumo.ui.feature.sonho.lista.ListaSonhoContent
 import com.fsales.app.rumo.ui.feature.sonho.lista.ListaSonhoScreen
+import com.fsales.app.rumo.ui.feature.dashboard.DashboardContent
+import com.fsales.app.rumo.ui.feature.dashboard.DashboardUiState
 import com.fsales.app.rumo.ui.feature.extrato.ExtratoContent
 import com.fsales.app.rumo.ui.feature.extrato.ExtratoUiState
-import com.fsales.app.rumo.ui.feature.saldo.SaldoContent
-import com.fsales.app.rumo.ui.feature.saldo.SaldoUiState
 import com.fsales.app.rumo.ui.theme.RumoTheme
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
@@ -54,7 +54,7 @@ private const val LOADING_DURATION_MS = 400L
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    abaInicial: HomeEvent = HomeEvent.IrParaSaldo,
+    abaInicial: HomeEvent = HomeEvent.IrParaHome,
     onNavigateToGanhoCadastro: () -> Unit = {},
     onNavigateToGastoCadastro: () -> Unit = {},
     onNavigateToSonhoCadastro: () -> Unit = {},
@@ -68,7 +68,7 @@ fun HomeScreen(
         viewModel.uiEvent.collect { event ->
             carregandoAba = true
             uiState = when (event) {
-                HomeUiEvent.NavigateToSaldo      -> uiState.copy(abaAtiva = HomeEvent.IrParaSaldo)
+                HomeUiEvent.NavigateToHome       -> uiState.copy(abaAtiva = HomeEvent.IrParaHome)
                 HomeUiEvent.NavigateToExtrato    -> uiState.copy(abaAtiva = HomeEvent.IrParaExtrato)
                 HomeUiEvent.NavigateToListaGanho -> uiState.copy(abaAtiva = HomeEvent.IrParaGanhos)
                 HomeUiEvent.NavigateToListaGasto -> uiState.copy(abaAtiva = HomeEvent.IrParaGastos)
@@ -162,7 +162,7 @@ private fun HomeDestino(
         modifier = modifier,
     ) { aba ->
         when (aba) {
-            HomeEvent.IrParaSaldo -> com.fsales.app.rumo.ui.feature.saldo.SaldoScreen(
+            HomeEvent.IrParaHome -> com.fsales.app.rumo.ui.feature.dashboard.DashboardScreen(
                 onIrExtrato = {},
             )
             HomeEvent.IrParaExtrato -> com.fsales.app.rumo.ui.feature.extrato.ExtratoScreen()
@@ -222,8 +222,8 @@ fun HomeScreenPreviewShell(
                 modifier = modifier,
             ) { destino ->
                 when (destino) {
-                    HomeEvent.IrParaSaldo -> SaldoContent(
-                        uiState = SaldoUiState(
+                    HomeEvent.IrParaHome -> DashboardContent(
+                        uiState = DashboardUiState(
                             mesAno = YearMonth.of(2026, 4),
                             totalGanhos = java.math.BigDecimal("6200.00"),
                             totalGastos = java.math.BigDecimal("4200.00"),

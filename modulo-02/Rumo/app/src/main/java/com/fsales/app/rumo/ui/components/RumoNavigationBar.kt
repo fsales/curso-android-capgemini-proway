@@ -33,10 +33,10 @@ data class RumoNavItem(
 
 val rumoNavItems = listOf(
     RumoNavItem(
-        labelRes     = R.string.nav_saldo,
+        labelRes     = R.string.nav_home,
         iconFilled   = Icons.Filled.Savings,
         iconOutlined = Icons.Outlined.Savings,
-        evento       = HomeEvent.IrParaSaldo,
+        evento       = HomeEvent.IrParaHome,
     ),
     RumoNavItem(
         labelRes     = R.string.nav_extrato,
@@ -78,8 +78,8 @@ fun RumoNavigationBar(
                 selected = selecionado,
                 onClick = { onItemSelected(item.evento) },
                 icon = {
-                    // Use custom vector drawable for Saldo tab to allow a unique brand icon.
-                    if (item.evento == HomeEvent.IrParaSaldo) {
+                    // Use custom vector drawable for Home/Dashboard tab to allow a unique brand icon.
+                    if (item.evento == HomeEvent.IrParaHome) {
                         Icon(
                             painter = painterResource(id = com.fsales.app.rumo.R.drawable.ic_rumo_saldo),
                             contentDescription = label,
