@@ -10,7 +10,13 @@ import java.time.LocalDate
 
 @Entity(
     tableName = "sonhos",
-    indices = [Index(value = ["prioridade"])]
+    // Índices para melhorar consultas por prioridade e por data de criação.
+    // Adicionar um índice em `dataCriacao` ajuda a acelerar ordenações e
+    // buscas que usam essa coluna (ex: listarTodos ORDER BY dataCriacao).
+    indices = [
+        Index(value = ["prioridade"]),
+        Index(value = ["dataCriacao"]),
+    ]
 )
 data class SonhoEntity(
     @field:PrimaryKey(autoGenerate = true)

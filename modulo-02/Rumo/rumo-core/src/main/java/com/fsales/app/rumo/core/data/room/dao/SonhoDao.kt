@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SonhoDao {
 
-    @Query("SELECT * FROM sonhos ORDER BY dataCriacao DESC")
+    // Ordena primeiro por data de criação decrescente e, em caso de empate
+    // (mesma dataCriacao), ordena por id decrescente para garantir uma
+    // ordenação determinística e estável entre registros com a mesma data.
+    @Query("SELECT * FROM sonhos ORDER BY dataCriacao DESC, id DESC")
     fun listarTodos(): Flow<List<SonhoEntity>>
 
     @Query("SELECT * FROM sonhos WHERE id = :id")

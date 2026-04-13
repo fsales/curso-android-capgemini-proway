@@ -10,11 +10,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface GanhoDao {
 
-    @Query("SELECT * FROM ganhos ORDER BY dataRecebimento DESC")
+    // Ordenação determinística: primeiro por dataRecebimento (mais recente primeiro)
+    // e em caso de empate por id decrescente.
+    @Query("SELECT * FROM ganhos ORDER BY dataRecebimento DESC, id DESC")
     fun listarTodos(): Flow<List<GanhoEntity>>
 
     @Query(
-        "SELECT * FROM ganhos WHERE mesReferencia = :mesReferencia AND anoReferencia = :anoReferencia ORDER BY dataRecebimento DESC"
+        "SELECT * FROM ganhos WHERE mesReferencia = :mesReferencia AND anoReferencia = :anoReferencia ORDER BY dataRecebimento DESC, id DESC"
     )
     fun listarPorMes(mesReferencia: Int, anoReferencia: Int): Flow<List<GanhoEntity>>
 
