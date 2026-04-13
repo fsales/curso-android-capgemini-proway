@@ -26,8 +26,9 @@ sealed interface ListaSonhoUiEvent {
 
 /** Home */
 sealed interface HomeUiEvent {
+    data object NavigateToSaldo      : HomeUiEvent
+    data object NavigateToExtrato    : HomeUiEvent
     data object NavigateToListaGanho : HomeUiEvent
     data object NavigateToListaGasto : HomeUiEvent
     data object NavigateToListaSonho : HomeUiEvent
-    data object NavigateToSaldo : HomeUiEvent
 }

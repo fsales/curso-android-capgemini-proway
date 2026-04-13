@@ -31,10 +31,11 @@ import com.fsales.app.rumo.ui.theme.iconSize
 
 // Mapeia a aba ativa para o @StringRes do título de seção
 private fun HomeEvent.tituloSecaoRes(): Int = when (this) {
-    HomeEvent.IrParaGanhos -> R.string.nav_ganhos
-    HomeEvent.IrParaGastos -> R.string.nav_gastos
-    HomeEvent.IrParaSonhos -> R.string.nav_sonhos
-    HomeEvent.IrParaSaldo -> R.string.nav_saldo
+    HomeEvent.IrParaGanhos  -> R.string.nav_ganhos
+    HomeEvent.IrParaGastos  -> R.string.nav_gastos
+    HomeEvent.IrParaSonhos  -> R.string.nav_sonhos
+    HomeEvent.IrParaSaldo   -> R.string.nav_saldo
+    HomeEvent.IrParaExtrato -> R.string.nav_extrato
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

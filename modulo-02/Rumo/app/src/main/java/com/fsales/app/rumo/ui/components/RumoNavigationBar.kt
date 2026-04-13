@@ -3,6 +3,8 @@ package com.fsales.app.rumo.ui.components
 import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -35,6 +37,12 @@ val rumoNavItems = listOf(
         iconFilled   = Icons.Filled.Savings,
         iconOutlined = Icons.Outlined.Savings,
         evento       = HomeEvent.IrParaSaldo,
+    ),
+    RumoNavItem(
+        labelRes     = R.string.nav_extrato,
+        iconFilled   = Icons.AutoMirrored.Filled.ReceiptLong,
+        iconOutlined = Icons.AutoMirrored.Outlined.ReceiptLong,
+        evento       = HomeEvent.IrParaExtrato,
     ),
     RumoNavItem(
         labelRes     = R.string.nav_ganhos,

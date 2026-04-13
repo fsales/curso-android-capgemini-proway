@@ -9,16 +9,18 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class AbaInicial {
+    SALDO,
+    EXTRATO,
     GANHOS,
     GASTOS,
-    SONHOS,
-    SALDO;
+    SONHOS;
 
     fun toHomeEvent(): HomeEvent = when (this) {
-        SALDO ->  HomeEvent.IrParaSaldo
-        GANHOS -> HomeEvent.IrParaGanhos
-        GASTOS -> HomeEvent.IrParaGastos
-        SONHOS -> HomeEvent.IrParaSonhos
+        SALDO   -> HomeEvent.IrParaSaldo
+        EXTRATO -> HomeEvent.IrParaExtrato
+        GANHOS  -> HomeEvent.IrParaGanhos
+        GASTOS  -> HomeEvent.IrParaGastos
+        SONHOS  -> HomeEvent.IrParaSonhos
     }
 }
 

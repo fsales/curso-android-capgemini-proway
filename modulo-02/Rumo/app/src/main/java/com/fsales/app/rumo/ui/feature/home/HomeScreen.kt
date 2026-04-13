@@ -33,6 +33,8 @@ import com.fsales.app.rumo.ui.feature.gasto.lista.ListaGastoContent
 import com.fsales.app.rumo.ui.feature.gasto.lista.ListaGastoScreen
 import com.fsales.app.rumo.ui.feature.sonho.lista.ListaSonhoContent
 import com.fsales.app.rumo.ui.feature.sonho.lista.ListaSonhoScreen
+import com.fsales.app.rumo.ui.feature.extrato.ExtratoContent
+import com.fsales.app.rumo.ui.feature.extrato.ExtratoUiState
 import com.fsales.app.rumo.ui.feature.saldo.SaldoContent
 import com.fsales.app.rumo.ui.feature.saldo.SaldoUiState
 import com.fsales.app.rumo.ui.theme.RumoTheme
@@ -66,10 +68,11 @@ fun HomeScreen(
         viewModel.uiEvent.collect { event ->
             carregandoAba = true
             uiState = when (event) {
+                HomeUiEvent.NavigateToSaldo      -> uiState.copy(abaAtiva = HomeEvent.IrParaSaldo)
+                HomeUiEvent.NavigateToExtrato    -> uiState.copy(abaAtiva = HomeEvent.IrParaExtrato)
                 HomeUiEvent.NavigateToListaGanho -> uiState.copy(abaAtiva = HomeEvent.IrParaGanhos)
                 HomeUiEvent.NavigateToListaGasto -> uiState.copy(abaAtiva = HomeEvent.IrParaGastos)
                 HomeUiEvent.NavigateToListaSonho -> uiState.copy(abaAtiva = HomeEvent.IrParaSonhos)
-                HomeUiEvent.NavigateToSaldo -> uiState.copy(abaAtiva = HomeEvent.IrParaSaldo)
             }
             delay(LOADING_DURATION_MS)
             carregandoAba = false
@@ -162,6 +165,7 @@ private fun HomeDestino(
             HomeEvent.IrParaSaldo -> com.fsales.app.rumo.ui.feature.saldo.SaldoScreen(
                 onIrExtrato = {},
             )
+            HomeEvent.IrParaExtrato -> com.fsales.app.rumo.ui.feature.extrato.ExtratoScreen()
             HomeEvent.IrParaGanhos -> ListaGanhoScreen(
                 onNavigateToCadastro = onNavigateToGanhoCadastro,
                 onCarregandoChange = onCarregandoChange,
@@ -232,6 +236,10 @@ fun HomeScreenPreviewShell(
                             ganhos = ganhosFakePreview,
                             mesAno = YearMonth.of(2026, 4),
                         ),
+                        onEvent = {},
+                    )
+                    HomeEvent.IrParaExtrato -> ExtratoContent(
+                        uiState = ExtratoUiState(mesAno = YearMonth.of(2026, 4)),
                         onEvent = {},
                     )
                     HomeEvent.IrParaGastos -> ListaGastoContent(onEvent = {})

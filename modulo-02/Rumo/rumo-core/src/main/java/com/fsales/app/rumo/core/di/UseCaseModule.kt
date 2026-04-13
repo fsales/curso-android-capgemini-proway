@@ -1,6 +1,7 @@
 package com.fsales.app.rumo.core.di
 
 import com.fsales.app.rumo.core.domain.usecase.ConcluirSonhoUseCase
+import com.fsales.app.rumo.core.domain.usecase.ListarExtratoPorMesUseCase
 import com.fsales.app.rumo.core.domain.usecase.ListarGanhosPorMesUseCase
 import com.fsales.app.rumo.core.domain.usecase.ListarGastosPorMesUseCase
 import com.fsales.app.rumo.core.domain.usecase.ListarSonhosUseCase
@@ -11,6 +12,7 @@ import com.fsales.app.rumo.core.domain.usecase.SalvarGanhoUseCase
 import com.fsales.app.rumo.core.domain.usecase.SalvarGastoUseCase
 import com.fsales.app.rumo.core.domain.usecase.SalvarSonhoUseCase
 import com.fsales.app.rumo.core.domain.usecase.impl.ConcluirSonhoUseCaseImpl
+import com.fsales.app.rumo.core.domain.usecase.impl.ListarExtratoPorMesUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ListarGanhosPorMesUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ListarGastosPorMesUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ListarSonhosUseCaseImpl
@@ -37,6 +39,10 @@ abstract class UseCaseModule {
     @Binds
     @Singleton
     abstract fun bindListarGanhosPorMes(impl: ListarGanhosPorMesUseCaseImpl): ListarGanhosPorMesUseCase
+
+    @Binds
+    @Singleton
+    abstract fun bindListarExtratoPorMes(impl: ListarExtratoPorMesUseCaseImpl): ListarExtratoPorMesUseCase
 
     @Binds
     @Singleton

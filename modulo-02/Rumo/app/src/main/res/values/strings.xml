@@ -21,10 +21,11 @@
     <string name="home_sonhos_descricao">Defina metas e realize seus sonhos</string>
 
     <!-- ===== NavigationBar ===== -->
+    <string name="nav_saldo">Saldo</string>
+    <string name="nav_extrato">Extrato</string>
     <string name="nav_ganhos">Ganhos</string>
     <string name="nav_gastos">Gastos</string>
     <string name="nav_sonhos">Sonhos</string>
-    <string name="nav_saldo">Saldo</string>
 
     <!-- ===== Saldo (Home) ===== -->
     <string name="saldo_label">Saldo em conta</string>
@@ -36,6 +37,14 @@
 
     <!-- ===== Componentes Genéricos ===== -->
     <string name="erro_tentar_novamente">Tentar novamente</string>
+
+    <!-- ===== Extrato ===== -->
+    <string name="extrato_resumo_saldo">Saldo do período</string>
+    <string name="extrato_resumo_entradas">Entradas</string>
+    <string name="extrato_resumo_saidas">Saídas</string>
+    <string name="extrato_lista_vazia_titulo">Sem movimentações</string>
+    <string name="extrato_lista_vazia_mensagem">Nenhum ganho ou gasto registrado neste mês.</string>
+    <string name="extrato_scroll_topo">Voltar ao topo</string>
 
     <!-- ===== Lista Ganhos ===== -->
     <string name="lista_ganho_titulo">Lista de Ganhos</string>

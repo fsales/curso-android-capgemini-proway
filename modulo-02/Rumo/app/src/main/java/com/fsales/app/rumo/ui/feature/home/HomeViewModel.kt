@@ -21,10 +21,11 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
     fun onEvent(event: HomeEvent) {
         when (event) {
-            HomeEvent.IrParaGanhos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGanho)
-            HomeEvent.IrParaGastos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGasto)
-            HomeEvent.IrParaSonhos -> _uiEvent.trySend(HomeUiEvent.NavigateToListaSonho)
-            HomeEvent.IrParaSaldo -> _uiEvent.trySend(HomeUiEvent.NavigateToSaldo)
+            HomeEvent.IrParaSaldo    -> _uiEvent.trySend(HomeUiEvent.NavigateToSaldo)
+            HomeEvent.IrParaExtrato  -> _uiEvent.trySend(HomeUiEvent.NavigateToExtrato)
+            HomeEvent.IrParaGanhos   -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGanho)
+            HomeEvent.IrParaGastos   -> _uiEvent.trySend(HomeUiEvent.NavigateToListaGasto)
+            HomeEvent.IrParaSonhos   -> _uiEvent.trySend(HomeUiEvent.NavigateToListaSonho)
         }
     }
 }
