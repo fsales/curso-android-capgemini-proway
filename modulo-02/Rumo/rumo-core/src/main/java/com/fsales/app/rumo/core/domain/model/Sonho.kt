@@ -12,7 +12,13 @@ data class Sonho(
     val valorAtual: BigDecimal = BigDecimal.ZERO,
     val prioridade: PrioridadeSonho = PrioridadeSonho.MEDIA,
     val prazoAlvo: LocalDate? = null,
-    val status: StatusSonho = StatusSonho.NAO_INICIADO,
     val dataCriacao: Instant = Instant.now(),
-    val dataConclusao: Instant? = null
-)
+) {
+    /** Status derivado dos valores — nunca fica inconsistente com o saldo real. */
+    val status: StatusSonho
+        get() = when {
+            valorAtual >= valorMeta && valorMeta > BigDecimal.ZERO -> StatusSonho.CONCLUIDO
+            valorAtual > BigDecimal.ZERO                           -> StatusSonho.EM_ANDAMENTO
+            else                                                   -> StatusSonho.NAO_INICIADO
+        }
+}

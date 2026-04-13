@@ -26,7 +26,6 @@ import com.fsales.app.rumo.R
 import com.fsales.app.rumo.core.domain.model.PrioridadeSonho
 import com.fsales.app.rumo.core.domain.model.ProjecaoSonho
 import com.fsales.app.rumo.core.domain.model.Sonho
-import com.fsales.app.rumo.core.domain.model.StatusSonho
 import com.fsales.app.rumo.ui.ListaSonhoUiEvent
 import com.fsales.app.rumo.ui.components.RumoEmptyState
 import com.fsales.app.rumo.ui.components.RumoErroState
@@ -135,34 +134,33 @@ private fun fakeSonho(
     valorMeta: BigDecimal,
     valorAtual: BigDecimal,
     prioridade: PrioridadeSonho,
-    status: StatusSonho,
 ) = Sonho(id = id, titulo = titulo, valorMeta = valorMeta, valorAtual = valorAtual,
-          prioridade = prioridade, status = status)
+          prioridade = prioridade)
 
 private val projecoesFake = listOf(
     ProjecaoSonho(
         sonho                = fakeSonho(1L, "Carro novo", BigDecimal("80000"), BigDecimal("25000"),
-                                         PrioridadeSonho.ALTA, StatusSonho.EM_ANDAMENTO),
+                                         PrioridadeSonho.ALTA),
         valorRestante        = BigDecimal("55000"),
         percentualConcluido  = BigDecimal("31.25"),
         mesesNecessarios     = 18,
-        seraAlcancadoNoPrazo = true,
+        seraAlcancadoNoPrazo = true,   // tem prazo e está no prazo
     ),
     ProjecaoSonho(
         sonho                = fakeSonho(2L, "Viagem para o Japão", BigDecimal("15000"), BigDecimal.ZERO,
-                                         PrioridadeSonho.MEDIA, StatusSonho.NAO_INICIADO),
+                                         PrioridadeSonho.MEDIA),
         valorRestante        = BigDecimal("15000"),
         percentualConcluido  = BigDecimal("0.00"),
         mesesNecessarios     = null,
-        seraAlcancadoNoPrazo = false,
+        seraAlcancadoNoPrazo = null,   // sem prazo — indicador oculto
     ),
     ProjecaoSonho(
         sonho                = fakeSonho(3L, "Apartamento próprio", BigDecimal("300000"), BigDecimal("45000"),
-                                         PrioridadeSonho.ALTA, StatusSonho.EM_ANDAMENTO),
+                                         PrioridadeSonho.ALTA),
         valorRestante        = BigDecimal("255000"),
         percentualConcluido  = BigDecimal("15.00"),
         mesesNecessarios     = 42,
-        seraAlcancadoNoPrazo = false,
+        seraAlcancadoNoPrazo = false,  // tem prazo mas está fora do prazo
     ),
 )
 

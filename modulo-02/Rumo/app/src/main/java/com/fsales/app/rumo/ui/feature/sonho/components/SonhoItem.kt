@@ -32,7 +32,6 @@ import com.fsales.app.rumo.R
 import com.fsales.app.rumo.core.domain.model.PrioridadeSonho
 import com.fsales.app.rumo.core.domain.model.ProjecaoSonho
 import com.fsales.app.rumo.core.domain.model.Sonho
-import com.fsales.app.rumo.core.domain.model.StatusSonho
 import com.fsales.app.rumo.ui.components.RumoInfoBadge
 import com.fsales.app.rumo.ui.components.formatarBRL
 import com.fsales.app.rumo.ui.theme.RumoTheme
@@ -54,12 +53,11 @@ fun SonhoItem(
         .divide(BigDecimal(100))
         .toFloat()
         .coerceIn(0f, 1f)
-    val concluido = projecao.valorRestante <= BigDecimal.ZERO
 
-    val corProgresso = when {
-        concluido -> MaterialTheme.colorScheme.tertiary
-        else      -> MaterialTheme.colorScheme.primary
-    }
+    val corProgresso = if (projecao.valorRestante <= BigDecimal.ZERO)
+        MaterialTheme.colorScheme.tertiary
+    else
+        MaterialTheme.colorScheme.primary
 
     ElevatedCard(
         onClick  = onClick,
@@ -161,28 +159,26 @@ fun SonhoItem(
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
                 ) {
                     // Meses necessários
-                    val meses = projecao.mesesNecessarios
                     Text(
-                        text  = if (meses != null)
-                            pluralStringResource(R.plurals.sonho_meses_necessarios, meses, meses)
-                        else
-                            stringResource(R.string.sonho_sem_projecao),
+                        text  = projecao.mesesNecessarios
+                            ?.let { pluralStringResource(R.plurals.sonho_meses_necessarios, it, it) }
+                            ?: stringResource(R.string.sonho_sem_projecao),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
 
-                    // Indicador de prazo (só se ainda há valor restante)
-                    if (!concluido) {
-                        val noPrazo = projecao.seraAlcancadoNoPrazo
+                    // Indicador de prazo — só exibe quando há prazo definido e cálculo disponível
+                    projecao.seraAlcancadoNoPrazo?.let { noPrazo ->
                         Row(
                             verticalAlignment     = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                         ) {
+                            val tint = if (noPrazo) MaterialTheme.colorScheme.primary
+                                       else MaterialTheme.colorScheme.error
                             Icon(
                                 imageVector        = if (noPrazo) Icons.Filled.CheckCircle else Icons.Filled.Warning,
                                 contentDescription = null,
-                                tint               = if (noPrazo) MaterialTheme.colorScheme.primary
-                                                     else MaterialTheme.colorScheme.error,
+                                tint               = tint,
                                 modifier           = Modifier.size(MaterialTheme.iconSize.extraSmall),
                             )
                             Text(
@@ -190,8 +186,7 @@ fun SonhoItem(
                                     if (noPrazo) R.string.sonho_no_prazo else R.string.sonho_fora_do_prazo
                                 ),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = if (noPrazo) MaterialTheme.colorScheme.primary
-                                        else MaterialTheme.colorScheme.error,
+                                color = tint,
                             )
                         }
                     }
@@ -211,7 +206,6 @@ private val sonhoPreviewCarro = Sonho(
     valorMeta  = BigDecimal("80000.00"),
     valorAtual = BigDecimal("25000.00"),
     prioridade = PrioridadeSonho.ALTA,
-    status     = StatusSonho.EM_ANDAMENTO,
 )
 
 private val sonhoPreviewViagem = Sonho(
@@ -220,7 +214,6 @@ private val sonhoPreviewViagem = Sonho(
     valorMeta  = BigDecimal("15000.00"),
     valorAtual = BigDecimal.ZERO,
     prioridade = PrioridadeSonho.MEDIA,
-    status     = StatusSonho.NAO_INICIADO,
 )
 
 private val sonhoPreviewApartamento = Sonho(
@@ -229,7 +222,6 @@ private val sonhoPreviewApartamento = Sonho(
     valorMeta  = BigDecimal("300000.00"),
     valorAtual = BigDecimal("300000.00"),
     prioridade = PrioridadeSonho.ALTA,
-    status     = StatusSonho.CONCLUIDO,
 )
 
 private val projecaoCarro = ProjecaoSonho(
@@ -237,7 +229,7 @@ private val projecaoCarro = ProjecaoSonho(
     valorRestante        = BigDecimal("55000.00"),
     percentualConcluido  = BigDecimal("31.25"),
     mesesNecessarios     = 18,
-    seraAlcancadoNoPrazo = true,
+    seraAlcancadoNoPrazo = true,   // tem prazo definido e está no prazo
 )
 
 private val projecaoViagem = ProjecaoSonho(
@@ -245,7 +237,7 @@ private val projecaoViagem = ProjecaoSonho(
     valorRestante        = BigDecimal("15000.00"),
     percentualConcluido  = BigDecimal("0.00"),
     mesesNecessarios     = null,
-    seraAlcancadoNoPrazo = false,
+    seraAlcancadoNoPrazo = null,   // sem prazo definido — indicador não exibido
 )
 
 private val projecaoApartamento = ProjecaoSonho(
@@ -253,7 +245,7 @@ private val projecaoApartamento = ProjecaoSonho(
     valorRestante        = BigDecimal.ZERO,
     percentualConcluido  = BigDecimal("100.00"),
     mesesNecessarios     = 0,
-    seraAlcancadoNoPrazo = true,
+    seraAlcancadoNoPrazo = null,   // concluído — indicador irrelevante
 )
 
 @Preview(showBackground = true, name = "SonhoItem · Em andamento · Light")

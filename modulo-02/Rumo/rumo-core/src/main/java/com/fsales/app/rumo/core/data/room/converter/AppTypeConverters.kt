@@ -3,7 +3,6 @@ package com.fsales.app.rumo.core.data.room.converter
 import androidx.room.TypeConverter
 import com.fsales.app.rumo.core.data.room.entity.enums.CategoriaGasto
 import com.fsales.app.rumo.core.data.room.entity.enums.PrioridadeSonho
-import com.fsales.app.rumo.core.data.room.entity.enums.StatusSonho
 import com.fsales.app.rumo.core.data.room.entity.enums.TipoGanho
 import java.math.BigDecimal
 import java.time.Instant
@@ -45,10 +44,4 @@ object AppTypeConverters {
 
     @TypeConverter
     fun stringToPrioridadeSonho(value: String?): PrioridadeSonho? = value?.let(PrioridadeSonho::valueOf)
-
-    @TypeConverter
-    fun statusSonhoToString(value: StatusSonho?): String? = value?.name
-
-    @TypeConverter
-    fun stringToStatusSonho(value: String?): StatusSonho? = value?.let(StatusSonho::valueOf)
 }

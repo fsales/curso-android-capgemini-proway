@@ -15,13 +15,13 @@ import kotlinx.serialization.Serializable
 data class HomeRoute(val abaInicial: AbaInicial = AbaInicial.GANHOS) : NavKey
 
 @Serializable
-object CadastroGanhoRoute : NavKey
+data class CadastroGanhoRoute(val abaOrigem: AbaInicial = AbaInicial.GANHOS) : NavKey
 
 @Serializable
-object CadastroGastoRoute : NavKey
+data class CadastroGastoRoute(val abaOrigem: AbaInicial = AbaInicial.GASTOS) : NavKey
 
 @Serializable
-object CadastroSonhoRoute : NavKey
+data class CadastroSonhoRoute(val abaOrigem: AbaInicial = AbaInicial.SONHOS) : NavKey
 
 @Composable
 fun AppNavHost() {
@@ -35,35 +35,45 @@ fun AppNavHost() {
             entry<HomeRoute> { route ->
                 HomeScreen(
                     abaInicial                = route.abaInicial.toHomeEvent(),
-                    onNavigateToGanhoCadastro = { backStack.add(CadastroGanhoRoute) },
-                    onNavigateToGastoCadastro = { backStack.add(CadastroGastoRoute) },
-                    onNavigateToSonhoCadastro = { backStack.add(CadastroSonhoRoute) },
+                    onNavigateToGanhoCadastro = { backStack.add(CadastroGanhoRoute(AbaInicial.GANHOS)) },
+                    onNavigateToGastoCadastro = { backStack.add(CadastroGastoRoute(AbaInicial.GASTOS)) },
+                    onNavigateToSonhoCadastro = { backStack.add(CadastroSonhoRoute(AbaInicial.SONHOS)) },
                 )
             }
-            entry<CadastroGanhoRoute> {
+            entry<CadastroGanhoRoute> { route ->
                 CadastroGanhoScreen(
-                    navigateBack = { backStack.removeLastOrNull() },
-                )
-            }
-            entry<CadastroGastoRoute> {
-                CadastroGastoScreen(
                     navigateBack = {
                         backStack.removeLastOrNull()
-                        backStack.add(HomeRoute(abaInicial = AbaInicial.GASTOS))
+                        val topo = backStack.lastOrNull()
+                        if (topo !is HomeRoute || topo.abaInicial != route.abaOrigem) {
+                            backStack.add(HomeRoute(route.abaOrigem))
+                        }
                     },
                 )
             }
-            entry<CadastroSonhoRoute> {
+            entry<CadastroGastoRoute> { route ->
+                CadastroGastoScreen(
+                    navigateBack = {
+                        backStack.removeLastOrNull()
+                        val topo = backStack.lastOrNull()
+                        if (topo !is HomeRoute || topo.abaInicial != route.abaOrigem) {
+                            backStack.add(HomeRoute(route.abaOrigem))
+                        }
+                    },
+                )
+            }
+            entry<CadastroSonhoRoute> { route ->
                 CadastroSonhoScreen(
                     navigateBack = {
                         backStack.removeLastOrNull()
-                        backStack.add(HomeRoute(abaInicial = AbaInicial.SONHOS))
+                        val topo = backStack.lastOrNull()
+                        if (topo !is HomeRoute || topo.abaInicial != route.abaOrigem) {
+                            backStack.add(HomeRoute(route.abaOrigem))
+                        }
                     },
                 )
             }
         }
     )
 }
-
-
 

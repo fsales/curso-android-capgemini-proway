@@ -9,25 +9,26 @@ import com.fsales.app.rumo.core.domain.usecase.ObterSaldoMensalUseCase
 import com.fsales.app.rumo.core.domain.usecase.validarCompetencia
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
 
-private val STATUS_ATIVOS = setOf(StatusSonho.NAO_INICIADO, StatusSonho.EM_ANDAMENTO)
-
 class ObterProjecaoSonhosUseCaseImpl @Inject constructor(
     private val sonhoRepository: SonhoRepository,
-    private val obterSaldoMensal: ObterSaldoMensalUseCase
+    private val obterSaldoMensal: ObterSaldoMensalUseCase,
 ) : ObterProjecaoSonhosUseCase {
 
-    override fun invoke(mesReferencia: Int, anoReferencia: Int): Flow<List<ProjecaoSonho>> {
+    override fun invoke(mesReferencia: Int, anoReferencia: Int): Flow<List<ProjecaoSonho>> = flow {
+        // validarCompetencia dentro do flow — exceção propagada corretamente via .catch na ViewModel
         validarCompetencia(mesReferencia, anoReferencia)
 
-        return combine(
+        combine(
             sonhoRepository.listarTodos(),
-            obterSaldoMensal(mesReferencia, anoReferencia)
+            obterSaldoMensal(mesReferencia, anoReferencia),
         ) { sonhos, saldo ->
-            val ativos = sonhos.filter { it.status in STATUS_ATIVOS }
+            // Apenas sonhos não concluídos participam da projeção de alocação de saldo
+            val ativos    = sonhos.filter { it.status != StatusSonho.CONCLUIDO }
             val pesoTotal = ativos.sumOf { it.prioridade.peso }
 
             ativos.map { sonho ->
@@ -40,6 +41,6 @@ class ObterProjecaoSonhosUseCaseImpl @Inject constructor(
                 }
                 sonho.calcularProjecao(saldoAlocado)
             }
-        }
+        }.collect { emit(it) }
     }
 }

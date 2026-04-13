@@ -10,7 +10,8 @@ data class ProjecaoSonho(
     val valorRestante: BigDecimal,
     val percentualConcluido: BigDecimal,
     val mesesNecessarios: Int?,
-    val seraAlcancadoNoPrazo: Boolean
+    /** `null` quando o sonho não tem prazo definido — indicador de prazo não deve ser exibido. */
+    val seraAlcancadoNoPrazo: Boolean?
 )
 
 fun Sonho.calcularProjecao(saldoMensal: BigDecimal): ProjecaoSonho {
@@ -31,10 +32,10 @@ fun Sonho.calcularProjecao(saldoMensal: BigDecimal): ProjecaoSonho {
         null
     }
 
-    val seraAlcancadoNoPrazo = when {
-        valorRestante <= BigDecimal.ZERO -> true
-        mesesNecessarios == null -> false
-        prazoAlvo == null -> true
+    val seraAlcancadoNoPrazo: Boolean? = when {
+        valorRestante <= BigDecimal.ZERO -> null  // concluído — indicador irrelevante
+        mesesNecessarios == null         -> null  // sem saldo alocado — não é possível calcular
+        prazoAlvo == null                -> null  // sem prazo definido — não exibe indicador
         else -> {
             val mesesAtePrazo = ChronoUnit.MONTHS.between(
                 LocalDate.now().withDayOfMonth(1),

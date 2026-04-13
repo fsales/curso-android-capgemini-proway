@@ -4,17 +4,13 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.fsales.app.rumo.core.data.room.entity.enums.PrioridadeSonho
-import com.fsales.app.rumo.core.data.room.entity.enums.StatusSonho
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
 
 @Entity(
     tableName = "sonhos",
-    indices = [
-        Index(value = ["status"]),
-        Index(value = ["prioridade"])
-    ]
+    indices = [Index(value = ["prioridade"])]
 )
 data class SonhoEntity(
     @field:PrimaryKey(autoGenerate = true)
@@ -25,8 +21,6 @@ data class SonhoEntity(
     val valorAtual: BigDecimal = BigDecimal.ZERO,
     val prioridade: PrioridadeSonho = PrioridadeSonho.MEDIA,
     val prazoAlvo: LocalDate? = null,
-    val status: StatusSonho = StatusSonho.NAO_INICIADO,
     val dataCriacao: Instant = Instant.now(),
-    val dataConclusao: Instant? = null
 )
 
