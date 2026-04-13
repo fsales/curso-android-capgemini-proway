@@ -31,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -70,15 +69,13 @@ fun CadastroGanhoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
+    val erroSalvarMsg = stringResource(R.string.cadastro_ganho_erro_salvar)
 
     LaunchedEffect(viewModel) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                CadastroGanhoUiEvent.NavigateBack  -> navigateBack()
-                CadastroGanhoUiEvent.ErroAoSalvar  -> snackbarHostState.showSnackbar(
-                    context.getString(R.string.cadastro_ganho_erro_salvar)
-                )
+                CadastroGanhoUiEvent.NavigateBack -> navigateBack()
+                CadastroGanhoUiEvent.ErroAoSalvar -> snackbarHostState.showSnackbar(erroSalvarMsg)
             }
         }
     }
@@ -135,8 +132,8 @@ fun CadastroGanhoContent(
                 value = uiState.descricao,
                 onValueChange = { onEvent(CadastroGanhoEvent.AlterarDescricao(it)) },
                 label = { Text(stringResource(R.string.cadastro_ganho_campo_descricao)) },
-                isError = uiState.erros.containsKey(CadastroGanhoViewModel.ERRO_DESCRICAO),
-                supportingText = uiState.erros[CadastroGanhoViewModel.ERRO_DESCRICAO]?.let { erro ->
+                isError = uiState.erroDescricao != null,
+                supportingText = uiState.erroDescricao?.let { erro ->
                     { Text(stringResource(erro.toStringRes()), color = MaterialTheme.colorScheme.error) }
                 },
                 singleLine = true,
@@ -148,8 +145,8 @@ fun CadastroGanhoContent(
                 value = uiState.valorTexto,
                 onValueChange = { onEvent(CadastroGanhoEvent.AlterarValor(it)) },
                 label = { Text(stringResource(R.string.cadastro_ganho_campo_valor)) },
-                isError = uiState.erros.containsKey(CadastroGanhoViewModel.ERRO_VALOR),
-                supportingText = uiState.erros[CadastroGanhoViewModel.ERRO_VALOR]?.let { erro ->
+                isError = uiState.erroValor != null,
+                supportingText = uiState.erroValor?.let { erro ->
                     { Text(stringResource(erro.toStringRes()), color = MaterialTheme.colorScheme.error) }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -163,7 +160,7 @@ fun CadastroGanhoContent(
                 data = uiState.dataRecebimento,
                 onDateSelected = { onEvent(CadastroGanhoEvent.AlterarData(it)) },
                 label = stringResource(R.string.cadastro_ganho_campo_data),
-                erro = uiState.erros[CadastroGanhoViewModel.ERRO_DATA]?.let { stringResource(it.toStringRes()) },
+                erro = uiState.erroData?.let { stringResource(it.toStringRes()) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -237,10 +234,8 @@ private fun CadastroGanhoComErrosPreview() {
         CadastroGanhoContent(
             uiState = CadastroGanhoUiState(
                 dataRecebimento = LocalDate.now(),
-                erros = mapOf(
-                    CadastroGanhoViewModel.ERRO_DESCRICAO to GanhoErro.DescricaoObrigatoria,
-                    CadastroGanhoViewModel.ERRO_VALOR to GanhoErro.ValorInvalido,
-                ),
+                erroDescricao = GanhoErro.DescricaoObrigatoria,
+                erroValor = GanhoErro.ValorInvalido,
             ),
         )
     }

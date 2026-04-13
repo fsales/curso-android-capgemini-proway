@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.fsales.app.rumo.core.domain.model.Ganho
 import com.fsales.app.rumo.core.domain.model.GanhoErro
 import com.fsales.app.rumo.core.domain.usecase.SalvarGanhoUseCase
+import com.fsales.app.rumo.core.domain.usecase.GanhoErroException
 import com.fsales.app.rumo.ui.util.toBigDecimalOuNulo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -22,12 +23,6 @@ import javax.inject.Inject
 class CadastroGanhoViewModel @Inject constructor(
     private val salvarGanhoUseCase: SalvarGanhoUseCase,
 ) : ViewModel() {
-
-    companion object {
-        const val ERRO_DESCRICAO = "descricao"
-        const val ERRO_VALOR     = "valor"
-        const val ERRO_DATA      = "data"
-    }
 
     private val _uiState = MutableStateFlow(
         CadastroGanhoUiState(dataRecebimento = LocalDate.now()),
@@ -57,8 +52,8 @@ class CadastroGanhoViewModel @Inject constructor(
 
     private fun alterarDescricao(valor: String) = _uiState.update { state ->
         state.copy(
-            descricao = valor,
-            erros = if (jaSubmeteu && valor.isNotBlank()) state.erros - ERRO_DESCRICAO else state.erros,
+            descricao    = valor,
+            erroDescricao = if (jaSubmeteu && valor.isNotBlank()) null else state.erroDescricao,
         )
     }
 
@@ -66,7 +61,7 @@ class CadastroGanhoViewModel @Inject constructor(
         val valorValido = (valor.toBigDecimalOuNulo() ?: BigDecimal.ZERO) > BigDecimal.ZERO
         state.copy(
             valorTexto = valor,
-            erros = if (jaSubmeteu && valorValido) state.erros - ERRO_VALOR else state.erros,
+            erroValor  = if (jaSubmeteu && valorValido) null else state.erroValor,
         )
     }
 
@@ -74,15 +69,12 @@ class CadastroGanhoViewModel @Inject constructor(
         jaSubmeteu = true
         val state = _uiState.value
 
-        // Validação local antes de chamar o domínio
-        val erros = buildMap<String, GanhoErro> {
-            if (state.descricao.isBlank()) put(ERRO_DESCRICAO, GanhoErro.DescricaoObrigatoria)
-            val v = state.valorTexto.toBigDecimalOuNulo()
-            if (v == null || v <= BigDecimal.ZERO) put(ERRO_VALOR, GanhoErro.ValorInvalido)
-        }
+        val erroDescricao = if (state.descricao.isBlank()) GanhoErro.DescricaoObrigatoria else null
+        val v             = state.valorTexto.toBigDecimalOuNulo()
+        val erroValor     = if (v == null || v <= BigDecimal.ZERO) GanhoErro.ValorInvalido else null
 
-        if (erros.isNotEmpty()) {
-            _uiState.update { it.copy(erros = erros) }
+        if (erroDescricao != null || erroValor != null) {
+            _uiState.update { it.copy(erroDescricao = erroDescricao, erroValor = erroValor) }
             return
         }
 
@@ -104,16 +96,17 @@ class CadastroGanhoViewModel @Inject constructor(
                     resetar()
                     _uiEvent.send(CadastroGanhoUiEvent.NavigateBack)
                 }
-                .onFailure { erro ->
+                .onFailure { throwable ->
+                    val erro = (throwable as? GanhoErroException)?.erro
                     when (erro) {
                         GanhoErro.DescricaoObrigatoria ->
-                            _uiState.update { it.copy(erros = it.erros + (ERRO_DESCRICAO to GanhoErro.DescricaoObrigatoria)) }
+                            _uiState.update { it.copy(erroDescricao = GanhoErro.DescricaoObrigatoria) }
                         GanhoErro.ValorInvalido ->
-                            _uiState.update { it.copy(erros = it.erros + (ERRO_VALOR to GanhoErro.ValorInvalido)) }
+                            _uiState.update { it.copy(erroValor = GanhoErro.ValorInvalido) }
                         GanhoErro.DataForaDeCompetencia ->
-                            _uiState.update { it.copy(erros = it.erros + (ERRO_DATA to GanhoErro.DataForaDeCompetencia)) }
+                            _uiState.update { it.copy(erroData = GanhoErro.DataForaDeCompetencia) }
                         GanhoErro.CompetenciaInvalida ->
-                            _uiState.update { it.copy(erros = it.erros + (ERRO_DATA to GanhoErro.CompetenciaInvalida)) }
+                            _uiState.update { it.copy(erroData = GanhoErro.CompetenciaInvalida) }
                         else -> _uiEvent.send(CadastroGanhoUiEvent.ErroAoSalvar)
                     }
                 }

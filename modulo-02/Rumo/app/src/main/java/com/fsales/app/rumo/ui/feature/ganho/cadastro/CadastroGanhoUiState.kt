@@ -11,7 +11,8 @@ data class CadastroGanhoUiState(
     val tipo: TipoGanho = TipoGanho.SALARIO,
     val recorrente: Boolean = false,
     val observacao: String = "",
-    // chave = campo (ERRO_*), valor = tipo de erro do domínio — a Screen resolve para string
-    val erros: Map<String, GanhoErro> = emptyMap(),
+    val erroDescricao: GanhoErro? = null,
+    val erroValor: GanhoErro? = null,
+    val erroData: GanhoErro? = null,
     val salvando: Boolean = false,
 )

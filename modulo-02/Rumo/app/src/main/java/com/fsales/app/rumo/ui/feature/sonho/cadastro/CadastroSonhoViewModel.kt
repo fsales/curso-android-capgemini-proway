@@ -3,9 +3,10 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fsales.app.rumo.core.domain.model.Sonho
+import com.fsales.app.rumo.core.domain.model.SonhoErro
 import com.fsales.app.rumo.core.domain.usecase.SalvarSonhoUseCase
+import com.fsales.app.rumo.core.domain.usecase.SonhoErroException
 import com.fsales.app.rumo.ui.util.toBigDecimalOuNulo
-import com.fsales.app.rumo.ui.CadastroSonhoUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,10 +23,6 @@ class CadastroSonhoViewModel @Inject constructor(
     private val salvarSonhoUseCase: SalvarSonhoUseCase,
 ) : ViewModel() {
 
-    companion object {
-        const val ERRO_TITULO     = "titulo"
-        const val ERRO_VALOR_META = "valorMeta"
-    }
 
     private val _uiState = MutableStateFlow(CadastroSonhoUiState())
     val uiState: StateFlow<CadastroSonhoUiState> = _uiState.asStateFlow()
@@ -51,36 +48,36 @@ class CadastroSonhoViewModel @Inject constructor(
     }
 
     private fun alterarTitulo(valor: String) = _uiState.update { state ->
-        state.copy(
-            titulo = valor,
-            erros  = if (jaSubmeteu && valor.isNotBlank()) state.erros - ERRO_TITULO else state.erros,
-        )
+        val erros = if (jaSubmeteu && valor.isNotBlank())
+            state.erros - ERRO_TITULO
+        else
+            state.erros
+        state.copy(titulo = valor, erros = erros)
     }
 
     private fun alterarValorMeta(valor: String) = _uiState.update { state ->
         val valido = (valor.toBigDecimalOuNulo() ?: BigDecimal.ZERO) > BigDecimal.ZERO
-        state.copy(
-            valorMetaTexto = valor,
-            erros          = if (jaSubmeteu && valido) state.erros - ERRO_VALOR_META else state.erros,
-        )
+        val erros = if (jaSubmeteu && valido)
+            state.erros - ERRO_VALOR_META
+        else
+            state.erros
+        state.copy(valorMetaTexto = valor, erros = erros)
     }
 
     private fun salvar() {
         jaSubmeteu = true
         val state = _uiState.value
 
-        val erros = buildMap<String, String> {
-            if (state.titulo.isBlank()) {
-                put(ERRO_TITULO, "O título é obrigatório.")
-            }
-            val meta = state.valorMetaTexto.toBigDecimalOuNulo()
-            if (meta == null || meta <= BigDecimal.ZERO) {
-                put(ERRO_VALOR_META, "Informe um valor meta maior que zero.")
-            }
-        }
+        val erroTitulo    = if (state.titulo.isBlank()) SonhoErro.TituloObrigatorio else null
+        val meta          = state.valorMetaTexto.toBigDecimalOuNulo()
+        val erroValorMeta = if (meta == null || meta <= BigDecimal.ZERO) SonhoErro.ValorMetaInvalido else null
 
-        if (erros.isNotEmpty()) {
-            _uiState.update { it.copy(erros = erros) }
+        if (erroTitulo != null || erroValorMeta != null) {
+            val novosErros = buildMap {
+                if (erroTitulo    != null) put(ERRO_TITULO,     erroTitulo)
+                if (erroValorMeta != null) put(ERRO_VALOR_META, erroValorMeta)
+            }
+            _uiState.update { it.copy(erros = novosErros) }
             return
         }
 
@@ -100,7 +97,16 @@ class CadastroSonhoViewModel @Inject constructor(
                     resetar()
                     _uiEvent.send(CadastroSonhoUiEvent.NavigateBack)
                 }
-                .onFailure { _uiEvent.send(CadastroSonhoUiEvent.ErroAoSalvar) }
+                .onFailure { throwable ->
+                    val erro = (throwable as? SonhoErroException)?.erro
+                    when (erro) {
+                        SonhoErro.TituloObrigatorio ->
+                            _uiState.update { it.copy(erros = it.erros + (ERRO_TITULO to SonhoErro.TituloObrigatorio)) }
+                        SonhoErro.ValorMetaInvalido ->
+                            _uiState.update { it.copy(erros = it.erros + (ERRO_VALOR_META to SonhoErro.ValorMetaInvalido)) }
+                        else -> _uiEvent.send(CadastroSonhoUiEvent.ErroAoSalvar)
+                    }
+                }
             _uiState.update { it.copy(salvando = false) }
         }
     }

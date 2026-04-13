@@ -1,6 +1,7 @@
 package com.fsales.app.rumo.ui.feature.gasto.cadastro
 
 import com.fsales.app.rumo.core.domain.model.CategoriaGasto
+import com.fsales.app.rumo.core.domain.model.GastoErro
 import java.time.LocalDate
 
 data class CadastroGastoUiState(
@@ -11,7 +12,8 @@ data class CadastroGastoUiState(
     val essencial: Boolean = false,
     val recorrente: Boolean = false,
     val observacao: String = "",
-    val erros: Map<String, String> = emptyMap(),
+    val erroDescricao: GastoErro? = null,
+    val erroValor: GastoErro? = null,
     val salvando: Boolean = false,
 )
 

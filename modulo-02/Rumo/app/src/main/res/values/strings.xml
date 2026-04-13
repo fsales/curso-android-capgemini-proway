@@ -51,6 +51,11 @@
     <string name="lista_sonho_vazia_titulo">Nenhum sonho cadastrado</string>
     <string name="lista_sonho_vazia_mensagem">Adicione seu primeiro sonho usando o botão abaixo.</string>
 
+    <!-- ===== Projeção Sonho (SonhoItem) ===== -->
+    <string name="sonho_sem_projecao">Sem projeção disponível</string>
+    <string name="sonho_no_prazo">No prazo</string>
+    <string name="sonho_fora_do_prazo">Fora do prazo</string>
+
     <!-- ===== Cadastro Ganho ===== -->
     <string name="cadastro_ganho_titulo">Cadastro de Ganho</string>
     <string name="cadastro_ganho_campo_descricao">Descrição</string>
@@ -102,4 +107,10 @@
     <!-- ===== Seletor de Mês ===== -->
     <string name="seletor_mes_anterior">Mês anterior</string>
     <string name="seletor_mes_proximo">Próximo mês</string>
+
+    <!-- ===== Plurals ===== -->
+    <plurals name="sonho_meses_necessarios">
+        <item quantity="one">%d mês necessário</item>
+        <item quantity="other">%d meses necessários</item>
+    </plurals>
 </resources>

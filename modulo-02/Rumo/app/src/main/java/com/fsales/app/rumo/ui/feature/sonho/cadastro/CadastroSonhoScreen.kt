@@ -35,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,11 +43,20 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fsales.app.rumo.R
 import com.fsales.app.rumo.core.domain.model.PrioridadeSonho
-import com.fsales.app.rumo.ui.CadastroSonhoUiEvent
+import com.fsales.app.rumo.core.domain.model.SonhoErro
 import com.fsales.app.rumo.ui.components.RumoDatePickerField
 import com.fsales.app.rumo.ui.theme.RumoTheme
 import com.fsales.app.rumo.ui.theme.spacing
 import java.time.LocalDate
+
+// =============================================================================
+// Mapeamento de SonhoErro → @StringRes (privado ao arquivo)
+// =============================================================================
+@androidx.annotation.StringRes
+private fun SonhoErro.toStringRes(): Int = when (this) {
+    SonhoErro.TituloObrigatorio -> R.string.cadastro_sonho_erro_titulo_obrigatorio
+    SonhoErro.ValorMetaInvalido -> R.string.cadastro_sonho_erro_valor_meta_invalido
+}
 // =============================================================================
 // Screen — ponto de entrada; coleta ViewModel e roteia UiEvent
 // =============================================================================
@@ -59,14 +67,13 @@ fun CadastroSonhoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
+    val erroSalvarMsg = stringResource(R.string.cadastro_sonho_erro_salvar)
+
     LaunchedEffect(viewModel) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 CadastroSonhoUiEvent.NavigateBack -> navigateBack()
-                CadastroSonhoUiEvent.ErroAoSalvar -> snackbarHostState.showSnackbar(
-                    context.getString(R.string.cadastro_sonho_erro_salvar),
-                )
+                CadastroSonhoUiEvent.ErroAoSalvar -> snackbarHostState.showSnackbar(erroSalvarMsg)
             }
         }
     }
@@ -120,9 +127,9 @@ fun CadastroSonhoContent(
                 value = uiState.titulo,
                 onValueChange = { onEvent(CadastroSonhoEvent.AlterarTitulo(it)) },
                 label = { Text(stringResource(R.string.cadastro_sonho_campo_titulo)) },
-                isError = uiState.erros.containsKey(CadastroSonhoViewModel.ERRO_TITULO),
-                supportingText = uiState.erros[CadastroSonhoViewModel.ERRO_TITULO]?.let { msg ->
-                    { Text(msg, color = MaterialTheme.colorScheme.error) }
+                isError = uiState.erros.containsKey(ERRO_TITULO),
+                supportingText = uiState.erros[ERRO_TITULO]?.let { erro ->
+                    { Text(stringResource(erro.toStringRes()), color = MaterialTheme.colorScheme.error) }
                 },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -140,9 +147,9 @@ fun CadastroSonhoContent(
                 value = uiState.valorMetaTexto,
                 onValueChange = { onEvent(CadastroSonhoEvent.AlterarValorMeta(it)) },
                 label = { Text(stringResource(R.string.cadastro_sonho_campo_valor_meta)) },
-                isError = uiState.erros.containsKey(CadastroSonhoViewModel.ERRO_VALOR_META),
-                supportingText = uiState.erros[CadastroSonhoViewModel.ERRO_VALOR_META]?.let { msg ->
-                    { Text(msg, color = MaterialTheme.colorScheme.error) }
+                isError = uiState.erros.containsKey(ERRO_VALOR_META),
+                supportingText = uiState.erros[ERRO_VALOR_META]?.let { erro ->
+                    { Text(stringResource(erro.toStringRes()), color = MaterialTheme.colorScheme.error) }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 prefix = { Text("R$") },
@@ -240,8 +247,8 @@ private fun CadastroSonhoComErrosPreview() {
         CadastroSonhoContent(
             uiState = CadastroSonhoUiState(
                 erros = mapOf(
-                    CadastroSonhoViewModel.ERRO_TITULO     to "O titulo e obrigatorio.",
-                    CadastroSonhoViewModel.ERRO_VALOR_META to "Informe um valor meta maior que zero.",
+                    ERRO_TITULO     to SonhoErro.TituloObrigatorio,
+                    ERRO_VALOR_META to SonhoErro.ValorMetaInvalido,
                 ),
             ),
         )

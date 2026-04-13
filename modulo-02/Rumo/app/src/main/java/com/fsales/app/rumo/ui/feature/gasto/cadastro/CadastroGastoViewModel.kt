@@ -3,8 +3,9 @@ package com.fsales.app.rumo.ui.feature.gasto.cadastro
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fsales.app.rumo.core.domain.model.Gasto
+import com.fsales.app.rumo.core.domain.model.GastoErro
 import com.fsales.app.rumo.core.domain.usecase.SalvarGastoUseCase
-import com.fsales.app.rumo.ui.CadastroGastoUiEvent
+import com.fsales.app.rumo.core.domain.usecase.GastoErroException
 import com.fsales.app.rumo.ui.util.toBigDecimalOuNulo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -23,10 +24,6 @@ class CadastroGastoViewModel @Inject constructor(
     private val salvarGastoUseCase: SalvarGastoUseCase,
 ) : ViewModel() {
 
-    companion object {
-        const val ERRO_DESCRICAO = "descricao"
-        const val ERRO_VALOR     = "valor"
-    }
 
     private val _uiState = MutableStateFlow(
         CadastroGastoUiState(dataGasto = LocalDate.now()),
@@ -58,7 +55,7 @@ class CadastroGastoViewModel @Inject constructor(
     private fun alterarDescricao(valor: String) = _uiState.update { state ->
         state.copy(
             descricao = valor,
-            erros = if (jaSubmeteu && valor.isNotBlank()) state.erros - ERRO_DESCRICAO else state.erros,
+            erroDescricao = if (jaSubmeteu && valor.isNotBlank()) null else state.erroDescricao,
         )
     }
 
@@ -66,7 +63,7 @@ class CadastroGastoViewModel @Inject constructor(
         val valorValido = (valor.toBigDecimalOuNulo() ?: BigDecimal.ZERO) > BigDecimal.ZERO
         state.copy(
             valorTexto = valor,
-            erros = if (jaSubmeteu && valorValido) state.erros - ERRO_VALOR else state.erros,
+            erroValor = if (jaSubmeteu && valorValido) null else state.erroValor,
         )
     }
 
@@ -74,14 +71,12 @@ class CadastroGastoViewModel @Inject constructor(
         jaSubmeteu = true
         val state = _uiState.value
 
-        val erros = buildMap<String, String> {
-            if (state.descricao.isBlank()) put(ERRO_DESCRICAO, "A descrição é obrigatória.")
-            val v = state.valorTexto.toBigDecimalOuNulo()
-            if (v == null || v <= BigDecimal.ZERO) put(ERRO_VALOR, "Informe um valor maior que zero.")
-        }
+        val erroDescricao = if (state.descricao.isBlank()) GastoErro.DescricaoObrigatoria else null
+        val v = state.valorTexto.toBigDecimalOuNulo()
+        val erroValor = if (v == null || v <= BigDecimal.ZERO) GastoErro.ValorInvalido else null
 
-        if (erros.isNotEmpty()) {
-            _uiState.update { it.copy(erros = erros) }
+        if (erroDescricao != null || erroValor != null) {
+            _uiState.update { it.copy(erroDescricao = erroDescricao, erroValor = erroValor) }
             return
         }
 
@@ -104,7 +99,16 @@ class CadastroGastoViewModel @Inject constructor(
                     resetar()
                     _uiEvent.send(CadastroGastoUiEvent.NavigateBack)
                 }
-                .onFailure { _uiEvent.send(CadastroGastoUiEvent.ErroAoSalvar) }
+                .onFailure { throwable ->
+                    val erro = (throwable as? GastoErroException)?.erro
+                    when (erro) {
+                        GastoErro.DescricaoObrigatoria ->
+                            _uiState.update { it.copy(erroDescricao = GastoErro.DescricaoObrigatoria) }
+                        GastoErro.ValorInvalido ->
+                            _uiState.update { it.copy(erroValor = GastoErro.ValorInvalido) }
+                        else -> _uiEvent.send(CadastroGastoUiEvent.ErroAoSalvar)
+                    }
+                }
             _uiState.update { it.copy(salvando = false) }
         }
     }

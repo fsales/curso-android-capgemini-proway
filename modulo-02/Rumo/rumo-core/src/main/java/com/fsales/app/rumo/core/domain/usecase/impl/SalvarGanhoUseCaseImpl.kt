@@ -3,6 +3,7 @@ package com.fsales.app.rumo.core.domain.usecase.impl
 import com.fsales.app.rumo.core.domain.model.Ganho
 import com.fsales.app.rumo.core.domain.model.GanhoErro
 import com.fsales.app.rumo.core.domain.repository.GanhoRepository
+import com.fsales.app.rumo.core.domain.usecase.GanhoErroException
 import com.fsales.app.rumo.core.domain.usecase.SalvarGanhoUseCase
 import com.fsales.app.rumo.core.domain.usecase.validarCompetencia
 import java.math.BigDecimal
@@ -13,7 +14,7 @@ class SalvarGanhoUseCaseImpl @Inject constructor(
 ) : SalvarGanhoUseCase {
 
     override suspend fun invoke(ganho: Ganho): Result<Long> {
-        validar(ganho)?.let { return Result.failure(it) }
+        validar(ganho)?.let { return Result.failure(GanhoErroException(it)) }
         return ganhoRepository.salvar(ganho)
     }
 

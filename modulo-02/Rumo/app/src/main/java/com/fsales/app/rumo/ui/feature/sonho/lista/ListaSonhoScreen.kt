@@ -24,6 +24,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fsales.app.rumo.R
 import com.fsales.app.rumo.core.domain.model.PrioridadeSonho
+import com.fsales.app.rumo.core.domain.model.ProjecaoSonho
 import com.fsales.app.rumo.core.domain.model.Sonho
 import com.fsales.app.rumo.core.domain.model.StatusSonho
 import com.fsales.app.rumo.ui.ListaSonhoUiEvent
@@ -58,8 +59,8 @@ fun ListaSonhoScreen(
 
     ListaSonhoContent(
         modifier = modifier,
-        uiState = uiState,
-        onEvent = viewModel::onEvent,
+        uiState  = uiState,
+        onEvent  = viewModel::onEvent,
     )
 }
 
@@ -77,13 +78,8 @@ fun ListaSonhoContent(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { onEvent(ListaSonhoEvent.IrParaCadastro) },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = null,
-                    )
-                },
-                text = { Text(text = stringResource(R.string.lista_sonho_adicionar)) },
+                icon    = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                text    = { Text(text = stringResource(R.string.lista_sonho_adicionar)) },
             )
         },
     ) { paddingValues ->
@@ -91,17 +87,17 @@ fun ListaSonhoContent(
             uiState.erro != null -> {
                 RumoErroState(
                     mensagem = uiState.erro,
-                    onRetry = { onEvent(ListaSonhoEvent.TentarNovamente) },
+                    onRetry  = { onEvent(ListaSonhoEvent.TentarNovamente) },
                     modifier = Modifier.padding(paddingValues),
                 )
             }
 
-            uiState.sonhos.isEmpty() && !uiState.carregando -> {
+            uiState.projecoes.isEmpty() && !uiState.carregando -> {
                 RumoEmptyState(
-                    icone = Icons.Filled.AutoAwesome,
-                    tituloRes = R.string.lista_sonho_vazia_titulo,
+                    icone       = Icons.Filled.AutoAwesome,
+                    tituloRes   = R.string.lista_sonho_vazia_titulo,
                     mensagemRes = R.string.lista_sonho_vazia_mensagem,
-                    modifier = Modifier
+                    modifier    = Modifier
                         .padding(paddingValues)
                         .fillMaxSize(),
                 )
@@ -110,18 +106,18 @@ fun ListaSonhoContent(
             else -> {
                 LazyColumn(
                     contentPadding = PaddingValues(
-                        start = MaterialTheme.spacing.medium,
-                        end = MaterialTheme.spacing.medium,
-                        top = paddingValues.calculateTopPadding() + MaterialTheme.spacing.medium,
+                        start  = MaterialTheme.spacing.medium,
+                        end    = MaterialTheme.spacing.medium,
+                        top    = paddingValues.calculateTopPadding() + MaterialTheme.spacing.medium,
                         bottom = paddingValues.calculateBottomPadding() + MaterialTheme.spacing.medium,
                     ),
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    items(uiState.sonhos, key = { it.id }) { sonho ->
+                    items(uiState.projecoes, key = { it.sonho.id }) { projecao ->
                         SonhoItem(
-                            sonho = sonho,
-                            onClick = { onEvent(ListaSonhoEvent.AbrirSonho(sonho.id)) },
+                            projecao = projecao,
+                            onClick  = { onEvent(ListaSonhoEvent.AbrirSonho(projecao.sonho.id)) },
                         )
                     }
                 }
@@ -133,31 +129,40 @@ fun ListaSonhoContent(
 // =============================================================================
 // Previews
 // =============================================================================
-private val sonhosFake = listOf(
-    Sonho(
-        id = 1L,
-        titulo = "Carro novo",
-        descricao = "Toyota Corolla 2027",
-        valorMeta = BigDecimal("80000.00"),
-        valorAtual = BigDecimal("25000.00"),
-        prioridade = PrioridadeSonho.ALTA,
-        status = StatusSonho.EM_ANDAMENTO,
+private fun fakeSonho(
+    id: Long,
+    titulo: String,
+    valorMeta: BigDecimal,
+    valorAtual: BigDecimal,
+    prioridade: PrioridadeSonho,
+    status: StatusSonho,
+) = Sonho(id = id, titulo = titulo, valorMeta = valorMeta, valorAtual = valorAtual,
+          prioridade = prioridade, status = status)
+
+private val projecoesFake = listOf(
+    ProjecaoSonho(
+        sonho                = fakeSonho(1L, "Carro novo", BigDecimal("80000"), BigDecimal("25000"),
+                                         PrioridadeSonho.ALTA, StatusSonho.EM_ANDAMENTO),
+        valorRestante        = BigDecimal("55000"),
+        percentualConcluido  = BigDecimal("31.25"),
+        mesesNecessarios     = 18,
+        seraAlcancadoNoPrazo = true,
     ),
-    Sonho(
-        id = 2L,
-        titulo = "Viagem para o Japão",
-        valorMeta = BigDecimal("15000.00"),
-        valorAtual = BigDecimal.ZERO,
-        prioridade = PrioridadeSonho.MEDIA,
-        status = StatusSonho.NAO_INICIADO,
+    ProjecaoSonho(
+        sonho                = fakeSonho(2L, "Viagem para o Japão", BigDecimal("15000"), BigDecimal.ZERO,
+                                         PrioridadeSonho.MEDIA, StatusSonho.NAO_INICIADO),
+        valorRestante        = BigDecimal("15000"),
+        percentualConcluido  = BigDecimal("0.00"),
+        mesesNecessarios     = null,
+        seraAlcancadoNoPrazo = false,
     ),
-    Sonho(
-        id = 3L,
-        titulo = "Apartamento próprio",
-        valorMeta = BigDecimal("300000.00"),
-        valorAtual = BigDecimal("45000.00"),
-        prioridade = PrioridadeSonho.ALTA,
-        status = StatusSonho.EM_ANDAMENTO,
+    ProjecaoSonho(
+        sonho                = fakeSonho(3L, "Apartamento próprio", BigDecimal("300000"), BigDecimal("45000"),
+                                         PrioridadeSonho.ALTA, StatusSonho.EM_ANDAMENTO),
+        valorRestante        = BigDecimal("255000"),
+        percentualConcluido  = BigDecimal("15.00"),
+        mesesNecessarios     = 42,
+        seraAlcancadoNoPrazo = false,
     ),
 )
 
@@ -165,25 +170,19 @@ private val sonhosFake = listOf(
 @Preview(showBackground = true, name = "ListaSonho · Preenchida · Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ListaSonhoPreenchidaPreview() {
-    RumoTheme {
-        ListaSonhoContent(uiState = ListaSonhoUiState(sonhos = sonhosFake))
-    }
+    RumoTheme { ListaSonhoContent(uiState = ListaSonhoUiState(projecoes = projecoesFake)) }
 }
 
 @Preview(showBackground = true, name = "ListaSonho · Vazia · Light")
 @Preview(showBackground = true, name = "ListaSonho · Vazia · Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ListaSonhoVaziaPreview() {
-    RumoTheme {
-        ListaSonhoContent(uiState = ListaSonhoUiState(sonhos = emptyList()))
-    }
+    RumoTheme { ListaSonhoContent(uiState = ListaSonhoUiState(projecoes = emptyList())) }
 }
 
 @Preview(showBackground = true, name = "ListaSonho · Shell · Light")
 @Preview(showBackground = true, name = "ListaSonho · Shell · Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ListaSonhoPreview() {
-    RumoTheme {
-        HomeScreenPreviewShell(initialTab = HomeEvent.IrParaSonhos)
-    }
+    RumoTheme { HomeScreenPreviewShell(initialTab = HomeEvent.IrParaSonhos) }
 }

@@ -33,7 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,12 +41,21 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fsales.app.rumo.R
 import com.fsales.app.rumo.core.domain.model.CategoriaGasto
-import com.fsales.app.rumo.ui.CadastroGastoUiEvent
+import com.fsales.app.rumo.core.domain.model.GastoErro
 import com.fsales.app.rumo.ui.components.RumoDatePickerField
 import com.fsales.app.rumo.ui.feature.gasto.components.CategoriaGastoDropdown
 import com.fsales.app.rumo.ui.theme.RumoTheme
 import com.fsales.app.rumo.ui.theme.spacing
 import java.time.LocalDate
+
+// =============================================================================
+// Mapeamento de GastoErro → @StringRes (privado ao arquivo)
+// =============================================================================
+@androidx.annotation.StringRes
+private fun GastoErro.toStringRes(): Int = when (this) {
+    GastoErro.DescricaoObrigatoria -> R.string.cadastro_gasto_erro_descricao_obrigatoria
+    GastoErro.ValorInvalido        -> R.string.cadastro_gasto_erro_valor_invalido
+}
 
 // =============================================================================
 // Screen — ponto de entrada; coleta ViewModel e roteia UiEvent
@@ -59,15 +67,13 @@ fun CadastroGastoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
+    val erroSalvarMsg = stringResource(R.string.cadastro_gasto_erro_salvar)
 
     LaunchedEffect(viewModel) {
-        viewModel.uiEvent.collect { event ->
+        viewModel.uiEvent.collect { event: CadastroGastoUiEvent ->
             when (event) {
                 CadastroGastoUiEvent.NavigateBack -> navigateBack()
-                CadastroGastoUiEvent.ErroAoSalvar -> snackbarHostState.showSnackbar(
-                    context.getString(R.string.cadastro_gasto_erro_salvar)
-                )
+                CadastroGastoUiEvent.ErroAoSalvar -> snackbarHostState.showSnackbar(erroSalvarMsg)
             }
         }
     }
@@ -123,9 +129,9 @@ fun CadastroGastoContent(
                 value = uiState.descricao,
                 onValueChange = { onEvent(CadastroGastoEvent.AlterarDescricao(it)) },
                 label = { Text(stringResource(R.string.cadastro_gasto_campo_descricao)) },
-                isError = uiState.erros.containsKey(CadastroGastoViewModel.ERRO_DESCRICAO),
-                supportingText = uiState.erros[CadastroGastoViewModel.ERRO_DESCRICAO]?.let { msg ->
-                    { Text(msg, color = MaterialTheme.colorScheme.error) }
+                isError = uiState.erroDescricao != null,
+                supportingText = uiState.erroDescricao?.let { erro ->
+                    { Text(stringResource(erro.toStringRes()), color = MaterialTheme.colorScheme.error) }
                 },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -136,9 +142,9 @@ fun CadastroGastoContent(
                 value = uiState.valorTexto,
                 onValueChange = { onEvent(CadastroGastoEvent.AlterarValor(it)) },
                 label = { Text(stringResource(R.string.cadastro_gasto_campo_valor)) },
-                isError = uiState.erros.containsKey(CadastroGastoViewModel.ERRO_VALOR),
-                supportingText = uiState.erros[CadastroGastoViewModel.ERRO_VALOR]?.let { msg ->
-                    { Text(msg, color = MaterialTheme.colorScheme.error) }
+                isError = uiState.erroValor != null,
+                supportingText = uiState.erroValor?.let { erro ->
+                    { Text(stringResource(erro.toStringRes()), color = MaterialTheme.colorScheme.error) }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 prefix = { Text("R$") },
@@ -241,10 +247,8 @@ private fun CadastroGastoComErrosPreview() {
         CadastroGastoContent(
             uiState = CadastroGastoUiState(
                 dataGasto = LocalDate.now(),
-                erros = mapOf(
-                    CadastroGastoViewModel.ERRO_DESCRICAO to "A descrição é obrigatória.",
-                    CadastroGastoViewModel.ERRO_VALOR to "Informe um valor maior que zero.",
-                ),
+                erroDescricao = GastoErro.DescricaoObrigatoria,
+                erroValor = GastoErro.ValorInvalido,
             ),
         )
     }

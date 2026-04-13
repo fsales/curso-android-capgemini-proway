@@ -1,7 +1,9 @@
 package com.fsales.app.rumo.core.domain.usecase.impl
 
 import com.fsales.app.rumo.core.domain.model.Gasto
+import com.fsales.app.rumo.core.domain.model.GastoErro
 import com.fsales.app.rumo.core.domain.repository.GastoRepository
+import com.fsales.app.rumo.core.domain.usecase.GastoErroException
 import com.fsales.app.rumo.core.domain.usecase.SalvarGastoUseCase
 import com.fsales.app.rumo.core.domain.usecase.validarCompetencia
 import java.math.BigDecimal
@@ -12,22 +14,18 @@ class SalvarGastoUseCaseImpl @Inject constructor(
 ) : SalvarGastoUseCase {
 
     override suspend fun invoke(gasto: Gasto): Result<Long> {
-        validar(gasto)?.let { return Result.failure(IllegalArgumentException(it)) }
+        validar(gasto)?.let { return Result.failure(GastoErroException(it)) }
         return gastoRepository.salvar(gasto)
     }
 
-    private fun validar(gasto: Gasto): String? {
-        if (gasto.descricao.isBlank()) return "A descrição do gasto é obrigatória."
-        if (gasto.valor <= BigDecimal.ZERO) return "O valor do gasto deve ser maior que zero."
+    private fun validar(gasto: Gasto): GastoErro? {
+        if (gasto.descricao.isBlank()) return GastoErro.DescricaoObrigatoria
+        if (gasto.valor <= BigDecimal.ZERO) return GastoErro.ValorInvalido
 
         return runCatching {
             validarCompetencia(gasto.mesReferencia, gasto.anoReferencia)
-            require(gasto.dataGasto.monthValue == gasto.mesReferencia) {
-                "O mês de referência deve corresponder à data do gasto."
-            }
-            require(gasto.dataGasto.year == gasto.anoReferencia) {
-                "O ano de referência deve corresponder à data do gasto."
-            }
-        }.exceptionOrNull()?.message
+            require(gasto.dataGasto.monthValue == gasto.mesReferencia)
+            require(gasto.dataGasto.year == gasto.anoReferencia)
+        }.exceptionOrNull()?.let { GastoErro.ValorInvalido }
     }
 }
