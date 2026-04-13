@@ -7,7 +7,6 @@ sealed interface CadastroSonhoEvent {
     data class AlterarTitulo(val valor: String)             : CadastroSonhoEvent
     data class AlterarDescricao(val valor: String)          : CadastroSonhoEvent
     data class AlterarValorMeta(val valor: String)          : CadastroSonhoEvent
-    data class AlterarValorAtual(val valor: String)         : CadastroSonhoEvent
     data class AlterarPrioridade(val prioridade: PrioridadeSonho) : CadastroSonhoEvent
     data class AlterarPrazo(val prazo: LocalDate?)          : CadastroSonhoEvent
     data object Salvar : CadastroSonhoEvent

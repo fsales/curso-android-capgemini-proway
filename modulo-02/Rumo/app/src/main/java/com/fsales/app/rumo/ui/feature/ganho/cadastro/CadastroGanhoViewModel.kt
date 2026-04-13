@@ -48,7 +48,10 @@ class CadastroGanhoViewModel @Inject constructor(
             is CadastroGanhoEvent.AlterarRecorrente  -> _uiState.update { it.copy(recorrente = event.recorrente) }
             is CadastroGanhoEvent.AlterarObservacao  -> _uiState.update { it.copy(observacao = event.observacao) }
             CadastroGanhoEvent.Salvar                -> salvar()
-            CadastroGanhoEvent.Voltar                -> _uiEvent.trySend(CadastroGanhoUiEvent.NavigateBack)
+            CadastroGanhoEvent.Voltar                -> {
+                resetar()
+                _uiEvent.trySend(CadastroGanhoUiEvent.NavigateBack)
+            }
         }
     }
 
@@ -97,7 +100,10 @@ class CadastroGanhoViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(salvando = true) }
             salvarGanhoUseCase(ganho)
-                .onSuccess { _uiEvent.send(CadastroGanhoUiEvent.NavigateBack) }
+                .onSuccess {
+                    resetar()
+                    _uiEvent.send(CadastroGanhoUiEvent.NavigateBack)
+                }
                 .onFailure { erro ->
                     when (erro) {
                         GanhoErro.DescricaoObrigatoria ->
@@ -113,5 +119,10 @@ class CadastroGanhoViewModel @Inject constructor(
                 }
             _uiState.update { it.copy(salvando = false) }
         }
+    }
+
+    private fun resetar() {
+        jaSubmeteu = false
+        _uiState.value = CadastroGanhoUiState(dataRecebimento = LocalDate.now())
     }
 }

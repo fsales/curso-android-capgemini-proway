@@ -7,7 +7,6 @@ data class CadastroSonhoUiState(
     val titulo: String = "",
     val descricao: String = "",
     val valorMetaTexto: String = "",
-    val valorAtualTexto: String = "",
     val prioridade: PrioridadeSonho = PrioridadeSonho.MEDIA,
     val prazoAlvo: LocalDate? = null,
     val erros: Map<String, String> = emptyMap(),

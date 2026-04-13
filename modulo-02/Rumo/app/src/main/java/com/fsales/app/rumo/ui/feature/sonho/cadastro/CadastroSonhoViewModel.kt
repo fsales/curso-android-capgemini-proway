@@ -23,9 +23,8 @@ class CadastroSonhoViewModel @Inject constructor(
 ) : ViewModel() {
 
     companion object {
-        const val ERRO_TITULO      = "titulo"
-        const val ERRO_VALOR_META  = "valorMeta"
-        const val ERRO_VALOR_ATUAL = "valorAtual"
+        const val ERRO_TITULO     = "titulo"
+        const val ERRO_VALOR_META = "valorMeta"
     }
 
     private val _uiState = MutableStateFlow(CadastroSonhoUiState())
@@ -41,11 +40,13 @@ class CadastroSonhoViewModel @Inject constructor(
             is CadastroSonhoEvent.AlterarTitulo     -> alterarTitulo(event.valor)
             is CadastroSonhoEvent.AlterarDescricao  -> _uiState.update { it.copy(descricao = event.valor) }
             is CadastroSonhoEvent.AlterarValorMeta  -> alterarValorMeta(event.valor)
-            is CadastroSonhoEvent.AlterarValorAtual -> alterarValorAtual(event.valor)
             is CadastroSonhoEvent.AlterarPrioridade -> _uiState.update { it.copy(prioridade = event.prioridade) }
             is CadastroSonhoEvent.AlterarPrazo      -> _uiState.update { it.copy(prazoAlvo = event.prazo) }
             CadastroSonhoEvent.Salvar               -> salvar()
-            CadastroSonhoEvent.Voltar               -> _uiEvent.trySend(CadastroSonhoUiEvent.NavigateBack)
+            CadastroSonhoEvent.Voltar               -> {
+                resetar()
+                _uiEvent.trySend(CadastroSonhoUiEvent.NavigateBack)
+            }
         }
     }
 
@@ -64,14 +65,6 @@ class CadastroSonhoViewModel @Inject constructor(
         )
     }
 
-    private fun alterarValorAtual(valor: String) = _uiState.update { state ->
-        val atual = valor.toBigDecimalOuNulo() ?: BigDecimal.ZERO
-        state.copy(
-            valorAtualTexto = valor,
-            erros           = if (jaSubmeteu && atual >= BigDecimal.ZERO) state.erros - ERRO_VALOR_ATUAL else state.erros,
-        )
-    }
-
     private fun salvar() {
         jaSubmeteu = true
         val state = _uiState.value
@@ -84,10 +77,6 @@ class CadastroSonhoViewModel @Inject constructor(
             if (meta == null || meta <= BigDecimal.ZERO) {
                 put(ERRO_VALOR_META, "Informe um valor meta maior que zero.")
             }
-            val atual = state.valorAtualTexto.toBigDecimalOuNulo()
-            if (atual != null && atual < BigDecimal.ZERO) {
-                put(ERRO_VALOR_ATUAL, "O valor atual não pode ser negativo.")
-            }
         }
 
         if (erros.isNotEmpty()) {
@@ -99,7 +88,7 @@ class CadastroSonhoViewModel @Inject constructor(
             titulo     = state.titulo.trim(),
             descricao  = state.descricao.trim().ifBlank { null },
             valorMeta  = state.valorMetaTexto.toBigDecimalOuNulo() ?: BigDecimal.ZERO,
-            valorAtual = state.valorAtualTexto.toBigDecimalOuNulo() ?: BigDecimal.ZERO,
+            valorAtual = BigDecimal.ZERO,
             prioridade = state.prioridade,
             prazoAlvo  = state.prazoAlvo,
         )
@@ -107,9 +96,17 @@ class CadastroSonhoViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(salvando = true) }
             salvarSonhoUseCase(sonho)
-                .onSuccess { _uiEvent.send(CadastroSonhoUiEvent.NavigateBack) }
+                .onSuccess {
+                    resetar()
+                    _uiEvent.send(CadastroSonhoUiEvent.NavigateBack)
+                }
                 .onFailure { _uiEvent.send(CadastroSonhoUiEvent.ErroAoSalvar) }
             _uiState.update { it.copy(salvando = false) }
         }
+    }
+
+    private fun resetar() {
+        jaSubmeteu = false
+        _uiState.value = CadastroSonhoUiState()
     }
 }

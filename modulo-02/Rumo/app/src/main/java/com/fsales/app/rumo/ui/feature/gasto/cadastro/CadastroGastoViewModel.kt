@@ -48,7 +48,10 @@ class CadastroGastoViewModel @Inject constructor(
             is CadastroGastoEvent.AlterarRecorrente  -> _uiState.update { it.copy(recorrente = event.recorrente) }
             is CadastroGastoEvent.AlterarObservacao  -> _uiState.update { it.copy(observacao = event.observacao) }
             CadastroGastoEvent.Salvar                -> salvar()
-            CadastroGastoEvent.Voltar                -> _uiEvent.trySend(CadastroGastoUiEvent.NavigateBack)
+            CadastroGastoEvent.Voltar                -> {
+                resetar()
+                _uiEvent.trySend(CadastroGastoUiEvent.NavigateBack)
+            }
         }
     }
 
@@ -97,9 +100,17 @@ class CadastroGastoViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(salvando = true) }
             salvarGastoUseCase(gasto)
-                .onSuccess { _uiEvent.send(CadastroGastoUiEvent.NavigateBack) }
+                .onSuccess {
+                    resetar()
+                    _uiEvent.send(CadastroGastoUiEvent.NavigateBack)
+                }
                 .onFailure { _uiEvent.send(CadastroGastoUiEvent.ErroAoSalvar) }
             _uiState.update { it.copy(salvando = false) }
         }
+    }
+
+    private fun resetar() {
+        jaSubmeteu = false
+        _uiState.value = CadastroGastoUiState(dataGasto = LocalDate.now())
     }
 }

@@ -149,20 +149,6 @@ fun CadastroSonhoContent(
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
-            // Valor atual
-            OutlinedTextField(
-                value = uiState.valorAtualTexto,
-                onValueChange = { onEvent(CadastroSonhoEvent.AlterarValorAtual(it)) },
-                label = { Text(stringResource(R.string.cadastro_sonho_campo_valor_atual)) },
-                isError = uiState.erros.containsKey(CadastroSonhoViewModel.ERRO_VALOR_ATUAL),
-                supportingText = uiState.erros[CadastroSonhoViewModel.ERRO_VALOR_ATUAL]?.let { msg ->
-                    { Text(msg, color = MaterialTheme.colorScheme.error) }
-                },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                prefix = { Text("R$") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-            )
             // Prioridade
             PrioridadeDropdown(
                 prioridadeSelecionada   = uiState.prioridade,
