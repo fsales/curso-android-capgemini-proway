@@ -42,6 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fsales.app.rumo.R
 import com.fsales.app.rumo.core.domain.model.CategoriaGasto
 import com.fsales.app.rumo.core.domain.model.GastoErro
+import com.fsales.app.rumo.ui.components.CurrencyVisualTransformation
 import com.fsales.app.rumo.ui.components.RumoDatePickerField
 import com.fsales.app.rumo.ui.feature.gasto.components.CategoriaGastoDropdown
 import com.fsales.app.rumo.ui.theme.RumoTheme
@@ -53,8 +54,10 @@ import java.time.LocalDate
 // =============================================================================
 @androidx.annotation.StringRes
 private fun GastoErro.toStringRes(): Int = when (this) {
-    GastoErro.DescricaoObrigatoria -> R.string.cadastro_gasto_erro_descricao_obrigatoria
-    GastoErro.ValorInvalido        -> R.string.cadastro_gasto_erro_valor_invalido
+    GastoErro.DescricaoObrigatoria   -> R.string.cadastro_gasto_erro_descricao_obrigatoria
+    GastoErro.ValorInvalido          -> R.string.cadastro_gasto_erro_valor_invalido
+    GastoErro.DataForaDeCompetencia  -> R.string.cadastro_gasto_erro_data_invalida
+    GastoErro.DataVencimentoInvalida -> R.string.cadastro_gasto_erro_data_vencimento_invalida
 }
 
 // =============================================================================
@@ -62,8 +65,11 @@ private fun GastoErro.toStringRes(): Int = when (this) {
 // =============================================================================
 @Composable
 fun CadastroGastoScreen(
-    viewModel: CadastroGastoViewModel = hiltViewModel(),
+    gastoId: Long? = null,
     navigateBack: () -> Unit,
+    viewModel: CadastroGastoViewModel = hiltViewModel<CadastroGastoViewModel, CadastroGastoViewModel.Factory>(
+        creationCallback = { factory -> factory.create(gastoId) }
+    ),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -76,6 +82,11 @@ fun CadastroGastoScreen(
                 CadastroGastoUiEvent.ErroAoSalvar -> snackbarHostState.showSnackbar(erroSalvarMsg)
             }
         }
+    }
+
+    LaunchedEffect(gastoId) {
+        if (gastoId != null) viewModel.carregarParaEdicao(gastoId)
+        else viewModel.resetar()
     }
 
     CadastroGastoContent(
@@ -99,7 +110,18 @@ fun CadastroGastoContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.cadastro_gasto_titulo)) },
+                title = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(R.string.app_name),
+                            style = MaterialTheme.typography.labelSmall,
+                        )
+                        Text(
+                            text = stringResource(R.string.cadastro_gasto_titulo),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { onEvent(CadastroGastoEvent.Voltar) }) {
                         Icon(
@@ -138,6 +160,7 @@ fun CadastroGastoContent(
             )
 
             // Valor
+            val currencyTransformation = remember { CurrencyVisualTransformation() }
             OutlinedTextField(
                 value = uiState.valorTexto,
                 onValueChange = { onEvent(CadastroGastoEvent.AlterarValor(it)) },
@@ -146,7 +169,8 @@ fun CadastroGastoContent(
                 supportingText = uiState.erroValor?.let { erro ->
                     { Text(stringResource(erro.toStringRes()), color = MaterialTheme.colorScheme.error) }
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                visualTransformation = currencyTransformation,
                 prefix = { Text("R$") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),

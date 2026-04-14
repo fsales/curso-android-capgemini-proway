@@ -12,7 +12,8 @@ import java.time.LocalDate
     indices = [
         Index(value = ["anoReferencia", "mesReferencia"]),
         Index(value = ["categoria"]),
-        Index(value = ["dataGasto"])
+        Index(value = ["dataGasto"]),
+        Index(value = ["grupoRecorrenciaId"]),
     ]
 )
 data class GastoEntity(
@@ -26,5 +27,7 @@ data class GastoEntity(
     val categoria: CategoriaGasto,
     val essencial: Boolean = false,
     val recorrente: Boolean = false,
-    val observacao: String? = null
+    val observacao: String? = null,
+    val dataVencimento: LocalDate? = null,
+    val grupoRecorrenciaId: String? = null,
 )

@@ -14,7 +14,7 @@ class ConcluirSonhoUseCaseImpl @Inject constructor(
     private val gastoRepository: GastoRepository,
 ) : ConcluirSonhoUseCase {
 
-    override suspend fun invoke(sonho: Sonho): Result<Unit> = runCatching {
+    override suspend operator fun invoke(sonho: Sonho): Result<Unit> = runCatching {
         val hoje = LocalDate.now()
 
         // Registra o gasto equivalente ao valor da meta

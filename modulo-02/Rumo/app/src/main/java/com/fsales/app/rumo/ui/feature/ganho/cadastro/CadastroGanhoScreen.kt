@@ -42,6 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fsales.app.rumo.R
 import com.fsales.app.rumo.core.domain.model.GanhoErro
 import com.fsales.app.rumo.core.domain.model.TipoGanho
+import com.fsales.app.rumo.ui.components.CurrencyVisualTransformation
 import com.fsales.app.rumo.ui.components.RumoDatePickerField
 import com.fsales.app.rumo.ui.feature.ganho.components.TipoGanhoDropdown
 import com.fsales.app.rumo.ui.theme.RumoTheme
@@ -64,8 +65,11 @@ private fun GanhoErro.toStringRes(): Int = when (this) {
 // =============================================================================
 @Composable
 fun CadastroGanhoScreen(
-    viewModel: CadastroGanhoViewModel = hiltViewModel(),
+    ganhoId: Long? = null,
     navigateBack: () -> Unit,
+    viewModel: CadastroGanhoViewModel = hiltViewModel<CadastroGanhoViewModel, CadastroGanhoViewModel.Factory>(
+        creationCallback = { factory -> factory.create(ganhoId) }
+    ),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -78,6 +82,11 @@ fun CadastroGanhoScreen(
                 CadastroGanhoUiEvent.ErroAoSalvar -> snackbarHostState.showSnackbar(erroSalvarMsg)
             }
         }
+    }
+
+    LaunchedEffect(ganhoId) {
+        if (ganhoId != null) viewModel.carregarParaEdicao(ganhoId)
+        else viewModel.resetar()
     }
 
     CadastroGanhoContent(
@@ -101,7 +110,18 @@ fun CadastroGanhoContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.cadastro_ganho_titulo)) },
+                title = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(R.string.app_name),
+                            style = MaterialTheme.typography.labelSmall,
+                        )
+                        Text(
+                            text = stringResource(R.string.cadastro_ganho_titulo),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { onEvent(CadastroGanhoEvent.Voltar) }) {
                         Icon(
@@ -141,6 +161,7 @@ fun CadastroGanhoContent(
             )
 
             // Valor
+            val currencyTransformation = remember { CurrencyVisualTransformation() }
             OutlinedTextField(
                 value = uiState.valorTexto,
                 onValueChange = { onEvent(CadastroGanhoEvent.AlterarValor(it)) },
@@ -149,7 +170,8 @@ fun CadastroGanhoContent(
                 supportingText = uiState.erroValor?.let { erro ->
                     { Text(stringResource(erro.toStringRes()), color = MaterialTheme.colorScheme.error) }
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                visualTransformation = currencyTransformation,
                 prefix = { Text("R$") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),

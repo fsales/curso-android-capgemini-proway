@@ -44,6 +44,7 @@ fun DashboardScreen(
         uiState = state,
         onMesAnterior = viewModel::onMesAnterior,
         onMesProximo = viewModel::onMesProximo,
+        onSelecionarMesAno = viewModel::onSelecionarMesAno,
         onIrExtrato = onIrExtrato,
     )
 }
@@ -54,6 +55,7 @@ fun DashboardContent(
     modifier: Modifier = Modifier,
     onMesAnterior: () -> Unit = {},
     onMesProximo: () -> Unit = {},
+    onSelecionarMesAno: (java.time.YearMonth) -> Unit = {},
     onIrExtrato: () -> Unit = {},
 ) {
     Column(modifier = modifier.padding(16.dp)) {
@@ -61,6 +63,7 @@ fun DashboardContent(
             mesAno = uiState.mesAno,
             onAnterior = onMesAnterior,
             onProximo = onMesProximo,
+            onSelecionarMesAno = onSelecionarMesAno,
         )
 
         Spacer(modifier = Modifier.height(12.dp))

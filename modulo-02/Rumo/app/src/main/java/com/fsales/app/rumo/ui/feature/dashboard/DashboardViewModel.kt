@@ -37,6 +37,11 @@ class DashboardViewModel @Inject constructor(
         carregarResumo(novo)
     }
 
+    fun onSelecionarMesAno(mesAno: YearMonth) {
+        _uiState.value = _uiState.value.copy(mesAno = mesAno)
+        carregarResumo(mesAno)
+    }
+
     private fun carregarResumo(mesAno: YearMonth) {
         viewModelScope.launch {
             obterSaldoMensalUseCase(mesAno.monthValue, mesAno.year)

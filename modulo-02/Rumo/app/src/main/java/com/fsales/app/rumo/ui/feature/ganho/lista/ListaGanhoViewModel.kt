@@ -37,10 +37,12 @@ class ListaGanhoViewModel @Inject constructor(
 
     fun onEvent(event: ListaGanhoEvent) {
         when (event) {
-            ListaGanhoEvent.IrParaCadastro  -> cadastro()
-            ListaGanhoEvent.MesAnterior     -> alterarMes(_uiState.value.mesAno.minusMonths(1))
-            ListaGanhoEvent.ProximoMes      -> alterarMes(_uiState.value.mesAno.plusMonths(1))
-            ListaGanhoEvent.TentarNovamente -> carregarGanhos(_uiState.value.mesAno)
+            ListaGanhoEvent.IrParaCadastro      -> cadastro()
+            is ListaGanhoEvent.AbrirDetalhe     -> _uiEvent.trySend(ListaGanhoUiEvent.NavigateToDetalhe(event.id))
+            ListaGanhoEvent.MesAnterior         -> alterarMes(_uiState.value.mesAno.minusMonths(1))
+            ListaGanhoEvent.ProximoMes          -> alterarMes(_uiState.value.mesAno.plusMonths(1))
+            is ListaGanhoEvent.SelecionarMesAno -> alterarMes(event.mesAno)
+            ListaGanhoEvent.TentarNovamente     -> carregarGanhos(_uiState.value.mesAno)
         }
     }
 

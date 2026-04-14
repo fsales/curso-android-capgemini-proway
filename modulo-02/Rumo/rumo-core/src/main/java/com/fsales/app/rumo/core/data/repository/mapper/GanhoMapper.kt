@@ -14,7 +14,8 @@ fun GanhoEntity.toDomain(): Ganho = Ganho(
     anoReferencia = anoReferencia,
     tipo = tipo.toDomain(),
     recorrente = recorrente,
-    observacao = observacao
+    observacao = observacao,
+    grupoRecorrenciaId = grupoRecorrenciaId,
 )
 
 fun Ganho.toEntity(): GanhoEntity = GanhoEntity(
@@ -26,7 +27,8 @@ fun Ganho.toEntity(): GanhoEntity = GanhoEntity(
     anoReferencia = anoReferencia,
     tipo = tipo.toEntity(),
     recorrente = recorrente,
-    observacao = observacao
+    observacao = observacao,
+    grupoRecorrenciaId = grupoRecorrenciaId,
 )
 
 private fun TipoGanhoEntity.toDomain(): TipoGanho = when (this) {

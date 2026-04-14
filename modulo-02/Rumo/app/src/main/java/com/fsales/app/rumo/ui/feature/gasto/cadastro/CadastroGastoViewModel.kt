@@ -4,9 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fsales.app.rumo.core.domain.model.Gasto
 import com.fsales.app.rumo.core.domain.model.GastoErro
+import com.fsales.app.rumo.core.domain.usecase.AtualizarGastoUseCase
+import com.fsales.app.rumo.core.domain.usecase.ObterGastoPorIdUseCase
 import com.fsales.app.rumo.core.domain.usecase.SalvarGastoUseCase
 import com.fsales.app.rumo.core.domain.usecase.GastoErroException
-import com.fsales.app.rumo.ui.util.toBigDecimalOuNulo
+import com.fsales.app.rumo.ui.util.centavosParaBigDecimal
+import com.fsales.app.rumo.ui.util.toDigitosCentavos
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,13 +23,19 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.time.LocalDate
-import javax.inject.Inject
 
-@HiltViewModel
-class CadastroGastoViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = CadastroGastoViewModel.Factory::class)
+class CadastroGastoViewModel @AssistedInject constructor(
+    @Assisted val gastoId: Long?,
     private val salvarGastoUseCase: SalvarGastoUseCase,
+    private val atualizarGastoUseCase: AtualizarGastoUseCase,
+    private val obterGastoPorIdUseCase: ObterGastoPorIdUseCase,
 ) : ViewModel() {
 
+    @AssistedFactory
+    interface Factory {
+        fun create(gastoId: Long?): CadastroGastoViewModel
+    }
 
     private val _uiState = MutableStateFlow(
         CadastroGastoUiState(dataGasto = LocalDate.now()),
@@ -34,6 +46,29 @@ class CadastroGastoViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private var jaSubmeteu = false
+
+    internal fun carregarParaEdicao(id: Long) {
+        viewModelScope.launch {
+            runCatching { obterGastoPorIdUseCase(id) }
+                .onSuccess { gasto ->
+                    if (gasto != null) {
+                        _uiState.update {
+                            it.copy(
+                                descricao  = gasto.descricao,
+                                valorTexto = gasto.valor.toDigitosCentavos(),
+                                dataGasto  = gasto.dataGasto,
+                                categoria  = gasto.categoria,
+                                essencial  = gasto.essencial,
+                                recorrente = gasto.recorrente,
+                                observacao = gasto.observacao ?: "",
+                                modoEdicao = ModoEdicaoGasto.INDIVIDUAL,
+                                gastoIdEdicao = id,
+                            )
+                        }
+                    }
+                }
+        }
+    }
 
     fun onEvent(event: CadastroGastoEvent) {
         when (event) {
@@ -60,9 +95,10 @@ class CadastroGastoViewModel @Inject constructor(
     }
 
     private fun alterarValor(valor: String) = _uiState.update { state ->
-        val valorValido = (valor.toBigDecimalOuNulo() ?: BigDecimal.ZERO) > BigDecimal.ZERO
+        val digits = valor.filter { it.isDigit() }
+        val valorValido = (digits.centavosParaBigDecimal() ?: BigDecimal.ZERO) > BigDecimal.ZERO
         state.copy(
-            valorTexto = valor,
+            valorTexto = digits,
             erroValor = if (jaSubmeteu && valorValido) null else state.erroValor,
         )
     }
@@ -72,7 +108,7 @@ class CadastroGastoViewModel @Inject constructor(
         val state = _uiState.value
 
         val erroDescricao = if (state.descricao.isBlank()) GastoErro.DescricaoObrigatoria else null
-        val v = state.valorTexto.toBigDecimalOuNulo()
+        val v = state.valorTexto.centavosParaBigDecimal()
         val erroValor = if (v == null || v <= BigDecimal.ZERO) GastoErro.ValorInvalido else null
 
         if (erroDescricao != null || erroValor != null) {
@@ -81,8 +117,9 @@ class CadastroGastoViewModel @Inject constructor(
         }
 
         val gasto = Gasto(
+            id             = state.gastoIdEdicao ?: 0L,
             descricao      = state.descricao.trim(),
-            valor          = state.valorTexto.toBigDecimalOuNulo() ?: BigDecimal.ZERO,
+            valor          = state.valorTexto.centavosParaBigDecimal() ?: BigDecimal.ZERO,
             dataGasto      = state.dataGasto,
             mesReferencia  = state.dataGasto.monthValue,
             anoReferencia  = state.dataGasto.year,
@@ -94,7 +131,8 @@ class CadastroGastoViewModel @Inject constructor(
 
         viewModelScope.launch {
             _uiState.update { it.copy(salvando = true) }
-            salvarGastoUseCase(gasto)
+            val resultado = if (state.gastoIdEdicao != null) atualizarGastoUseCase(gasto) else salvarGastoUseCase(gasto)
+            resultado
                 .onSuccess {
                     resetar()
                     _uiEvent.send(CadastroGastoUiEvent.NavigateBack)
@@ -106,6 +144,10 @@ class CadastroGastoViewModel @Inject constructor(
                             _uiState.update { it.copy(erroDescricao = GastoErro.DescricaoObrigatoria) }
                         GastoErro.ValorInvalido ->
                             _uiState.update { it.copy(erroValor = GastoErro.ValorInvalido) }
+                        GastoErro.DataForaDeCompetencia ->
+                            _uiState.update { it.copy(erroData = GastoErro.DataForaDeCompetencia) }
+                        GastoErro.DataVencimentoInvalida ->
+                            _uiState.update { it.copy(erroData = GastoErro.DataVencimentoInvalida) }
                         else -> _uiEvent.send(CadastroGastoUiEvent.ErroAoSalvar)
                     }
                 }
@@ -113,7 +155,7 @@ class CadastroGastoViewModel @Inject constructor(
         }
     }
 
-    private fun resetar() {
+    internal fun resetar() {
         jaSubmeteu = false
         _uiState.value = CadastroGastoUiState(dataGasto = LocalDate.now())
     }

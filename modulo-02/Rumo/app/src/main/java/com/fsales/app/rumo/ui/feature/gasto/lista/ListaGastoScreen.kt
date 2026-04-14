@@ -50,6 +50,7 @@ fun ListaGastoScreen(
     modifier: Modifier = Modifier,
     viewModel: ListaGastoViewModel = hiltViewModel(),
     onNavigateToCadastro: () -> Unit = {},
+    onNavigateToDetalhe: (Long) -> Unit = {},
     onCarregandoChange: (Boolean) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -62,6 +63,8 @@ fun ListaGastoScreen(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 ListaGastoUiEvent.NavigateToCadastro -> onNavigateToCadastro()
+                is ListaGastoUiEvent.NavigateToDetalhe -> onNavigateToDetalhe(event.id)
+                else -> Unit
             }
         }
     }
@@ -106,6 +109,7 @@ fun ListaGastoContent(
                 mesAno = uiState.mesAno,
                 onAnterior = { onEvent(ListaGastoEvent.MesAnterior) },
                 onProximo = { onEvent(ListaGastoEvent.ProximoMes) },
+                onSelecionarMesAno = { onEvent(ListaGastoEvent.SelecionarMesAno(it)) },
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
             )
 
@@ -135,7 +139,10 @@ fun ListaGastoContent(
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         items(uiState.gastos, key = { it.id }) { gasto ->
-                            GastoItem(gasto = gasto, onClick = {})
+                            GastoItem(
+                                gasto = gasto,
+                                onClick = { onEvent(ListaGastoEvent.AbrirDetalhe(gasto.id)) },
+                            )
                         }
                     }
                 }

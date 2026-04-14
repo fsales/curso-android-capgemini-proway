@@ -12,7 +12,7 @@ class SalvarSonhoUseCaseImpl @Inject constructor(
     private val sonhoRepository: SonhoRepository
 ) : SalvarSonhoUseCase {
 
-    override suspend fun invoke(sonho: Sonho): Result<Long> {
+    override suspend operator fun invoke(sonho: Sonho): Result<Long> {
         validar(sonho)?.let { return Result.failure(SonhoErroException(it)) }
         return sonhoRepository.salvar(sonho)
     }

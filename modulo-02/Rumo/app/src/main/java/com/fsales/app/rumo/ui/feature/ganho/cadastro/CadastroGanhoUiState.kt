@@ -15,4 +15,6 @@ data class CadastroGanhoUiState(
     val erroValor: GanhoErro? = null,
     val erroData: GanhoErro? = null,
     val salvando: Boolean = false,
+    val modoEdicao: ModoEdicaoGanho = ModoEdicaoGanho.NOVO,
+    val ganhoIdEdicao: Long? = null,
 )

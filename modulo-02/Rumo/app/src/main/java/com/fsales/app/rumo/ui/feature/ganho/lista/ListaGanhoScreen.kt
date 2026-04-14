@@ -50,6 +50,7 @@ fun ListaGanhoScreen(
     modifier: Modifier = Modifier,
     viewModel: ListaGanhoViewModel = hiltViewModel(),
     onNavigateToCadastro: () -> Unit = {},
+    onNavigateToDetalhe: (Long) -> Unit = {},
     onCarregandoChange: (Boolean) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -63,6 +64,8 @@ fun ListaGanhoScreen(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 ListaGanhoUiEvent.NavigateToCadastro -> onNavigateToCadastro()
+                is ListaGanhoUiEvent.NavigateToDetalhe -> onNavigateToDetalhe(event.id)
+                else -> Unit
             }
         }
     }
@@ -108,6 +111,7 @@ fun ListaGanhoContent(
                 mesAno = uiState.mesAno,
                 onAnterior = { onEvent(ListaGanhoEvent.MesAnterior) },
                 onProximo = { onEvent(ListaGanhoEvent.ProximoMes) },
+                onSelecionarMesAno = { onEvent(ListaGanhoEvent.SelecionarMesAno(it)) },
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
             )
 
@@ -137,7 +141,10 @@ fun ListaGanhoContent(
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         items(uiState.ganhos, key = { it.id }) { ganho ->
-                            GanhoItem(ganho = ganho, onClick = {})
+                            GanhoItem(
+                                ganho = ganho,
+                                onClick = { onEvent(ListaGanhoEvent.AbrirDetalhe(ganho.id)) },
+                            )
                         }
                     }
                 }

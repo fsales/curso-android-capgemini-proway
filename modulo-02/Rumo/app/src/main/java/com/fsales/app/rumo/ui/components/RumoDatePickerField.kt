@@ -1,15 +1,18 @@
 package com.fsales.app.rumo.ui.components
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -44,23 +47,32 @@ fun RumoDatePickerField(
 ) {
     var dialogAberto by remember { mutableStateOf(false) }
 
-    OutlinedTextField(
-        value = data.formatarParaLocale(Locale.getDefault()),
-        onValueChange = {},
-        readOnly = true,
-        label = { Text(label) },
-        trailingIcon = {
-            IconButton(onClick = { dialogAberto = true }) {
+    Box(modifier = modifier.clickable { dialogAberto = true }) {
+        OutlinedTextField(
+            value = data.formatarParaLocale(Locale.getDefault()),
+            onValueChange = {},
+            enabled = false,
+            colors = OutlinedTextFieldDefaults.colors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = if (erro != null) MaterialTheme.colorScheme.error
+                                      else MaterialTheme.colorScheme.outline,
+                disabledLabelColor = if (erro != null) MaterialTheme.colorScheme.error
+                                     else MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledSupportingTextColor = if (erro != null) MaterialTheme.colorScheme.error
+                                              else MaterialTheme.colorScheme.onSurfaceVariant,
+            ),
+            label = { Text(label) },
+            trailingIcon = {
                 Icon(
                     imageVector = Icons.Filled.CalendarMonth,
                     contentDescription = stringResource(R.string.campo_data_abrir_calendario),
                 )
-            }
-        },
-        isError = erro != null,
-        supportingText = erro?.let { { Text(it, color = MaterialTheme.colorScheme.error) } },
-        modifier = modifier,
-    )
+            },
+            supportingText = erro?.let { msg -> { Text(msg) } },
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
 
     if (dialogAberto) {
         val datePickerState = rememberDatePickerState(

@@ -15,7 +15,9 @@ fun GastoEntity.toDomain(): Gasto = Gasto(
     categoria = categoria.toDomain(),
     essencial = essencial,
     recorrente = recorrente,
-    observacao = observacao
+    observacao = observacao,
+    dataVencimento = dataVencimento,
+    grupoRecorrenciaId = grupoRecorrenciaId,
 )
 
 fun Gasto.toEntity(): GastoEntity = GastoEntity(
@@ -28,7 +30,9 @@ fun Gasto.toEntity(): GastoEntity = GastoEntity(
     categoria = categoria.toEntity(),
     essencial = essencial,
     recorrente = recorrente,
-    observacao = observacao
+    observacao = observacao,
+    dataVencimento = dataVencimento,
+    grupoRecorrenciaId = grupoRecorrenciaId,
 )
 
 private fun CategoriaGastoEntity.toDomain(): CategoriaGasto = when (this) {

@@ -20,7 +20,7 @@ import java.util.Locale
 // =============================================================================
 
 private val formatadorBRL: NumberFormat
-    get() = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR"))
+    get() = NumberFormat.getCurrencyInstance(Locale.getDefault())
 
 fun BigDecimal.formatarBRL(): String = formatadorBRL.format(this)
 

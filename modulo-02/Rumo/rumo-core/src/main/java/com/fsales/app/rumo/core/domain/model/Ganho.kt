@@ -12,5 +12,6 @@ data class Ganho(
     val anoReferencia: Int,
     val tipo: TipoGanho,
     val recorrente: Boolean = false,
-    val observacao: String? = null
+    val observacao: String? = null,
+    val grupoRecorrenciaId: String? = null,
 )

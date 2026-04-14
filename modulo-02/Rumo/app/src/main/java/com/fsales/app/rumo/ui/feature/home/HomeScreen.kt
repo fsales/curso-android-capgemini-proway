@@ -56,7 +56,9 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     abaInicial: HomeEvent = HomeEvent.IrParaHome,
     onNavigateToGanhoCadastro: () -> Unit = {},
+    onNavigateToGanhoDetalhe: (Long) -> Unit = {},
     onNavigateToGastoCadastro: () -> Unit = {},
+    onNavigateToGastoDetalhe: (Long) -> Unit = {},
     onNavigateToSonhoCadastro: () -> Unit = {},
     onNavigateToSonhoDetalhe: (Long) -> Unit = {},
 ) {
@@ -85,7 +87,9 @@ fun HomeScreen(
         onEvent = viewModel::onEvent,
         onCarregandoChange = { carregandoLista = it },
         onNavigateToGanhoCadastro = onNavigateToGanhoCadastro,
+        onNavigateToGanhoDetalhe  = onNavigateToGanhoDetalhe,
         onNavigateToGastoCadastro = onNavigateToGastoCadastro,
+        onNavigateToGastoDetalhe  = onNavigateToGastoDetalhe,
         onNavigateToSonhoCadastro = onNavigateToSonhoCadastro,
         onNavigateToSonhoDetalhe  = onNavigateToSonhoDetalhe,
     )
@@ -104,7 +108,9 @@ fun HomeContent(
     onEvent: (HomeEvent) -> Unit,
     onCarregandoChange: (Boolean) -> Unit = {},
     onNavigateToGanhoCadastro: () -> Unit = {},
+    onNavigateToGanhoDetalhe: (Long) -> Unit = {},
     onNavigateToGastoCadastro: () -> Unit = {},
+    onNavigateToGastoDetalhe: (Long) -> Unit = {},
     onNavigateToSonhoCadastro: () -> Unit = {},
     onNavigateToSonhoDetalhe: (Long) -> Unit = {},
     destinoConteudo: (@Composable (HomeEvent, Modifier) -> Unit)? = null,
@@ -131,7 +137,9 @@ fun HomeContent(
                 modifier = contentModifier,
                 onCarregandoChange = onCarregandoChange,
                 onNavigateToGanhoCadastro = onNavigateToGanhoCadastro,
+                onNavigateToGanhoDetalhe  = onNavigateToGanhoDetalhe,
                 onNavigateToGastoCadastro = onNavigateToGastoCadastro,
+                onNavigateToGastoDetalhe  = onNavigateToGastoDetalhe,
                 onNavigateToSonhoCadastro = onNavigateToSonhoCadastro,
                 onNavigateToSonhoDetalhe  = onNavigateToSonhoDetalhe,
             )
@@ -148,7 +156,9 @@ private fun HomeDestino(
     modifier: Modifier,
     onCarregandoChange: (Boolean) -> Unit,
     onNavigateToGanhoCadastro: () -> Unit,
+    onNavigateToGanhoDetalhe: (Long) -> Unit,
     onNavigateToGastoCadastro: () -> Unit,
+    onNavigateToGastoDetalhe: (Long) -> Unit,
     onNavigateToSonhoCadastro: () -> Unit,
     onNavigateToSonhoDetalhe: (Long) -> Unit,
 ) {
@@ -168,10 +178,12 @@ private fun HomeDestino(
             HomeEvent.IrParaExtrato -> com.fsales.app.rumo.ui.feature.extrato.ExtratoScreen()
             HomeEvent.IrParaGanhos -> ListaGanhoScreen(
                 onNavigateToCadastro = onNavigateToGanhoCadastro,
+                onNavigateToDetalhe  = onNavigateToGanhoDetalhe,
                 onCarregandoChange = onCarregandoChange,
             )
             HomeEvent.IrParaGastos -> ListaGastoScreen(
                 onNavigateToCadastro = onNavigateToGastoCadastro,
+                onNavigateToDetalhe  = onNavigateToGastoDetalhe,
                 onCarregandoChange = onCarregandoChange,
             )
             HomeEvent.IrParaSonhos -> ListaSonhoScreen(

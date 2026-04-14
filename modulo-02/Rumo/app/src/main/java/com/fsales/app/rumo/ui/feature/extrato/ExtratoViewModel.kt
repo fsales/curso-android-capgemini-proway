@@ -33,9 +33,10 @@ class ExtratoViewModel @Inject constructor(
 
     fun onEvent(event: ExtratoEvent) {
         when (event) {
-            ExtratoEvent.MesAnterior     -> alterarMes(_uiState.value.mesAno.minusMonths(1))
-            ExtratoEvent.ProximoMes      -> alterarMes(_uiState.value.mesAno.plusMonths(1))
-            ExtratoEvent.TentarNovamente -> carregarExtrato(_uiState.value.mesAno)
+            ExtratoEvent.MesAnterior          -> alterarMes(_uiState.value.mesAno.minusMonths(1))
+            ExtratoEvent.ProximoMes           -> alterarMes(_uiState.value.mesAno.plusMonths(1))
+            is ExtratoEvent.SelecionarMesAno  -> alterarMes(event.mesAno)
+            ExtratoEvent.TentarNovamente      -> carregarExtrato(_uiState.value.mesAno)
         }
     }
 

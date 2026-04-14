@@ -37,10 +37,12 @@ class ListaGastoViewModel @Inject constructor(
 
     fun onEvent(event: ListaGastoEvent) {
         when (event) {
-            ListaGastoEvent.IrParaCadastro  -> cadastro()
-            ListaGastoEvent.MesAnterior     -> alterarMes(_uiState.value.mesAno.minusMonths(1))
-            ListaGastoEvent.ProximoMes      -> alterarMes(_uiState.value.mesAno.plusMonths(1))
-            ListaGastoEvent.TentarNovamente -> carregarGastos(_uiState.value.mesAno)
+            ListaGastoEvent.IrParaCadastro       -> cadastro()
+            is ListaGastoEvent.AbrirDetalhe      -> _uiEvent.trySend(ListaGastoUiEvent.NavigateToDetalhe(event.id))
+            ListaGastoEvent.MesAnterior          -> alterarMes(_uiState.value.mesAno.minusMonths(1))
+            ListaGastoEvent.ProximoMes           -> alterarMes(_uiState.value.mesAno.plusMonths(1))
+            is ListaGastoEvent.SelecionarMesAno  -> alterarMes(event.mesAno)
+            ListaGastoEvent.TentarNovamente      -> carregarGastos(_uiState.value.mesAno)
         }
     }
 

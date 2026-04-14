@@ -118,6 +118,7 @@ fun ExtratoContent(
                 mesAno = uiState.mesAno,
                 onAnterior = { onEvent(ExtratoEvent.MesAnterior) },
                 onProximo = { onEvent(ExtratoEvent.ProximoMes) },
+                onSelecionarMesAno = { onEvent(ExtratoEvent.SelecionarMesAno(it)) },
             )
 
             Spacer(Modifier.height(MaterialTheme.spacing.small))

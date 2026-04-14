@@ -110,7 +110,22 @@
     <string name="cadastro_gasto_erro_descricao_obrigatoria">A descrição é obrigatória.</string>
     <string name="cadastro_gasto_erro_valor_invalido">Informe um valor maior que zero.</string>
     <string name="cadastro_gasto_erro_data_invalida">A data não corresponde ao mês de referência.</string>
+    <string name="cadastro_gasto_erro_data_vencimento_invalida">A data de vencimento deve ser posterior à data do gasto.</string>
     <string name="cadastro_gasto_erro_salvar">Não foi possível salvar o gasto. Tente novamente.</string>
+
+    <!-- ===== Detalhe Gasto ===== -->
+    <string name="detalhe_gasto_titulo">Detalhe do Gasto</string>
+    <string name="detalhe_gasto_editar">Editar</string>
+    <string name="detalhe_gasto_excluir">Excluir</string>
+    <string name="detalhe_gasto_confirmar_excluir_titulo">Excluir gasto</string>
+    <string name="detalhe_gasto_confirmar_excluir_mensagem">Tem certeza que deseja excluir este gasto?</string>
+
+    <!-- ===== Detalhe Ganho ===== -->
+    <string name="detalhe_ganho_titulo">Detalhe do Ganho</string>
+    <string name="detalhe_ganho_editar">Editar</string>
+    <string name="detalhe_ganho_excluir">Excluir</string>
+    <string name="detalhe_ganho_confirmar_excluir_titulo">Excluir ganho</string>
+    <string name="detalhe_ganho_confirmar_excluir_mensagem">Tem certeza que deseja excluir este ganho?</string>
 
     <!-- ===== Cadastro Sonho ===== -->
     <string name="cadastro_sonho_titulo">Cadastro de Sonho</string>
@@ -137,6 +152,9 @@
     <!-- ===== Seletor de Mês ===== -->
     <string name="seletor_mes_anterior">Mês anterior</string>
     <string name="seletor_mes_proximo">Próximo mês</string>
+    <string name="seletor_mes_dialog_titulo">Selecionar mês e ano</string>
+    <string name="seletor_mes_label_mes">Mês</string>
+    <string name="seletor_mes_label_ano">Ano</string>
 
     <!-- ===== Plurals ===== -->
     <plurals name="sonho_meses_necessarios">

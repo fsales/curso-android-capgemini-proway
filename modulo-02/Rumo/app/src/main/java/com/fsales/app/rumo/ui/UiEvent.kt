@@ -5,15 +5,17 @@ import androidx.annotation.StringRes
 
 /** Ganho */
 sealed interface ListaGanhoUiEvent {
-    data class ShowSnackbar(@param:StringRes val resId: Int)
+    data class ShowSnackbar(@param:StringRes val resId: Int) : ListaGanhoUiEvent
     data object NavigateToCadastro : ListaGanhoUiEvent
+    data class NavigateToDetalhe(val id: Long) : ListaGanhoUiEvent
 }
 
 
 /** Gasto */
 sealed interface ListaGastoUiEvent {
-    data class ShowSnackbar(@param:StringRes val resId: Int)
+    data class ShowSnackbar(@param:StringRes val resId: Int) : ListaGastoUiEvent
     data object NavigateToCadastro : ListaGastoUiEvent
+    data class NavigateToDetalhe(val id: Long) : ListaGastoUiEvent
 }
 
 

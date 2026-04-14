@@ -11,7 +11,8 @@ import java.time.LocalDate
     tableName = "ganhos",
     indices = [
         Index(value = ["anoReferencia", "mesReferencia"]),
-        Index(value = ["dataRecebimento"])
+        Index(value = ["dataRecebimento"]),
+        Index(value = ["grupoRecorrenciaId"]),
     ]
 )
 data class GanhoEntity(
@@ -24,5 +25,6 @@ data class GanhoEntity(
     val anoReferencia: Int,
     val tipo: TipoGanho,
     val recorrente: Boolean = false,
-    val observacao: String? = null
+    val observacao: String? = null,
+    val grupoRecorrenciaId: String? = null,
 )

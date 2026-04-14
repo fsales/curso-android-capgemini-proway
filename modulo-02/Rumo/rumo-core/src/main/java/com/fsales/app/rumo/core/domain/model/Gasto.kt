@@ -13,5 +13,7 @@ data class Gasto(
     val categoria: CategoriaGasto,
     val essencial: Boolean = false,
     val recorrente: Boolean = false,
-    val observacao: String? = null
+    val observacao: String? = null,
+    val dataVencimento: LocalDate? = null,
+    val grupoRecorrenciaId: String? = null,
 )

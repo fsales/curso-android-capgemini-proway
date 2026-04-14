@@ -13,7 +13,7 @@ class SalvarGanhoUseCaseImpl @Inject constructor(
     private val ganhoRepository: GanhoRepository
 ) : SalvarGanhoUseCase {
 
-    override suspend fun invoke(ganho: Ganho): Result<Long> {
+    override suspend operator fun invoke(ganho: Ganho): Result<Long> {
         validar(ganho)?.let { return Result.failure(GanhoErroException(it)) }
         return ganhoRepository.salvar(ganho)
     }

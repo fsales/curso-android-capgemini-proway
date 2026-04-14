@@ -14,6 +14,9 @@ data class CadastroGastoUiState(
     val observacao: String = "",
     val erroDescricao: GastoErro? = null,
     val erroValor: GastoErro? = null,
+    val erroData: GastoErro? = null,
     val salvando: Boolean = false,
+    val modoEdicao: ModoEdicaoGasto = ModoEdicaoGasto.NOVO,
+    val gastoIdEdicao: Long? = null,
 )
 

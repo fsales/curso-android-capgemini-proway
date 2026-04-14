@@ -23,6 +23,30 @@ fun String.toBigDecimalOuNulo(): BigDecimal? =
         .replace(',', '.')
         .toBigDecimalOrNull()
 
+/**
+ * Converte uma String de dígitos (centavos) em [BigDecimal] com escala 2.
+ *
+ * Usada em conjunto com [CurrencyVisualTransformation], onde o usuário digita
+ * apenas algarismos e o campo armazena centavos. Exemplo: "150050" → 1500.50.
+ *
+ * Retorna `null` se a string for vazia, resultado for zero ou não for um número válido.
+ */
+fun String.centavosParaBigDecimal(): BigDecimal? {
+    val digits = this.filter { it.isDigit() }
+    if (digits.isEmpty()) return null
+    val value = digits.toLongOrNull() ?: return null
+    if (value == 0L) return null
+    return BigDecimal(value).movePointLeft(2)
+}
+
+/**
+ * Converte um [BigDecimal] em string de dígitos de centavos.
+ * Exemplo: 1500.50 → "150050"
+ * Usada para pré-preencher campos monetários no modo de edição.
+ */
+fun BigDecimal.toDigitosCentavos(): String =
+    this.movePointRight(2).toLong().toString()
+
 
 
 

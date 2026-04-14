@@ -1,21 +1,37 @@
 package com.fsales.app.rumo.core.di
 
+import com.fsales.app.rumo.core.domain.usecase.AtualizarGanhoUseCase
+import com.fsales.app.rumo.core.domain.usecase.AtualizarGastoUseCase
 import com.fsales.app.rumo.core.domain.usecase.ConcluirSonhoUseCase
+import com.fsales.app.rumo.core.domain.usecase.DeletarGanhoUseCase
+import com.fsales.app.rumo.core.domain.usecase.DeletarGastoUseCase
 import com.fsales.app.rumo.core.domain.usecase.ListarExtratoPorMesUseCase
 import com.fsales.app.rumo.core.domain.usecase.ListarGanhosPorMesUseCase
 import com.fsales.app.rumo.core.domain.usecase.ListarGastosPorMesUseCase
 import com.fsales.app.rumo.core.domain.usecase.ListarSonhosUseCase
+import com.fsales.app.rumo.core.domain.usecase.ObterGanhoPorIdUseCase
+import com.fsales.app.rumo.core.domain.usecase.ObterGastoPorIdUseCase
+import com.fsales.app.rumo.core.domain.usecase.ObservarGanhoPorIdUseCase
+import com.fsales.app.rumo.core.domain.usecase.ObservarGastoPorIdUseCase
 import com.fsales.app.rumo.core.domain.usecase.ObterProjecaoSonhosUseCase
 import com.fsales.app.rumo.core.domain.usecase.ObterSaldoMensalUseCase
 import com.fsales.app.rumo.core.domain.usecase.ObterSonhoUseCase
 import com.fsales.app.rumo.core.domain.usecase.SalvarGanhoUseCase
 import com.fsales.app.rumo.core.domain.usecase.SalvarGastoUseCase
 import com.fsales.app.rumo.core.domain.usecase.SalvarSonhoUseCase
+import com.fsales.app.rumo.core.domain.usecase.impl.AtualizarGanhoUseCaseImpl
+import com.fsales.app.rumo.core.domain.usecase.impl.AtualizarGastoUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ConcluirSonhoUseCaseImpl
+import com.fsales.app.rumo.core.domain.usecase.impl.DeletarGanhoUseCaseImpl
+import com.fsales.app.rumo.core.domain.usecase.impl.DeletarGastoUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ListarExtratoPorMesUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ListarGanhosPorMesUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ListarGastosPorMesUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ListarSonhosUseCaseImpl
+import com.fsales.app.rumo.core.domain.usecase.impl.ObterGanhoPorIdUseCaseImpl
+import com.fsales.app.rumo.core.domain.usecase.impl.ObterGastoPorIdUseCaseImpl
+import com.fsales.app.rumo.core.domain.usecase.impl.ObservarGanhoPorIdUseCaseImpl
+import com.fsales.app.rumo.core.domain.usecase.impl.ObservarGastoPorIdUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ObterProjecaoSonhosUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ObterSaldoMensalUseCaseImpl
 import com.fsales.app.rumo.core.domain.usecase.impl.ObterSonhoUseCaseImpl
@@ -32,47 +48,60 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class UseCaseModule {
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindSalvarGanho(impl: SalvarGanhoUseCaseImpl): SalvarGanhoUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindListarGanhosPorMes(impl: ListarGanhosPorMesUseCaseImpl): ListarGanhosPorMesUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
+    abstract fun bindObterGanhoPorId(impl: ObterGanhoPorIdUseCaseImpl): ObterGanhoPorIdUseCase
+
+    @Binds @Singleton
+    abstract fun bindAtualizarGanho(impl: AtualizarGanhoUseCaseImpl): AtualizarGanhoUseCase
+
+    @Binds @Singleton
+    abstract fun bindDeletarGanho(impl: DeletarGanhoUseCaseImpl): DeletarGanhoUseCase
+
+    @Binds @Singleton
     abstract fun bindListarExtratoPorMes(impl: ListarExtratoPorMesUseCaseImpl): ListarExtratoPorMesUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindSalvarGasto(impl: SalvarGastoUseCaseImpl): SalvarGastoUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindListarGastosPorMes(impl: ListarGastosPorMesUseCaseImpl): ListarGastosPorMesUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
+    abstract fun bindObterGastoPorId(impl: ObterGastoPorIdUseCaseImpl): ObterGastoPorIdUseCase
+
+    @Binds @Singleton
+    abstract fun bindAtualizarGasto(impl: AtualizarGastoUseCaseImpl): AtualizarGastoUseCase
+
+    @Binds @Singleton
+    abstract fun bindDeletarGasto(impl: DeletarGastoUseCaseImpl): DeletarGastoUseCase
+
+    @Binds @Singleton
     abstract fun bindListarSonhos(impl: ListarSonhosUseCaseImpl): ListarSonhosUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindSalvarSonho(impl: SalvarSonhoUseCaseImpl): SalvarSonhoUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindObterSaldoMensal(impl: ObterSaldoMensalUseCaseImpl): ObterSaldoMensalUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindObterProjecaoSonhos(impl: ObterProjecaoSonhosUseCaseImpl): ObterProjecaoSonhosUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindObterSonho(impl: ObterSonhoUseCaseImpl): ObterSonhoUseCase
 
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindConcluirSonho(impl: ConcluirSonhoUseCaseImpl): ConcluirSonhoUseCase
+
+    @Binds @Singleton
+    abstract fun bindObservarGanhoPorId(impl: ObservarGanhoPorIdUseCaseImpl): ObservarGanhoPorIdUseCase
+
+    @Binds @Singleton
+    abstract fun bindObservarGastoPorId(impl: ObservarGastoPorIdUseCaseImpl): ObservarGastoPorIdUseCase
 }
