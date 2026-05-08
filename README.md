@@ -51,6 +51,12 @@ curso-android-capgemini-proway/
 | [**Atividade 02**](modulo-02/Rumo/README.md) | App Android de gestão financeira com Jetpack Compose e navegação entre telas; MVVM e Room aplicados como plus/desafio técnico |
 ---
 
+### 📦 Módulo 03 – MVVM, Consumo de API
+| Atividade | Descrição |
+|----------|-----------|
+| [**Atividade 03**](modulo-03/SmartContact/README.md) | App Android de gestão financeira com Jetpack Compose e navegação entre telas; MVVM e Room aplicados como plus/desafio técnico |
+---
+
 ## 🛠 Tecnologias Utilizadas
 - Kotlin
 - Android Studio

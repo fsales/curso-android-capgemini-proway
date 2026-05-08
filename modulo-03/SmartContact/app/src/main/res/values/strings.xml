@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Smart Contact</string>
+
+    <!-- List -->
+    <string name="titulo_lista_contatos">Contatos</string>
+    <string name="titulo_estado_vazio">Nenhum contato</string>
+    <string name="mensagem_estado_vazio">Sua lista está vazia. Adicione um novo contato!</string>
+
+
+    <!-- Adicionar/Editar -->
+    <string name="fab_contato">Novo</string>
+
+</resources>
