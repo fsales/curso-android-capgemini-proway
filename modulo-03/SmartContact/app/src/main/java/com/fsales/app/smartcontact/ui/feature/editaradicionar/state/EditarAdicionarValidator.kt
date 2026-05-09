@@ -10,6 +10,7 @@ object EditarAdicionarValidator {
             else                           -> null
         },
         telefone   = if (state.telefone.isBlank()) FieldError.Vazio else null,
+        dataNascimento = if (state.dataNascimento == null) FieldError.Vazio else null,
         cep        = when {
             state.cep.isBlank()                            -> FieldError.Vazio
             state.cep.filter { it.isDigit() }.length != 8 -> FieldError.Invalido
