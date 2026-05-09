@@ -5,6 +5,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.fsales.app.smartcontact.ui.feature.editaradicionar.EditarAdicionarScreen
 import com.fsales.app.smartcontact.ui.feature.lista.ListScreen
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -21,7 +22,6 @@ data class EditarAdicionarRoute(
     val entryId: String
 ) : NavKey
 
-
 @Composable
 fun SmartContactNavHost() {
 
@@ -34,8 +34,18 @@ fun SmartContactNavHost() {
             entry<ListRoute> {
                 ListScreen(
                     onNavigateToAddEdit = { id ->
-                        backStack.add(EditarAdicionarRoute(id = null, entryId = UUID.randomUUID().toString()))
+                        backStack.add(
+                            EditarAdicionarRoute(
+                                id      = if (id == 0L) null else id,
+                                entryId = UUID.randomUUID().toString(),
+                            )
+                        )
                     }
+                )
+            }
+            entry<EditarAdicionarRoute> {
+                EditarAdicionarScreen(
+                    navigateBack = { backStack.removeLastOrNull() }
                 )
             }
         }

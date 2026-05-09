@@ -21,11 +21,13 @@
     <string name="form_estado">Estado</string>
     <string name="form_cidade">Cidade</string>
 
-    <!-- Erros de validação do formulário (genéricos) -->
+    <!-- Erros de validação do formulário (genéricos com placeholder) -->
     <string name="cadastro_edicao_erro_campo_obrigatorio">O campo %1$s é obrigatório.</string>
     <string name="cadastro_edicao_erro_campo_invalido">O campo %1$s informado é inválido.</string>
+    <string name="cadastro_edicao_erro_salvar">Erro ao salvar o contato. Tente novamente.</string>
 
     <!-- ===== Ações genéricas ===== -->
     <string name="fab_contato">Novo contato</string>
     <string name="acao_voltar">Voltar</string>
+    <string name="acao_salvar">Salvar</string>
 </resources>

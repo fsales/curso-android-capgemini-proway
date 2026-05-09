@@ -8,74 +8,79 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fsales.app.smartcontact.R
+import com.fsales.app.smartcontact.ui.components.MaskVisualTransformation
+import com.fsales.app.smartcontact.ui.components.SmartContactDatePickerField
 import com.fsales.app.smartcontact.ui.components.SmartContactScaffold
 import com.fsales.app.smartcontact.ui.feature.editaradicionar.state.EditarAdicionarUiState
 import com.fsales.app.smartcontact.ui.feature.editaradicionar.state.toStringRes
 import com.fsales.app.smartcontact.ui.theme.spacing
 import com.fsales.app.smartcontact.viewmodel.EditarAdicionarViewModel
 
+// =============================================================================
+// Screen — ponto de entrada; coleta ViewModel e roteia UiEvent
+// =============================================================================
 @Composable
 fun EditarAdicionarScreen(
-    onNavigateBack: () -> Unit = {},
-    viewModel: EditarAdicionarViewModel = viewModel()
+    navigateBack: () -> Unit = {},
+    viewModel: EditarAdicionarViewModel = viewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val erroSalvarMsg = stringResource(R.string.cadastro_edicao_erro_salvar)
+
+    LaunchedEffect(viewModel) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                EditarAdicionarUiEvent.NavigateBack -> navigateBack()
+                EditarAdicionarUiEvent.ErroAoSalvar -> snackbarHostState.showSnackbar(erroSalvarMsg)
+            }
+        }
+    }
+
     EditarAdicionarContent(
-        uiState = uiState,
-        onNomeChange = viewModel::onNomeChange,
-        onEmailChange = viewModel::onEmailChange,
-        onTelefoneChange = viewModel::onTelefoneChange,
-        onCepChange = viewModel::onCepChange,
-        onBairroChange = viewModel::onBairroChange,
-        onLogradouroChange = viewModel::onLogradouroChange,
-        onNumeroChange = viewModel::onNumeroChange,
-        onEstadoChange = viewModel::onEstadoChange,
-        onCidadeChange = viewModel::onCidadeChange,
-        onSalvar = {
-            if (viewModel.onSalvar()) onNavigateBack()
-        },
-        onNavigateBack = onNavigateBack,
+        uiState           = uiState,
+        snackbarHostState = snackbarHostState,
+        onEvent           = viewModel::onEvent,
     )
 }
 
+// =============================================================================
+// Content — renderiza estado puro; sem ViewModel
+// =============================================================================
 @Composable
 fun EditarAdicionarContent(
     uiState: EditarAdicionarUiState = EditarAdicionarUiState(),
-    onNomeChange: (String) -> Unit = {},
-    onEmailChange: (String) -> Unit = {},
-    onTelefoneChange: (String) -> Unit = {},
-    onCepChange: (String) -> Unit = {},
-    onBairroChange: (String) -> Unit = {},
-    onLogradouroChange: (String) -> Unit = {},
-    onNumeroChange: (String) -> Unit = {},
-    onEstadoChange: (String) -> Unit = {},
-    onCidadeChange: (String) -> Unit = {},
-    onSalvar: () -> Unit = {},
-    onNavigateBack: () -> Unit = {},
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onEvent: (EditarAdicionarEvent) -> Unit = {},
 ) {
     SmartContactScaffold(
-        title = stringResource(R.string.titulo_cadastro_edicao),
+        title             = stringResource(R.string.titulo_cadastro_edicao),
         snackbarHostState = snackbarHostState,
-        navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
-        onNavigationClick = onNavigateBack,
+        navigationIcon    = Icons.AutoMirrored.Filled.ArrowBack,
+        onNavigationClick = { onEvent(EditarAdicionarEvent.Voltar) },
     ) { paddingValues ->
 
         Column(
@@ -85,125 +90,190 @@ fun EditarAdicionarContent(
                 .verticalScroll(rememberScrollState())
                 .padding(
                     horizontal = MaterialTheme.spacing.medium,
-                    vertical = MaterialTheme.spacing.large
+                    vertical   = MaterialTheme.spacing.large,
                 ),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         ) {
             // Nome
             OutlinedTextField(
-                value = uiState.nome,
-                onValueChange = onNomeChange,
-                label = { Text(stringResource(R.string.form_nome)) },
-                isError = uiState.errors.nome != null,
+                value          = uiState.nome,
+                onValueChange  = { onEvent(EditarAdicionarEvent.AlterarNome(it)) },
+                label          = { Text(stringResource(R.string.form_nome)) },
+                isError        = uiState.errors.nome != null,
                 supportingText = uiState.errors.nome?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_nome)), color = MaterialTheme.colorScheme.error) }
                 },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    keyboardType   = KeyboardType.Text,
+                    imeAction      = ImeAction.Next,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
             // E-mail
             OutlinedTextField(
-                value = uiState.email,
-                onValueChange = onEmailChange,
-                label = { Text(stringResource(R.string.form_email)) },
-                isError = uiState.errors.email != null,
+                value          = uiState.email,
+                onValueChange  = { onEvent(EditarAdicionarEvent.AlterarEmail(it)) },
+                label          = { Text(stringResource(R.string.form_email)) },
+                isError        = uiState.errors.email != null,
                 supportingText = uiState.errors.email?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_email)), color = MaterialTheme.colorScheme.error) }
                 },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction    = ImeAction.Next,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
-            // Telefone
+            // Telefone — aceita somente dígitos, máscara dinâmica celular/fixo
+            val telefoneMask = if (uiState.telefone.length <= 10)
+                MaskVisualTransformation.FIXO else MaskVisualTransformation.CELULAR
             OutlinedTextField(
-                value = uiState.telefone,
-                onValueChange = onTelefoneChange,
-                label = { Text(stringResource(R.string.form_telefone)) },
-                isError = uiState.errors.telefone != null,
+                value          = uiState.telefone,
+                onValueChange  = { if (it.length <= 11) onEvent(EditarAdicionarEvent.AlterarTelefone(it.filter(Char::isDigit))) },
+                label          = { Text(stringResource(R.string.form_telefone)) },
+                isError        = uiState.errors.telefone != null,
                 supportingText = uiState.errors.telefone?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_telefone)), color = MaterialTheme.colorScheme.error) }
                 },
+                visualTransformation = telefoneMask,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Phone,
+                    imeAction    = ImeAction.Next,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
-            // CEP
+            // Data de Nascimento
+            SmartContactDatePickerField(
+                data           = uiState.dataNascimento,
+                onDateSelected = { onEvent(EditarAdicionarEvent.AlterarDataNascimento(it)) },
+                label          = stringResource(R.string.form_data_nascimento),
+                erro           = uiState.errors.dataNascimento?.let {
+                    stringResource(it.toStringRes(), stringResource(R.string.form_data_nascimento))
+                },
+                modifier       = Modifier.fillMaxWidth(),
+            )
+            // CEP — aceita somente dígitos, máscara 00000-000
             OutlinedTextField(
-                value = uiState.cep,
-                onValueChange = onCepChange,
-                label = { Text(stringResource(R.string.form_cep)) },
-                isError = uiState.errors.cep != null,
+                value          = uiState.cep,
+                onValueChange  = { if (it.length <= 8) onEvent(EditarAdicionarEvent.AlterarCep(it.filter(Char::isDigit))) },
+                label          = { Text(stringResource(R.string.form_cep)) },
+                isError        = uiState.errors.cep != null,
                 supportingText = uiState.errors.cep?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_cep)), color = MaterialTheme.colorScheme.error) }
                 },
+                visualTransformation = MaskVisualTransformation.CEP,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction    = ImeAction.Next,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
             // Logradouro
             OutlinedTextField(
-                value = uiState.logradouro,
-                onValueChange = onLogradouroChange,
-                label = { Text(stringResource(R.string.form_logradouro)) },
-                isError = uiState.errors.logradouro != null,
+                value          = uiState.logradouro,
+                onValueChange  = { onEvent(EditarAdicionarEvent.AlterarLogradouro(it)) },
+                label          = { Text(stringResource(R.string.form_logradouro)) },
+                isError        = uiState.errors.logradouro != null,
                 supportingText = uiState.errors.logradouro?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_logradouro)), color = MaterialTheme.colorScheme.error) }
                 },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    keyboardType   = KeyboardType.Text,
+                    imeAction      = ImeAction.Next,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
             // Número
             OutlinedTextField(
-                value = uiState.numero,
-                onValueChange = onNumeroChange,
-                label = { Text(stringResource(R.string.form_numero)) },
-                isError = uiState.errors.numero != null,
+                value          = uiState.numero,
+                onValueChange  = { onEvent(EditarAdicionarEvent.AlterarNumero(it)) },
+                label          = { Text(stringResource(R.string.form_numero)) },
+                isError        = uiState.errors.numero != null,
                 supportingText = uiState.errors.numero?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_numero)), color = MaterialTheme.colorScheme.error) }
                 },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction    = ImeAction.Next,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
             // Bairro
             OutlinedTextField(
-                value = uiState.bairro,
-                onValueChange = onBairroChange,
-                label = { Text(stringResource(R.string.form_bairro)) },
-                isError = uiState.errors.bairro != null,
+                value          = uiState.bairro,
+                onValueChange  = { onEvent(EditarAdicionarEvent.AlterarBairro(it)) },
+                label          = { Text(stringResource(R.string.form_bairro)) },
+                isError        = uiState.errors.bairro != null,
                 supportingText = uiState.errors.bairro?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_bairro)), color = MaterialTheme.colorScheme.error) }
                 },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    keyboardType   = KeyboardType.Text,
+                    imeAction      = ImeAction.Next,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
             // Cidade
             OutlinedTextField(
-                value = uiState.cidade,
-                onValueChange = onCidadeChange,
-                label = { Text(stringResource(R.string.form_cidade)) },
-                isError = uiState.errors.cidade != null,
+                value          = uiState.cidade,
+                onValueChange  = { onEvent(EditarAdicionarEvent.AlterarCidade(it)) },
+                label          = { Text(stringResource(R.string.form_cidade)) },
+                isError        = uiState.errors.cidade != null,
                 supportingText = uiState.errors.cidade?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_cidade)), color = MaterialTheme.colorScheme.error) }
                 },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    keyboardType   = KeyboardType.Text,
+                    imeAction      = ImeAction.Next,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
             // Estado
             OutlinedTextField(
-                value = uiState.estado,
-                onValueChange = onEstadoChange,
-                label = { Text(stringResource(R.string.form_estado)) },
-                isError = uiState.errors.estado != null,
+                value          = uiState.estado,
+                onValueChange  = { onEvent(EditarAdicionarEvent.AlterarEstado(it)) },
+                label          = { Text(stringResource(R.string.form_estado)) },
+                isError        = uiState.errors.estado != null,
                 supportingText = uiState.errors.estado?.let { erro ->
                     { Text(stringResource(erro.toStringRes(), stringResource(R.string.form_estado)), color = MaterialTheme.colorScheme.error) }
                 },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Characters,
+                    keyboardType   = KeyboardType.Text,
+                    imeAction      = ImeAction.Done,
+                ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier   = Modifier.fillMaxWidth(),
             )
+            // Botão Salvar
+            Button(
+                onClick  = { onEvent(EditarAdicionarEvent.Salvar) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.acao_salvar))
+            }
         }
     }
 }
 
+// =============================================================================
+// Previews
+// =============================================================================
 @Preview(showBackground = true, name = "New – Light")
 @Preview(showBackground = true, name = "New – Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun EditarAdicionarPreview() {
+private fun EditarAdicionarPreview() {
     EditarAdicionarContent()
 }
