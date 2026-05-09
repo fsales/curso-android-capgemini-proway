@@ -1,4 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.SmartContact" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Theme.SmartContact" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- SplashScreen custom icon and background -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app_logo</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+    </style>
 </resources>

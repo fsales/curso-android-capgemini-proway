@@ -43,9 +43,10 @@ fun SmartContactNavHost() {
                     }
                 )
             }
-            entry<EditarAdicionarRoute> {
+            entry<EditarAdicionarRoute> { route ->
                 EditarAdicionarScreen(
-                    navigateBack = { backStack.removeLastOrNull() }
+                    contatoId = route.id,
+                    navigateBack = { backStack.removeLastOrNull() },
                 )
             }
         }

@@ -15,7 +15,9 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.Icon as M3Icon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +32,12 @@ fun SmartContactTopAppBar(
     LargeTopAppBar(
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                // Ícone do app à esquerda do título
+                M3Icon(
+                    painter = painterResource(id = com.fsales.app.smartcontact.R.drawable.ic_app_logo),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
                 if (subtitle != null) {
                     Text(
                         text = subtitle,

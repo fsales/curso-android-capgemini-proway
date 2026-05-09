@@ -5,6 +5,7 @@ import com.fsales.app.smartcontact.R
 import java.time.LocalDate
 
 data class EditarAdicionarUiState(
+    val id: Long = 0L,
     val nome: String = "",
     val email: String = "",
     val telefone: String = "",
@@ -15,6 +16,8 @@ data class EditarAdicionarUiState(
     val numero: String = "",
     val estado: String = "",
     val cidade: String = "",
+    /** Indica que uma consulta ao ViaCEP está em andamento */
+    val carregandoCep: Boolean = false,
     val errors: EditarAdicionarErrors = EditarAdicionarErrors()
 )
 
@@ -22,7 +25,7 @@ data class EditarAdicionarUiState(
 sealed class FieldError {
     object Vazio : FieldError()
     object Invalido : FieldError()
-    // Adicione outros erros conforme necessário
+    object CepNaoEncontrado : FieldError()
 }
 
 // 2. Data class para armazenar os erros de cada campo
@@ -41,6 +44,7 @@ data class EditarAdicionarErrors(
 
 @StringRes
 fun FieldError.toStringRes(): Int = when (this) {
-    FieldError.Vazio   -> R.string.cadastro_edicao_erro_campo_obrigatorio
-    FieldError.Invalido -> R.string.cadastro_edicao_erro_campo_invalido
+    FieldError.Vazio            -> R.string.cadastro_edicao_erro_campo_obrigatorio
+    FieldError.Invalido         -> R.string.cadastro_edicao_erro_campo_invalido
+    FieldError.CepNaoEncontrado -> R.string.cadastro_edicao_erro_cep_nao_encontrado
 }

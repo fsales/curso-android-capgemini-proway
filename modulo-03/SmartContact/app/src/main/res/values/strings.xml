@@ -24,10 +24,20 @@
     <!-- Erros de validação do formulário (genéricos com placeholder) -->
     <string name="cadastro_edicao_erro_campo_obrigatorio">O campo %1$s é obrigatório.</string>
     <string name="cadastro_edicao_erro_campo_invalido">O campo %1$s informado é inválido.</string>
+    <string name="cadastro_edicao_erro_cep_nao_encontrado">CEP não encontrado. Verifique e tente novamente.</string>
     <string name="cadastro_edicao_erro_salvar">Erro ao salvar o contato. Tente novamente.</string>
 
     <!-- ===== Ações genéricas ===== -->
     <string name="fab_contato">Novo contato</string>
     <string name="acao_voltar">Voltar</string>
     <string name="acao_salvar">Salvar</string>
+
+    <!-- ===== Diálogo de Exclusão ===== -->
+    <string name="confirmar_exclusao_titulo">Excluir contato?</string>
+    <string name="confirmar_exclusao_titulo_nome">Excluir %1$s?</string>
+    <string name="confirmar_exclusao_mensagem">Tem certeza que deseja excluir este contato? Esta ação não pode ser desfeita.</string>
+    <string name="confirmar_exclusao_excluir">Excluir</string>
+    <string name="confirmar_exclusao_cancelar">Cancelar</string>
+    <string name="lista_excluir_sucesso">Contato excluido com sucesso.</string>
+    <string name="lista_excluir_erro">Nao foi possivel excluir o contato.</string>
 </resources>
