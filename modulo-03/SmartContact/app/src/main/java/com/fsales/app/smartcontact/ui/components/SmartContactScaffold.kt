@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 package com.fsales.app.smartcontact.ui.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,29 +13,37 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.fsales.app.smartcontact.R
 
 @Composable
 fun SmartContactScaffold(
     title: String,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
     navigationIcon: ImageVector? = null,
     onNavigationClick: (() -> Unit)? = null,
     actions: @Composable (() -> Unit)? = null,
-    scrollBehavior: TopAppBarScrollBehavior? = null,
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     snackbarHostState: SnackbarHostState = SnackbarHostState(),
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (paddingValues: PaddingValues) -> Unit
 ) {
+    val resolvedSubtitle = subtitle ?: stringResource(R.string.app_name)
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SmartContactTopAppBar(
                 title = title,
+                subtitle = resolvedSubtitle,
                 navigationIcon = navigationIcon,
                 onNavigationClick = onNavigationClick,
                 actions = actions,
@@ -62,11 +71,11 @@ fun SmartContactScaffoldPreview() {
         }
     ) { paddingValues ->
         // Conteúdo de exemplo
-        androidx.compose.foundation.layout.Box(
-            modifier = androidx.compose.ui.Modifier
+        Box(
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            contentAlignment = androidx.compose.ui.Alignment.Center
+            contentAlignment = Alignment.Center
         ) {
             Text("Conteúdo da tela")
         }

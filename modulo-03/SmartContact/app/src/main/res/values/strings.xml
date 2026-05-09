@@ -1,13 +1,31 @@
 <resources>
     <string name="app_name">Smart Contact</string>
 
-    <!-- List -->
+    <!-- ===== Listagem de Contatos ===== -->
     <string name="titulo_lista_contatos">Contatos</string>
     <string name="titulo_estado_vazio">Nenhum contato</string>
     <string name="mensagem_estado_vazio">Sua lista está vazia. Adicione um novo contato!</string>
 
+    <!-- ===== Cadastro/Edição de Contato ===== -->
+    <string name="titulo_cadastro_edicao">Cadastro / Edição de Contato</string>
 
-    <!-- Adicionar/Editar -->
-    <string name="fab_contato">Novo</string>
+    <!-- Labels dos campos do formulário -->
+    <string name="form_nome">Nome</string>
+    <string name="form_email">E-mail</string>
+    <string name="form_telefone">Telefone</string>
+    <string name="form_data_nascimento">Data de nascimento</string>
+    <string name="form_cep">CEP</string>
+    <string name="form_bairro">Bairro</string>
+    <string name="form_logradouro">Logradouro</string>
+    <string name="form_numero">Número</string>
+    <string name="form_estado">Estado</string>
+    <string name="form_cidade">Cidade</string>
 
+    <!-- Erros de validação do formulário (genéricos) -->
+    <string name="cadastro_edicao_erro_campo_obrigatorio">O campo %1$s é obrigatório.</string>
+    <string name="cadastro_edicao_erro_campo_invalido">O campo %1$s informado é inválido.</string>
+
+    <!-- ===== Ações genéricas ===== -->
+    <string name="fab_contato">Novo contato</string>
+    <string name="acao_voltar">Voltar</string>
 </resources>

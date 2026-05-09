@@ -12,11 +12,9 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.fsales.app.smartcontact.R
@@ -28,28 +26,22 @@ import com.fsales.app.smartcontact.ui.theme.SmartContactTheme
 fun ListScreen(
     onNavigateToAddEdit: (id: Long) -> Unit
 ) {
-
-    ListContent()
+    ListContent(onNavigateToAddEdit = onNavigateToAddEdit)
 }
 
 @Composable
 fun ListContent(
-
+    onNavigateToAddEdit: (id: Long) -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
 
-    // MD3: LargeTopAppBar colapsa à medida que o usuário rola a lista
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     SmartContactScaffold(
         title = stringResource(R.string.titulo_lista_contatos),
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        scrollBehavior = scrollBehavior,
         snackbarHostState = snackbarHostState,
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(stringResource(R.string.fab_contato)) },
-                onClick = { /* TODO: Navegar para AddEditScreen */ },
+                onClick = { onNavigateToAddEdit(0L) },
                 icon = { Icon(Icons.Default.Add, contentDescription = null) }
             )
         }
