@@ -60,7 +60,7 @@ curso-android-capgemini-proway/
 ### 📦 Projeto Final
 | Atividade | Descrição |
 |----------|-----------|
-| [**G3 Bank - Projeto Final**]([modulo-03/SmartContact/README.md](https://github.com/fsales/capgemini-proway-projeto-final]) | Aplicativo Android nativo para gerenciamento de cartões de crédito. |
+| [**G3 Bank - Projeto Final**](https://github.com/fsales/capgemini-proway-projeto-final]) | Aplicativo Android nativo para gerenciamento de cartões de crédito. |
 ---
 
 ## 🛠 Tecnologias Utilizadas
