@@ -57,6 +57,12 @@ curso-android-capgemini-proway/
 | [**Atividade 03**](modulo-03/SmartContact/README.md) | App Android de gestão financeira com Jetpack Compose e navegação entre telas; MVVM e Room aplicados como plus/desafio técnico |
 ---
 
+### 📦 Projeto Final
+| Atividade | Descrição |
+|----------|-----------|
+| [**G3 Bank - Projeto Final**]([modulo-03/SmartContact/README.md](https://github.com/fsales/capgemini-proway-projeto-final)) | Aplicativo Android nativo para gerenciamento de cartões de crédito. |
+---
+
 ## 🛠 Tecnologias Utilizadas
 - Kotlin
 - Android Studio
